@@ -18,3 +18,15 @@ class Admission(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     date_admission = models.DateTimeField(auto_now_add=True)
     diagnostic = models.TextField()
+    from django.db import models
+
+class Appointment(models.Model):
+    patient_name = models.CharField(max_length=150, verbose_name="اسم المريض")
+    doctor_name = models.CharField(max_length=150, verbose_name="اسم الطبيب")
+    date = models.DateField(verbose_name="تاريخ الموعد")
+    time = models.TimeField(verbose_name="وقت الموعد")
+    reason = models.TextField(blank=True, null=True, verbose_name="سبب الزيارة")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"موعد {self.patient_name} مع {self.doctor_name} - {self.date}"
