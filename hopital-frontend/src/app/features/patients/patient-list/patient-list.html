@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des Patients</title>
+  <!-- Liaison avec le fichier de style -->
+  <link rel="stylesheet" href="patient-list.scss">
+</head>
+<body>
+<div class="container">
+  <h2>Gestion des Patients</h2>
+
+  <!-- Barre de recherche -->
+  <div class="actions">
+    <input 
+      type="text" 
+      placeholder="Rechercher un patient..." 
+      [(ngModel)]="searchTerm"
+    />
+  </div>
+
+  <!-- Formulaire d'ajout / modification -->
+  <div class="card-form">
+    <h3>{{ isEditing ? 'Modifier le patient' : 'Nouveau Patient' }}</h3>
+    
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Nom</label>
+        <input 
+          type="text" 
+          [(ngModel)]="newPatient.nom" 
+          name="nom" 
+          required 
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Prénom</label>
+        <input 
+          type="text" 
+          [(ngModel)]="newPatient.prenom" 
+          name="prenom" 
+          required 
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Téléphone</label>
+        <input 
+          type="text" 
+          [(ngModel)]="newPatient.telephone" 
+          name="telephone" 
+          required 
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Genre</label>
+        <select [(ngModel)]="newPatient.genre" name="genre">
+          <option value="M">Masculin</option>
+          <option value="F">Féminin</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-success">
+        {{ isEditing ? 'Enregistrer' : 'Ajouter' }}
+      </button>
+      <button type="button" *ngIf="isEditing" (click)="resetForm()">Annuler</button>
+    </form>
+  </div>
+
+  <!-- Tableau des patients -->
+  <table class="patients-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Téléphone</th>
+        <th>Genre</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of filteredPatients">
+        <td>{{ p.nom }}</td>
+        <td>{{ p.prenom }}</td>
+        <td>{{ p.telephone }}</td>
+        <td>{{ p.genre === 'M' ? 'Masculin' : 'Féminin' }}</td>
+        <td>
+          <button type="button" (click)="onViewMedicalRecord(p.id!)">Dossier Médical</button>
+          <button type="button" (click)="onEdit(p)">Éditer</button>
+          <button type="button" (click)="onDelete(p.id!)">Supprimer</button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredPatients.length === 0">
+        <td colspan="5">Aucun patient trouvé.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

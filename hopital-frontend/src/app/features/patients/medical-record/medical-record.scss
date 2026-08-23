@@ -1,0 +1,220 @@
+// ===== Variables (cohérentes avec patient-list) =====
+$color-primary: #0f6e5f;
+$color-primary-dark: #0a4f45;
+$color-primary-light: #e6f4f1;
+$color-text: #1f2937;
+$color-text-muted: #6b7280;
+$color-border: #e2e5e9;
+$color-bg: #f6f8f9;
+$color-white: #ffffff;
+
+// Couleurs de tri
+$color-rouge: #dc2626;
+$color-jaune: #d97706;
+$color-vert: #16a34a;
+$color-gris: #6b7280;
+
+$radius: 10px;
+$shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+$font-main: 'Segoe UI', system-ui, sans-serif;
+
+// ===== Base =====
+body {
+  margin: 0;
+  background: $color-bg;
+  font-family: $font-main;
+  color: $color-text;
+}
+
+.medical-record-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+}
+
+// ===== En-tête =====
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  margin-bottom: 32px;
+  border-bottom: 1px solid $color-border;
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: $color-primary-dark;
+  }
+
+  button {
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid $color-border;
+    transition: all 0.15s ease;
+  }
+
+  .btn-back {
+    background: $color-white;
+    color: $color-text-muted;
+
+    &:hover {
+      background: $color-bg;
+      color: $color-text;
+    }
+  }
+
+  .btn-logout {
+    background: $color-white;
+    color: #dc2626;
+    border-color: rgba(#dc2626, 0.3);
+
+    &:hover {
+      background: #dc2626;
+      color: $color-white;
+    }
+  }
+}
+
+// ===== Sections / cartes =====
+.card {
+  background: $color-white;
+  border-radius: $radius;
+  box-shadow: $shadow-sm;
+  padding: 24px;
+  margin-bottom: 24px;
+  border-left: 4px solid transparent;
+
+  h3 {
+    margin: 0 0 20px;
+    font-size: 17px;
+    font-weight: 600;
+  }
+}
+
+.nurse-section {
+  border-left-color: #0ea5e9;
+}
+
+.doctor-section {
+  border-left-color: $color-primary;
+}
+
+// ===== Formulaires =====
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+
+  &:last-of-type { margin-bottom: 0; }
+
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 9px 12px;
+    border: 1px solid $color-border;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: $color-white;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+  }
+}
+
+// ===== Badges de tri (select dynamique) =====
+select {
+  &.urgence-rouge {
+    background: rgba($color-rouge, 0.08);
+    border-color: $color-rouge;
+    color: $color-rouge;
+    font-weight: 600;
+  }
+  &.urgence-jaune {
+    background: rgba($color-jaune, 0.08);
+    border-color: $color-jaune;
+    color: $color-jaune;
+    font-weight: 600;
+  }
+  &.urgence-vert {
+    background: rgba($color-vert, 0.08);
+    border-color: $color-vert;
+    color: $color-vert;
+    font-weight: 600;
+  }
+  &.urgence-gris {
+    background: rgba($color-gris, 0.08);
+    border-color: $color-gris;
+    color: $color-gris;
+    font-weight: 600;
+  }
+}
+
+// ===== Boutons de soumission =====
+.btn-submit {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-white;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.nurse-section .btn-submit {
+  background: #0ea5e9;
+  &:hover { background: #0284c7; }
+}
+
+.btn-doctor {
+  background: $color-primary;
+  &:hover { background: $color-primary-dark; }
+}
+
+// ===== Responsive =====
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-wrap: wrap;
+    gap: 12px;
+
+    h2 { order: -1; width: 100%; }
+  }
+}

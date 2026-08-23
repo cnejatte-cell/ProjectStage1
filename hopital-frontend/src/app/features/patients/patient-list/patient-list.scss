@@ -1,0 +1,247 @@
+// ===== Variables =====
+$color-primary: #0f6e5f;      // sarcelle profond
+$color-primary-dark: #0a4f45;
+$color-primary-light: #e6f4f1;
+$color-danger: #d64545;
+$color-text: #1f2937;
+$color-text-muted: #6b7280;
+$color-border: #e2e5e9;
+$color-bg: #f6f8f9;
+$color-white: #ffffff;
+
+$radius: 10px;
+$shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+$shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+$font-main: 'Segoe UI', system-ui, sans-serif;
+
+// ===== Base =====
+body {
+  margin: 0;
+  background: $color-bg;
+  font-family: $font-main;
+  color: $color-text;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: $color-primary-dark;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+// ===== Barre de recherche =====
+.actions {
+  margin-bottom: 24px;
+
+  input[type="text"] {
+    width: 100%;
+    max-width: 360px;
+    padding: 10px 14px;
+    border: 1px solid $color-border;
+    border-radius: $radius;
+    font-size: 14px;
+    background: $color-white;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+    }
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+  }
+}
+
+// ===== Formulaire =====
+.card-form {
+  background: $color-white;
+  border-radius: $radius;
+  box-shadow: $shadow-sm;
+  padding: 24px;
+  margin-bottom: 32px;
+
+  h3 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: $color-text;
+  }
+
+  form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    align-items: end;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: $color-text-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    input,
+    select {
+      padding: 9px 12px;
+      border: 1px solid $color-border;
+      border-radius: 8px;
+      font-size: 14px;
+      background: $color-white;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+      }
+    }
+  }
+
+  button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.05s ease;
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  .btn-success {
+    background: $color-primary;
+    color: $color-white;
+
+    &:hover {
+      background: $color-primary-dark;
+    }
+  }
+
+  button[type="button"] {
+    background: transparent;
+    color: $color-text-muted;
+    border: 1px solid $color-border;
+
+    &:hover {
+      background: $color-bg;
+    }
+  }
+}
+
+// ===== Tableau =====
+.patients-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: $color-white;
+  border-radius: $radius;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+
+  thead {
+    background: $color-primary;
+
+    th {
+      color: $color-white;
+      text-align: left;
+      padding: 14px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background 0.1s ease;
+
+      &:not(:last-child) td {
+        border-bottom: 1px solid $color-border;
+      }
+
+      &:hover {
+        background: $color-primary-light;
+      }
+    }
+
+    td {
+      padding: 14px 16px;
+      font-size: 14px;
+      color: $color-text;
+      vertical-align: middle;
+    }
+
+    td[colspan] {
+      text-align: center;
+      color: $color-text-muted;
+      padding: 32px;
+      font-style: italic;
+    }
+  }
+
+  // Actions
+  td button {
+    padding: 6px 12px;
+    margin-right: 6px;
+    border: 1px solid $color-border;
+    border-radius: 6px;
+    background: $color-white;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:last-child { margin-right: 0; }
+    &:nth-of-type(1) {
+      // Dossier Médical
+      border-color: $color-primary;
+      color: $color-primary;
+      &:hover { background: $color-primary; color: $color-white; }
+    }
+
+    &:nth-of-type(2) {
+      // Éditer
+      color: $color-text-muted;
+      &:hover { background: $color-bg; }
+    }
+
+    &:nth-of-type(3) {
+      // Supprimer
+      color: $color-danger;
+      border-color: rgba($color-danger, 0.4);
+      &:hover { background: $color-danger; color: $color-white; }
+    }
+  }
+}
+
+// ===== Responsive =====
+@media (max-width: 640px) {
+  .patients-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .card-form form {
+    grid-template-columns: 1fr;
+  }
+}

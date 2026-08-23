@@ -1,12 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PatientViewSet, AdmissionViewSet, ConstanteViewSet
+from rest_framework.authtoken.views import obtain_auth_token  # <--- Importation
 
 router = DefaultRouter()
-router.register(r'patients', PatientViewSet)
-router.register(r'admissions', AdmissionViewSet)
-router.register(r'constantes', ConstanteViewSet)
+# Vos routes router.register(...) existantes restent ici
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('login/', obtain_auth_token, name='api_token_auth'),  # <--- Ajout de la route
 ]
