@@ -1,0 +1,179 @@
+// ==========================================================================
+// Connexion — Espace Hôpital
+// Palette : sauge profond (confiance, soin) + or doux (chaleur humaine)
+// ==========================================================================
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Public+Sans:wght@400;500;600&display=swap');
+
+// --- Tokens ---------------------------------------------------------------
+$bg:            #F4F8F7;
+$bg-glow:       #EAF3F1;
+$card:          #FFFFFF;
+$primary:       #1F6F78;
+$primary-dark:  #164F56;
+$text:          #263A3A;
+$muted:         #6B8280;
+$accent:        #E3A857;
+$border:        #DCE8E6;
+$error:         #C25B4B;
+
+$font-display: 'Lora', 'Georgia', serif;
+$font-body:    'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+$radius-lg: 20px;
+$radius-md: 12px;
+$shadow-card: 0 24px 60px -20px rgba(31, 111, 120, 0.25);
+
+@mixin focus-ring($color: $primary) {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba($color, 0.15);
+  border-color: $color;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+// --- Page shell -------------------------------------------------------------
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: $font-body;
+  color: $text;
+  background:
+    radial-gradient(circle at 15% 20%, rgba($bg-glow, 0.9), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba($accent, 0.08), transparent 40%),
+    $bg;
+}
+
+// --- Card ---------------------------------------------------------------
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  background: $card;
+  border-radius: $radius-lg;
+  padding: 48px 40px 40px;
+  box-shadow: $shadow-card;
+  border: 1px solid rgba($primary, 0.06);
+  animation: rise 0.6s ease-out;
+
+  h2 {
+    margin: 0 0 6px;
+    font-family: $font-display;
+    font-weight: 600;
+    font-size: 1.75rem;
+    color: $primary-dark;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+  // Sous-titre discret + tracé "battement" — signature du soin
+  &::after {
+    content: "";
+    display: block;
+    width: 72px;
+    height: 14px;
+    margin: 10px auto 32px;
+    background: none;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 14'%3E%3Cpath d='M0 7h18l5-6 8 12 6-9 4 3h31' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 14'%3E%3Cpath d='M0 7h18l5-6 8 12 6-9 4 3h31' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    background-color: rgba($accent, 0.8);
+  }
+}
+
+// --- Form -----------------------------------------------------------------
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $muted;
+    letter-spacing: 0.01em;
+  }
+
+  input {
+    font-family: $font-body;
+    font-size: 1rem;
+    padding: 14px 16px;
+    border-radius: $radius-md;
+    border: 1.5px solid $border;
+    background: #FBFDFC;
+    color: $text;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+
+    &::placeholder {
+      color: #A8B8B6;
+    }
+
+    &:hover {
+      border-color: rgba($primary, 0.4);
+    }
+
+    &:focus {
+      @include focus-ring($primary);
+      background: #FFFFFF;
+    }
+
+    &:invalid:not(:placeholder-shown) {
+      border-color: $error;
+    }
+  }
+}
+
+// --- Bouton -----------------------------------------------------------------
+button[type="submit"] {
+  margin-top: 8px;
+  padding: 15px 20px;
+  border: none;
+  border-radius: $radius-md;
+  background: linear-gradient(135deg, $primary, $primary-dark);color: #FFFFFF;
+  font-family: $font-body;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 10px 24px -8px rgba($primary-dark, 0.5);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px -8px rgba($primary-dark, 0.55);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    @include focus-ring($accent);
+  }
+}
+
+// --- Animation d'entrée : douce, sans surenchère ---------------------------
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// --- Responsive -------------------------------------------------------------
+@media (max-width: 480px) {
+  .login-container {
+    padding: 36px 24px 32px;
+    border-radius: $radius-md;
+  }
+}

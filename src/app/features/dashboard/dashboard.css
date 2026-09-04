@@ -1,0 +1,544 @@
+/* =========================================
+   DASHBOARD
+========================================= */
+
+.dashboard-container {
+  max-width: 1250px;
+  margin: 30px auto;
+  padding-bottom: 40px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.dashboard-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 35px;
+
+  padding-bottom: 20px;
+
+  border-bottom:
+    1px solid #e5e7eb;
+}
+
+
+.dashboard-header h2 {
+  margin: 0;
+
+  font-weight: 700;
+
+  color: #1f2937;
+}
+
+
+.dashboard-header p {
+  margin-top: 8px;
+
+  margin-bottom: 0;
+
+  color: #6b7280;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loading-container {
+  padding: 40px;
+
+  text-align: center;
+
+  border-radius: 12px;
+
+  background: #eef6ff;
+
+  font-size: 18px;
+
+  color: #2563eb;
+}
+
+
+/* =========================================
+   SECTION TITLE
+========================================= */
+
+.section-title {
+  margin-bottom: 20px;
+
+  font-weight: 700;
+
+  color: #374151;
+}
+
+
+/* =========================================
+   DASHBOARD CARDS
+========================================= */
+
+.dashboard-card {
+  height: 100%;
+
+  min-height: 115px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 20px;
+
+  background: white;
+
+  border-radius: 14px;
+
+  border:
+    1px solid #e5e7eb;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0, 0, 0, 0.06);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.dashboard-card:hover {
+  transform:
+    translateY(-4px);
+
+  box-shadow:
+    0 10px 25px
+    rgba(0, 0, 0, 0.10);
+}
+
+
+/* =========================================
+   ICON
+========================================= */
+
+.stat-icon {
+  font-size: 32px;
+}
+
+
+/* =========================================
+   CARD TEXT
+========================================= */
+
+.dashboard-card span {
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+
+.dashboard-card h3 {
+  margin: 5px 0 0;
+
+  font-size: 30px;
+
+  font-weight: 700;
+
+  color: #1f2937;
+}
+
+
+/* =========================================
+   URGENCE CARDS
+========================================= */
+
+.urgence-card {
+  min-height: 150px;
+
+  padding: 20px;
+
+  border-radius: 14px;
+
+  color: white;
+
+  box-shadow:
+    0 4px 15px
+    rgba(0, 0, 0, 0.08);
+
+  transition:
+    transform 0.2s ease;
+}
+
+
+.urgence-card:hover {
+  transform:
+    translateY(-4px);
+}
+
+
+.urgence-card span {
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+
+.urgence-card h2 {
+  margin: 12px 0;
+
+  font-size: 38px;
+
+  color: inherit;
+}
+
+
+.urgence-card small {
+  opacity: 0.9;
+}
+
+
+/* =========================================
+   ROUGE
+========================================= */
+
+.urgence-rouge {
+  background:
+    linear-gradient(
+      135deg,
+      #dc3545,
+      #a71d2a
+    );
+}
+
+
+/* =========================================
+   JAUNE
+========================================= */
+
+.urgence-jaune {
+  background:
+    linear-gradient(
+      135deg,
+      #ffc107,
+      #d39e00
+    );
+
+  color: #212529;
+}
+
+
+/* =========================================
+   VERT
+========================================= */
+
+.urgence-vert {
+  background:
+    linear-gradient(
+      135deg,
+      #198754,
+      #146c43
+    );
+}
+
+
+/* =========================================
+   GRIS
+========================================= */
+
+.urgence-gris {
+  background:
+    linear-gradient(
+      135deg,
+      #6c757d,
+      #495057
+    );
+}
+
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.summary-box {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 20px;
+
+  margin-bottom: 30px;
+
+  border-radius: 12px;
+
+  background: #f8f9fa;
+
+  border:
+    1px solid #e5e7eb;
+
+  font-size: 17px;
+}
+
+
+.summary-box strong {
+  font-size: 28px;
+
+  color: #2563eb;
+}
+
+
+/* =========================================
+   PATIENT SECTION
+========================================= */
+
+.patient-section {
+  background: white;
+
+  padding: 22px;
+
+  margin-bottom: 25px;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================================
+   SECTION COLORS
+========================================= */
+
+.rouge-section {
+  border-left:
+    6px solid #dc3545;
+}
+
+
+.jaune-section {
+  border-left:
+    6px solid #ffc107;
+}
+
+
+.vert-section {
+  border-left:
+    6px solid #198754;
+}
+
+
+.gris-section {
+  border-left:
+    6px solid #6c757d;
+}
+
+
+/* =========================================
+   SECTION HEADER
+========================================= */
+
+.section-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 18px;
+}
+
+
+.section-header h4 {
+  margin: 0;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   BADGE
+========================================= */
+
+.count-badge {
+  display: inline-flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  width: 35px;
+
+  height: 35px;
+
+  border-radius: 50%;
+
+  color: white;
+
+  font-weight: bold;
+}
+
+
+.rouge-badge {
+  background: #dc3545;
+}
+
+
+.jaune-badge {
+  background: #ffc107;
+
+  color: #212529;
+}
+
+
+.vert-badge {
+  background: #198754;
+}
+
+
+.gris-badge {
+  background: #6c757d;
+}
+
+
+/* =========================================
+   PATIENT ITEM
+========================================= */
+
+.patient-item {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 16px;
+
+  margin-top: 10px;
+
+  border-radius: 10px;
+
+  background: #f8f9fa;
+
+  border:
+    1px solid #e9ecef;
+
+  transition:
+    0.2s ease;
+}
+
+
+.patient-item:hover {
+  background: white;
+
+  transform:
+    translateX(4px);
+
+  box-shadow:
+    0 5px 15px
+    rgba(0, 0, 0, 0.08);
+}
+
+
+.patient-item strong {
+  font-size: 16px;
+
+  color: #1f2937;
+}
+
+
+.patient-item p {
+  margin: 5px 0 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   EMPTY LIST
+========================================= */
+
+.empty-list {
+  padding: 18px;
+
+  text-align: center;
+
+  color: #6b7280;
+
+  background: #f8f9fa;
+
+  border-radius: 8px;
+}
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.btn {
+  border-radius: 8px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (
+  max-width: 768px
+) {
+
+
+  .dashboard-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+
+  .dashboard-header button {
+    width: 100%;
+  }
+
+
+  .patient-item {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+
+  .patient-item .btn {
+    width: 100%;
+  }
+
+
+  .summary-box {
+    flex-direction: column;
+
+    gap: 10px;
+
+    text-align: center;
+  }
+
+
+  .urgence-card {
+    min-height: auto;
+  }
+
+}

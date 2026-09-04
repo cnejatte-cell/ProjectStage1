@@ -1,0 +1,79 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestion des Rendez-vous</h2>
+    <button class="btn btn-secondary" routerLink="/patients">← Retour aux Patients</button>
+  </div>
+
+  <!-- نموذج إضافة موعد جديد -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header bg-primary text-white">Prendre un Rendez-vous</div>
+    <div class="card-body">
+      <form (ngSubmit)="createAppointment()">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="patient" class="form-label">Patient *</label>
+            <select id="patient" class="form-control" [(ngModel)]="newAppointment.patient" name="patient" required>
+              <option *ngFor="let p of patients" [value]="p.id">{{ p.nom }} {{ p.prenom }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="date_heure" class="form-label">Date et Heure *</label>
+            <input type="datetime-local" id="date_heure" class="form-control" [(ngModel)]="newAppointment.date_heure" name="date_heure" required />
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="statut" class="form-label">Statut</label>
+            <select id="statut" class="form-control" [(ngModel)]="newAppointment.statut" name="statut">
+              <option value="En attente">En attente</option>
+              <option value="Confirmé">Confirmé</option>
+              <option value="Annulé">Annulé</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-success">Enregistrer le Rendez-vous</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- جدول عرض المواعيد -->
+  <div class="card shadow-sm">
+    <div class="card-header bg-secondary text-white">Liste des Rendez-vous</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Patient</th>
+              <th>Date et Heure</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let app of appointments">
+              <td>{{ app.id }}</td>
+              <td>{{ app.patient_nom || app.patient }}</td>
+              <td>{{ app.date_heure }}</td>
+              <td>
+                <span class="badge" [ngClass]="{'bg-warning': app.statut==='En attente', 'bg-success': app.statut==='Confirmé', 'bg-danger': app.statut==='Annulé'}">
+                  {{ app.statut }}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-danger" (click)="deleteAppointment(app.id)">Supprimer</button>
+              </td>
+            </tr>
+            <tr *ngIf="appointments.length === 0">
+              <td colspan="5" class="text-center text-muted">Aucun rendez-vous trouvé.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

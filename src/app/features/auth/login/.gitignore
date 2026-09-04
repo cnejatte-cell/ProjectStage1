@@ -1,0 +1,14 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+
+# Environnement virtuel
+venv/
+env/
+
+# Angular / Node
+node_modules/
+/dist/
+.angular/

@@ -1,0 +1,796 @@
+<div class="medical-record-container">
+
+  <!-- ============================= -->
+  <!-- TITLE -->
+  <!-- ============================= -->
+ <div class="medical-record-header">
+  <h2 class="mb-4">
+    📁 Dossier médical
+  </h2>
+
+  <button 
+    type="button"
+    contenteditable="btn-print"
+    (click)="printMedicalRecord()"
+
+  > 🖨️ Imprimer le dossier </button>
+  </div>
+  <!-- ============================= -->
+  <!-- LOADING -->
+  <!-- ============================= -->
+
+ <div
+    *ngIf="loading"
+    class="alert alert-info"
+  >
+    ⏳ Chargement du dossier médical...
+  </div>
+
+
+  <!-- ============================= -->
+  <!-- ERROR -->
+  <!-- ============================= -->
+
+  <div
+    *ngIf="!loading && errorMessage"
+    class="alert alert-danger"
+  >
+    {{ errorMessage }}
+  </div>
+
+
+  <!-- ============================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ============================= -->
+
+  <div
+    id="medical-record-print"
+    *ngIf="!loading && !errorMessage"
+  >
+
+
+    <!-- ============================= -->
+    <!-- PATIENT -->
+    <!-- ============================= -->
+
+    <div
+      *ngIf="patient"
+      class="card p-4 mb-4 shadow-sm"
+    >
+
+      <h3>
+        👤 Informations du patient
+      </h3>
+
+      <hr>
+
+      <div class="row">
+
+        <div class="col-md-6 mb-3">
+
+          <strong>Nom :</strong>
+
+          {{ patient.nom }}
+
+        </div>
+
+
+        <div class="col-md-6 mb-3">
+
+          <strong>Prénom :</strong>
+
+          {{ patient.prenom }}
+
+        </div>
+
+
+        <div class="col-md-6 mb-3">
+
+          <strong>Téléphone :</strong>
+
+          {{ patient.telephone }}
+
+        </div>
+
+
+        <div class="col-md-6 mb-3">
+
+          <strong>Date de naissance :</strong>
+
+          {{ patient.date_naissance || '-' }}
+
+        </div>
+
+
+        <div class="col-md-6 mb-3">
+
+          <strong>Genre :</strong>
+
+          {{ patient.genre || '-' }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- PATIENT NOT AVAILABLE -->
+    <!-- ============================= -->
+
+    <div
+      *ngIf="!patient"
+      class="alert alert-warning"
+    >
+      Informations du patient non disponibles.
+    </div>
+
+
+
+    <!-- ============================= -->
+    <!-- NO ADMISSION -->
+    <!-- ============================= -->
+
+    <div
+      *ngIf="admissions.length === 0"
+      class="alert alert-warning"
+    >
+
+      ⚠️ Aucune admission trouvée pour ce patient.
+
+    </div>
+
+
+
+    <!-- ============================= -->
+    <!-- ADMISSIONS -->
+    <!-- ============================= -->
+
+    <div
+      *ngFor="let admission of admissions"
+      class="card p-4 mb-4 shadow-sm"
+    >
+
+
+      <!-- ============================= -->
+      <!-- ADMISSION HEADER -->
+      <!-- ============================= -->
+
+      <h3>
+
+        🏥 Admission #{{ admission.id }}
+
+      </h3>
+
+
+      <hr>
+
+
+      <p>
+
+        <strong>Statut :</strong>
+
+        {{ admission.statut }}
+
+      </p>
+
+
+      <p>
+
+        <strong>Diagnostic :</strong>
+
+        {{ admission.diagnostic || '-' }}
+
+      </p>
+
+
+      <p>
+
+        <strong>Date d'admission :</strong>
+
+        {{ admission.date_admission || '-' }}
+
+      </p>
+
+
+
+      <!-- ============================= -->
+      <!-- CONSTANTES -->
+      <!-- ============================= -->
+
+      <hr>
+
+      <h4>
+        🩺 Constantes
+      </h4>
+
+
+      <div
+        *ngIf="
+          getConstantesAdmission(admission.id!).length === 0
+        "
+        class="alert alert-secondary"
+      >
+
+        Aucune constante enregistrée.
+
+      </div>
+
+
+
+      <div
+        *ngFor="
+          let constante of
+          getConstantesAdmission(admission.id!)
+        "
+        class="card p-3 mb-3 border"
+      >
+
+        <div class="row">
+
+
+          <div class="col-md-6 mb-2">
+
+            <strong>🌡 Température :</strong>
+
+            {{ constante.temperature }} °C
+
+          </div>
+
+
+          <div class="col-md-6 mb-2">
+
+            <strong>🩸 Tension :</strong>
+
+            {{ constante.tension }}
+
+          </div>
+
+
+          <div class="col-md-6 mb-2">
+
+            <strong>🍬 Glycémie :</strong>
+
+            {{ constante.glycemie ?? '-' }}
+
+          </div>
+
+
+          <div class="col-md-6 mb-2">
+
+            <strong>🚨 Degré d'urgence :</strong>
+
+            <span
+              class="urgence_badge"[ngClass]="{
+                'urgence-rouge' : constante.degre_urgence === 'ROUGE',
+                'urgence-jaune' : constante.degre_urgence === 'JAUNE',
+                'urgence-vert' : constante.degre_urgence === 'VERT',
+                'urgence-gris' : constante.degre_urgence ==='GRIS'
+              }">
+
+              {{ constante.degre_urgence }}
+            </span>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ============================= -->
+      <!-- CONSULTATION -->
+      <!-- ============================= -->
+
+      <hr>
+
+
+      <h4>
+        👨‍⚕️ Consultation
+      </h4>
+
+
+
+      <ng-container
+        *ngIf="
+          getConsultation(admission.id!)
+          as consultation;
+          else noConsultation
+        "
+      >
+
+
+        <div class="card p-3 mb-3 border">
+
+
+          <p>
+
+            <strong>Examen clinique :</strong>
+
+            {{ consultation.examen_clinique }}
+
+          </p>
+
+
+          <p>
+
+            <strong>Diagnostic :</strong>
+
+            {{ consultation.diagnostic }}
+
+          </p>
+
+
+          <p>
+
+            <strong>Remarques :</strong>
+
+            {{ consultation.remarques || '-' }}
+
+          </p>
+
+
+        </div>
+
+
+
+        <!-- ============================= -->
+        <!-- ORDONNANCE -->
+        <!-- ============================= -->
+
+        <hr>
+
+
+        <h4>
+          📝 Ordonnance
+        </h4>
+
+
+
+        <ng-container
+          *ngIf="
+            consultation.id &&
+            getOrdonnance(consultation.id)
+            as ordonnance;
+            else noOrdonnance
+          "
+        >
+
+
+          <!-- ============================= -->
+          <!-- ORD0NNANCE INFO -->
+          <!-- ============================= -->
+
+
+
+          <!-- ============================= -->
+          <!-- PRESCRIPTIONS -->
+          <!-- ============================= -->
+
+          <h5 class="mt-3">
+
+            💊 Médicaments prescrits
+
+          </h5>
+
+
+
+          <div
+            *ngIf="
+              getPrescriptionsOrdonnance(
+                ordonnance.id!
+              ).length === 0
+            "
+            class="alert alert-secondary"
+          >
+
+            Aucun médicament prescrit.
+
+          </div>
+
+
+
+          <div
+            *ngFor="
+              let prescription of
+              getPrescriptionsOrdonnance(
+                ordonnance.id!
+              )
+            "
+            class="medicament-card"
+          >
+
+
+            <p>
+
+              <strong>
+                💊 Médicament :
+              </strong>
+
+              {{ getMedicamentName(prescription.medicament) }}
+
+            </p>
+
+
+            <p>
+
+              <strong>
+                Dosage :
+              </strong>
+
+              {{ prescription.dosage }}
+
+            </p>
+
+
+            <p>
+
+              <strong>
+                Fréquence :
+              </strong>
+
+              {{ prescription.frequence }}
+
+            </p>
+
+
+            <p>
+
+              <strong>
+                Durée :
+              </strong>
+
+              {{ prescription.duree }}
+
+            </p>
+
+            <p
+              *ngIf="prescription.instructions">
+              <strong> Instructions : </strong>
+
+              {{ prescription.instructions }}
+            </p>
+
+
+
+          </div>
+
+
+
+          <!-- ============================= -->
+          <!-- ADD MEDICAMENT BUTTON -->
+          <!-- ============================= -->
+
+          <button
+            type="button"
+            class="btn btn-success mt-2"
+            (click)="openPrescription(ordonnance.id!)"
+          >
+
+            ➕ Ajouter un médicament
+
+          </button>
+
+
+
+          <!-- ============================= -->
+          <!-- PRESCRIPTION FORM -->
+          <!-- ============================= -->
+
+          <div
+            *ngIf="
+              selectedOrdonnanceId === ordonnance.id
+            "
+            class="card p-4 mt-3 border"
+          >
+
+
+            <h5>
+              💊 Nouvelle prescription
+            </h5>
+
+
+            <!-- MEDICAMENT -->
+
+            <div class="mb-3">
+
+              <label class="form-label">
+
+                Médicament
+
+              </label>
+
+
+              <select
+                class="form-select"
+                [(ngModel)]="
+                  nouvellePrescription.medicament
+                "
+              >
+
+                <option
+                  [ngValue]="null"
+                >
+                  -- Sélectionner un médicament --
+                </option>
+
+
+                <option
+                  *ngFor="
+                    let medicament of medicaments
+                  "
+                  [ngValue]="medicament.id"
+                >
+
+                  {{ medicament.nom }}
+
+                </option>
+
+              </select>
+
+            </div>
+
+
+
+            <!-- DOSAGE -->
+
+            <div class="mb-3">
+
+              <label class="form-label">
+
+                Dosage
+
+              </label>
+
+
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="
+                  nouvellePrescription.dosage
+                "
+                placeholder="Exemple : 500 mg"
+              >
+
+            </div>
+
+
+
+            <!-- FREQUENCE -->
+
+            <div class="mb-3">
+
+              <label class="form-label">
+
+                Fréquence
+
+              </label>
+
+
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="
+                  nouvellePrescription.frequence
+                "
+                placeholder="Exemple : 3 fois par jour"
+              >
+
+            </div>
+
+
+
+            <!-- DUREE -->
+
+            <div class="mb-3">
+
+              <label class="form-label">
+
+                Durée
+
+              </label>
+
+
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="
+                  nouvellePrescription.duree
+                "
+                placeholder="Exemple : 7 jours"
+              >
+
+            </div>
+
+
+
+            <!-- INSTRUCTIONS -->
+
+            <div class="mb-3">
+
+              <label class="form-label">
+
+                Instructions
+
+              </label>
+
+
+              <textarea
+                class="form-control"
+                rows="3"
+                [(ngModel)]="
+                  nouvellePrescription.instructions
+                "
+              ></textarea>
+
+            </div>
+
+
+
+            <!-- BUTTONS -->
+
+            <button
+              type="button"
+              class="btn btn-primary me-2"
+              (click)="savePrescription()"
+            >
+
+              💾 Enregistrer
+
+            </button>
+
+
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="cancelPrescription()"
+            >
+
+              ❌ Annuler
+
+            </button>
+
+
+          </div>
+
+
+
+        </ng-container>
+
+
+
+        <!-- ============================= -->
+        <!-- NO ORD0NNANCE -->
+        <!-- ============================= -->
+
+        <ng-template #noOrdonnance>
+
+
+          <div
+            class="alert alert-secondary"
+          >
+
+            Aucune ordonnance créée.
+
+          </div>
+
+
+
+          <!-- CREATE BUTTON -->
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="createOrdonnance(consultation.id!)"
+          >
+
+            📝 Créer une ordonnance
+
+          </button>
+
+
+
+          <!-- ============================= -->
+          <!-- CREATE ORD0NNANCE FORM -->
+          <!-- ============================= -->
+
+          <div
+            *ngIf="
+              selectedConsultationId === consultation.id
+            "
+            class="card p-4 mt-3 border"
+          >
+
+
+            <h5>
+              📝 Nouvelle ordonnance
+            </h5>
+
+
+
+            <div class="mb-3">
+
+              <label class="form-label">
+
+                Instructions générales
+
+              </label>
+
+
+              <textarea
+                class="form-control"
+                rows="4"
+                [(ngModel)]="
+                  instructionsGenerales
+                "
+                placeholder="Instructions pour le patient..."
+              ></textarea>
+
+
+            </div>
+
+
+
+            <button
+              type="button"
+              class="btn btn-success me-2"
+              (click)="saveOrdonnance()"
+            >
+
+              💾 Enregistrer l'ordonnance
+
+            </button>
+
+
+
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="cancelOrdonnance()"
+            >
+
+              ❌ Annuler
+
+            </button>
+
+
+          </div>
+
+
+        </ng-template>
+
+
+      </ng-container>
+
+
+
+      <!-- ============================= -->
+      <!-- NO CONSULTATION -->
+      <!-- ============================= -->
+
+      <ng-template #noConsultation>
+
+
+        <div
+          class="alert alert-warning"
+        >
+
+          ⚠️ Aucune consultation enregistrée
+          pour cette admission.
+
+        </div>
+
+
+      </ng-template>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>
