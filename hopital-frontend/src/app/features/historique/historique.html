@@ -1,0 +1,198 @@
+<div class="container mt-4">
+
+  <!-- ============================== -->
+  <!-- TITRE -->
+  <!-- ============================== -->
+
+  <h2>
+    📋 Historique des patients
+  </h2>
+
+
+  <!-- ============================== -->
+  <!-- BOUTON ACTUALISER -->
+  <!-- ============================== -->
+
+  <button
+    class="btn btn-secondary mb-3"
+    (click)="loadHistorique()">
+
+    🔄 Actualiser
+
+  </button>
+
+
+  <!-- ============================== -->
+  <!-- CHARGEMENT -->
+  <!-- ============================== -->
+
+  <div *ngIf="loading">
+
+    <p>
+      ⏳ Chargement des admissions...
+    </p>
+
+  </div>
+
+
+  <!-- ============================== -->
+  <!-- ERREUR -->
+  <!-- ============================== -->
+
+  <div
+    *ngIf="!loading && errorMessage"
+    class="alert alert-danger">
+
+    {{ errorMessage }}
+
+  </div>
+
+
+  <!-- ============================== -->
+  <!-- CONTENU -->
+  <!-- ============================== -->
+
+  <div *ngIf="!loading && !errorMessage">
+
+
+    <!-- NOMBRE -->
+
+    <p>
+
+      Nombre d'admissions terminées :
+
+      <strong>
+        {{ admissions.length }}
+      </strong>
+
+    </p>
+
+
+    <hr>
+
+
+    <!-- AUCUNE ADMISSION -->
+
+    <div *ngIf="admissions.length === 0">
+
+      <p class="alert alert-info">
+
+        Aucun patient terminé.
+
+      </p>
+
+    </div>
+
+
+    <!-- ============================== -->
+    <!-- LISTE DES ADMISSIONS -->
+    <!-- ============================== -->
+
+    <div
+      *ngFor="let admission of admissions"
+      class="card mb-3 p-3">
+
+
+      <!-- ID ADMISSION -->
+
+      <h4>
+
+        🏥 Admission #{{ admission.id }}
+
+      </h4>
+
+
+      <hr>
+
+
+      <!-- PATIENT -->
+
+      <p>
+
+        <strong>
+          👤 Patient :
+        </strong>
+
+        {{ admission.patient?.prenom }}
+        {{ admission.patient?.nom }}
+
+      </p>
+
+
+      <!-- TELEPHONE -->
+
+      <p>
+
+        <strong>
+          📞 Téléphone :
+        </strong>
+
+        {{ admission.patient?.telephone || 'Non renseigné' }}
+
+      </p>
+
+
+      <!-- DIAGNOSTIC -->
+
+      <p>
+
+        <strong>
+          🩺 Diagnostic :
+        </strong>
+
+        {{ admission.diagnostic || 'Non renseigné' }}
+
+      </p>
+
+
+      <!-- STATUT -->
+
+      <p>
+
+        <strong>
+          📌 Statut :
+        </strong>
+
+        <span class="badge bg-success">
+
+          {{ admission.statut }}
+
+        </span>
+
+      </p>
+
+
+      <!-- DATE -->
+
+      <p>
+
+        <strong>
+          📅 Date d'admission :
+        </strong>
+
+        {{ admission.date_admission }}
+
+      </p>
+
+
+      <hr>
+
+
+      <!-- ============================== -->
+      <!-- BOUTON DOSSIER MEDICAL -->
+      <!-- ============================== -->
+
+      <button
+        class="btn btn-primary"
+        (click)="voirDossierMedical(admission)">
+
+        👁️ Voir le dossier médical
+
+      </button>
+
+
+    </div>
+
+  </div>
+
+</div>

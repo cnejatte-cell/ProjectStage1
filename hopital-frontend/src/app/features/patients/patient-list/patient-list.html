@@ -1,103 +1,536 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestion des Patients</title>
-  <!-- Liaison avec le fichier de style -->
-  <link rel="stylesheet" href="patient-list.scss">
-</head>
-<body>
-<div class="container">
-  <h2>Gestion des Patients</h2>
+<div class="patient-page">
 
-  <!-- Barre de recherche -->
-  <div class="actions">
-    <input 
-      type="text" 
-      placeholder="Rechercher un patient..." 
+  <!-- ================================= -->
+  <!-- HEADER -->
+  <!-- ================================= -->
+
+  <div class="page-header">
+
+    <div>
+
+      <h2>
+        👥 Gestion des Patients
+      </h2>
+
+      <p>
+        Gestion et suivi des patients de la clinique
+      </p>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <button
+        class="btn btn-refresh"
+        (click)="chargerPatients()"
+      >
+        🔄 Actualiser
+      </button>
+
+
+      <button
+        class="btn btn-logout"
+        (click)="onLogout()"
+      >
+        🚪 Déconnexion
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================================= -->
+  <!-- SEARCH -->
+  <!-- ================================= -->
+
+  <div class="search-card">
+
+    <div class="search-icon">
+      🔍
+    </div>
+
+    <input
+      type="text"
+      placeholder="Rechercher par nom ou prénom..."
       [(ngModel)]="searchTerm"
     />
+
   </div>
 
-  <!-- Formulaire d'ajout / modification -->
+
+  <!-- ================================= -->
+  <!-- FORM -->
+  <!-- ================================= -->
+
   <div class="card-form">
-    <h3>{{ isEditing ? 'Modifier le patient' : 'Nouveau Patient' }}</h3>
-    
-    <form (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label>Nom</label>
-        <input 
-          type="text" 
-          [(ngModel)]="newPatient.nom" 
-          name="nom" 
-          required 
-        />
+
+
+    <div class="form-title">
+
+      <div class="form-icon">
+
+        {{ isEditing ? '✏️' : '➕' }}
+
       </div>
 
-      <div class="form-group">
-        <label>Prénom</label>
-        <input 
-          type="text" 
-          [(ngModel)]="newPatient.prenom" 
-          name="prenom" 
-          required 
-        />
+
+      <div>
+
+        <h3>
+
+          {{
+            isEditing
+              ? 'Modifier le patient'
+              : 'Ajouter un nouveau patient'
+          }}
+
+        </h3>
+
+
+        <p>
+
+          {{
+            isEditing
+              ? 'Modifiez les informations du patient.'
+              : 'Remplissez les informations du nouveau patient.'
+          }}
+
+        </p>
+
       </div>
 
-      <div class="form-group">
-        <label>Téléphone</label>
-        <input 
-          type="text" 
-          [(ngModel)]="newPatient.telephone" 
-          name="telephone" 
-          required 
-        />
-      </div>
+    </div>
+
+
+    <form
+      (submit)="onSubmit(); $event.preventDefault()"
+    >
+
+
+      <!-- NOM -->
 
       <div class="form-group">
-        <label>Genre</label>
-        <select [(ngModel)]="newPatient.genre" name="genre">
-          <option value="M">Masculin</option>
-          <option value="F">Féminin</option>
+
+        <label for="nom">
+
+          Nom *
+
+        </label>
+
+
+        <input
+          type="text"
+          id="nom"
+          [(ngModel)]="newPatient.nom"
+          name="nom"
+          required
+        />
+
+      </div>
+
+
+      <!-- PRENOM -->
+
+      <div class="form-group">
+
+        <label for="prenom">
+
+          Prénom *
+
+        </label>
+
+
+        <input
+          type="text"
+          id="prenom"
+          [(ngModel)]="newPatient.prenom"
+          name="prenom"
+          required
+        />
+
+      </div>
+
+
+      <!-- TELEPHONE -->
+
+      <div class="form-group">
+
+        <label for="telephone">
+
+          Téléphone *
+
+        </label>
+
+
+        <input
+          type="text"
+          id="telephone"
+          [(ngModel)]="newPatient.telephone"
+          name="telephone"
+          required
+        />
+
+      </div>
+
+
+      <!-- DATE NAISSANCE -->
+
+      <div class="form-group">
+
+        <label for="date_naissance">
+
+          Date de naissance
+
+        </label>
+
+
+        <input
+          type="date"
+          id="date_naissance"
+          [(ngModel)]="newPatient.date_naissance"
+          name="date_naissance"
+        />
+
+      </div>
+
+
+      <!-- GENRE -->
+
+      <div class="form-group">
+
+        <label for="genre">
+
+          Genre
+
+        </label>
+
+
+        <select
+          id="genre"
+          [(ngModel)]="newPatient.genre"
+          name="genre"
+        >
+
+          <option value="M">
+            Masculin
+          </option>
+
+
+          <option value="F">
+            Féminin
+          </option>
+
         </select>
+
       </div>
 
-      <button type="submit" class="btn-success">
-        {{ isEditing ? 'Enregistrer' : 'Ajouter' }}
-      </button>
-      <button type="button" *ngIf="isEditing" (click)="resetForm()">Annuler</button>
+
+      <!-- BUTTONS -->
+
+      <div class="form-buttons">
+
+
+        <button
+          type="submit"
+          class="btn-save"
+        >
+
+          {{
+            isEditing
+              ? '💾 Enregistrer'
+              : '➕ Ajouter le patient'
+          }}
+
+        </button>
+
+
+        <button
+          *ngIf="isEditing"
+          type="button"
+          class="btn-cancel"
+          (click)="resetForm()"
+        >
+
+          Annuler
+
+        </button>
+
+
+      </div>
+
+
     </form>
+
   </div>
 
-  <!-- Tableau des patients -->
-  <table class="patients-table">
-    <thead>
-      <tr>
-        <th>Nom</th>
-        <th>Prénom</th>
-        <th>Téléphone</th>
-        <th>Genre</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let p of filteredPatients">
-        <td>{{ p.nom }}</td>
-        <td>{{ p.prenom }}</td>
-        <td>{{ p.telephone }}</td>
-        <td>{{ p.genre === 'M' ? 'Masculin' : 'Féminin' }}</td>
-        <td>
-          <button type="button" (click)="onViewMedicalRecord(p.id!)">Dossier Médical</button>
-          <button type="button" (click)="onEdit(p)">Éditer</button>
-          <button type="button" (click)="onDelete(p.id!)">Supprimer</button>
-        </td>
-      </tr>
-      <tr *ngIf="filteredPatients.length === 0">
-        <td colspan="5">Aucun patient trouvé.</td>
-      </tr>
-    </tbody>
-  </table>
+
+  <!-- ================================= -->
+  <!-- PATIENTS LIST -->
+  <!-- ================================= -->
+
+  <div class="patients-card">
+
+
+    <!-- HEADER -->
+
+    <div class="patients-header">
+
+
+      <div>
+
+        <h3>
+          📋 Liste des patients
+        </h3>
+
+
+        <p>
+
+          {{ filteredPatients.length }}
+
+          patient(s) trouvé(s)
+
+        </p>
+
+      </div>
+
+
+      <div class="patients-count">
+
+        👥 {{ patients.length }}
+
+      </div>
+
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="table-responsive">
+
+
+      <table class="patients-table">
+
+
+        <thead>
+
+          <tr>
+
+            <th>ID</th>
+
+            <th>Nom</th>
+
+            <th>Prénom</th>
+
+            <th>Téléphone</th>
+
+            <th>Date de naissance</th>
+
+            <th>Genre</th>
+
+            <th class="actions-column">
+
+              Actions
+
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          <tr
+            *ngFor="
+              let patient
+              of filteredPatients
+            "
+          >
+
+
+            <td>
+
+              <span class="patient-id">
+
+                #{{ patient.id }}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <strong>
+
+                {{ patient.nom }}
+
+              </strong>
+
+            </td>
+
+
+            <td>
+
+              {{ patient.prenom }}
+
+            </td>
+
+
+            <td>
+
+              📞 {{ patient.telephone }}
+
+            </td>
+
+
+            <td>
+
+              {{
+                patient.date_naissance || '-'
+              }}
+
+            </td>
+
+
+            <td>
+
+
+              <span
+                class="genre-badge"
+                [class.genre-m]="
+                  patient.genre === 'M'
+                "
+                [class.genre-f]="
+                  patient.genre === 'F'
+                "
+              >
+
+                {{
+                  patient.genre === 'M'
+                    ? '♂ Masculin'
+                    : '♀ Féminin'
+                }}
+
+              </span>
+
+
+            </td>
+
+
+            <!-- ACTIONS -->
+
+            <td class="patient-actions">
+
+
+              <button
+                class="action-btn dossier-btn"
+                title="Voir le dossier médical"
+                (click)="
+                  onViewMedicalRecord(
+                    patient.id!
+                  )
+                "
+              >
+
+                📁
+
+              </button>
+
+              <button
+                class="action-btn admission-btn"
+                title="Créer une admission"
+              (click)="onCreateAdmission(patient.id!)"
+              >
+              🏥
+              </button>
+
+
+              <button
+                class="action-btn edit-btn"
+                title="Modifier le patient"
+                (click)="onEdit(patient)"
+              >
+
+                ✏️
+
+              </button>
+
+
+              <button
+                class="action-btn delete-btn"
+                title="Supprimer le patient"
+                (click)="onDelete(patient.id)"
+              >
+
+                🗑️
+
+              </button>
+
+
+            </td>
+
+
+          </tr>
+
+
+          <!-- EMPTY -->
+
+          <tr
+            *ngIf="
+              filteredPatients.length === 0
+            "
+          >
+
+            <td
+              colspan="7"
+              class="empty-state"
+            >
+
+              <div>
+
+                <div class="empty-icon">
+
+                  👤
+
+                </div>
+
+
+                <strong>
+
+                  Aucun patient trouvé
+
+                </strong>
+
+
+                <p>
+
+                  Aucun résultat ne correspond
+                  à votre recherche.
+
+                </p>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+        </tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+  </div>
+
+
 </div>
-</body>
-</html>

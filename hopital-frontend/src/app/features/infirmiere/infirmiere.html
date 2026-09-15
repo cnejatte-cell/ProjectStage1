@@ -1,0 +1,434 @@
+<div class="nurse-page">
+
+  <!-- ================================= -->
+  <!-- HEADER -->
+  <!-- ================================= -->
+
+  <div class="nurse-header">
+
+    <div>
+
+      <h1>
+        👩‍⚕️ Espace Infirmière
+      </h1>
+
+      <p>
+        Gestion des patients et enregistrement des constantes médicales
+      </p>
+
+    </div>
+
+
+    <div class="admissions-badge">
+
+      👥 {{ admissions.length }} admission(s)
+
+    </div>
+
+  </div>
+
+
+  <!-- ================================= -->
+  <!-- PATIENTS -->
+  <!-- ================================= -->
+
+  <div class="section">
+
+    <div class="section-title">
+
+      <div>
+
+        <h2>
+          ⏳ Patients à prendre en charge
+        </h2>
+
+        <p>
+          Sélectionnez un patient pour enregistrer ses constantes.
+        </p>
+
+      </div>
+
+
+      <span class="badge">
+
+        {{ admissions.length }}
+
+      </span>
+
+    </div>
+
+
+    <!-- EMPTY -->
+
+    <div
+      *ngIf="admissions.length === 0"
+      class="empty"
+    >
+
+      <div class="empty-icon">
+
+        👥
+
+      </div>
+
+      <h3>
+        Aucun patient en attente
+      </h3>
+
+      <p>
+        Il n'y a actuellement aucune admission à traiter.
+      </p>
+
+    </div>
+
+
+    <!-- ADMISSIONS -->
+
+    <div
+      *ngFor="let admission of admissions"
+      class="admission-card"
+    >
+
+
+      <div class="admission-top">
+
+
+        <div>
+
+          <span class="admission-id">
+
+            Admission #{{ admission.id }}
+
+          </span>
+
+
+          <h3 class="patient-name">
+
+            👤
+            {{ admission.patient.nom }}
+            {{ admission.patient.prenom }}
+
+          </h3>
+
+        </div>
+
+
+        <span class="status">
+
+          {{ admission.statut }}
+
+        </span>
+
+
+      </div>
+
+
+      <div class="admission-info">
+
+
+        <div>
+
+          <span class="info-label">
+
+            🩺 Diagnostic
+
+          </span>
+
+
+          <strong>
+
+            {{ admission.diagnostic || 'Non renseigné' }}
+
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <span class="info-label">
+
+            📋 Admission
+
+          </span>
+
+
+          <strong>
+
+            #{{ admission.id }}
+
+          </strong>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="admission-actions">
+
+
+        <button
+          *ngIf="
+            admission.statut !==
+            'AUX_CONSTANTES'
+          "
+          class="primary-button"
+          (click)="selectAdmission(admission)"
+        >
+
+          🩺 Prendre les constantes
+
+        </button>
+
+
+        <button
+          *ngIf="
+            admission.statut ===
+            'AUX_CONSTANTES'
+          "
+          class="continue-button"
+          (click)="selectAdmission(admission)"
+        >
+
+          ▶️ Continuer les constantes
+
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- ================================= -->
+  <!-- FORM CONSTANTES -->
+  <!-- ================================= -->
+
+  <div
+    *ngIf="selectedAdmission"
+    class="constants-section"
+  >
+
+
+    <div class="form-header">
+
+
+      <div>
+
+        <h2>
+          🩺 Constantes du patient
+        </h2>
+
+        <p>
+          Enregistrez les informations médicales du patient.
+        </p>
+
+      </div>
+
+
+      <span class="form-status">
+
+        En cours
+
+      </span>
+
+
+    </div>
+
+
+    <!-- PATIENT -->
+
+    <div class="patient-box">
+
+
+      <div class="patient-avatar">
+
+        👤
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Patient sélectionné
+        </span>
+
+
+        <h3>
+
+          {{ selectedAdmission.patient.nom }}
+          {{ selectedAdmission.patient.prenom }}
+
+        </h3>
+
+
+        <p>
+
+          Admission #{{ selectedAdmission.id }}
+
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="constants-grid">
+
+
+      <!-- TEMPERATURE -->
+
+      <div class="form-group">
+
+        <label>
+
+          🌡️ Température
+
+        </label>
+
+
+        <div class="input-with-unit">
+
+          <input
+            type="number"
+            [(ngModel)]="constante.temperature"
+            placeholder="Ex: 37.2"
+          >
+
+          <span>
+            °C
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- TENSION -->
+
+      <div class="form-group">
+
+        <label>
+
+          ❤️ Tension artérielle
+
+        </label>
+
+
+        <input
+          type="text"
+          [(ngModel)]="constante.tension"
+          placeholder="Ex: 12/8"
+        >
+
+      </div>
+
+
+      <!-- GLYCEMIE -->
+
+      <div class="form-group">
+
+        <label>
+
+          🩸 Glycémie
+
+        </label>
+
+
+        <div class="input-with-unit">
+
+          <input
+            type="number"
+            [(ngModel)]="constante.glycemie"
+            placeholder="Ex: 0.95"
+          >
+
+          <span>
+            g/L
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- URGENCE -->
+
+      <div class="form-group">
+
+        <label>
+
+          🚨 Degré d'urgence
+
+        </label>
+
+
+        <select
+          [(ngModel)]="constante.degre_urgence"
+        >
+
+          <option value="ROUGE">
+            🔴 Rouge - Urgent
+          </option>
+
+          <option value="JAUNE">
+            🟡 Jaune - Moyen
+          </option>
+
+          <option value="VERT">
+            🟢 Vert - Normal
+          </option>
+
+          <option value="GRIS">
+            ⚪ Gris - En attente
+          </option>
+
+        </select>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="form-actions">
+
+
+      <button
+        class="cancel-button"
+        (click)="selectedAdmission = null"
+      >
+
+        Annuler
+
+      </button>
+
+
+      <button
+        class="save-button"
+        (click)="saveConstantes()"
+      >
+
+        💾 Enregistrer les constantes
+
+      </button>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>

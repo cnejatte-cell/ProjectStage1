@@ -1,0 +1,560 @@
+<div class="doctor-page">
+
+  <div class="doctor-header">
+    <div>
+      <h1>👨‍⚕️ Espace Médecin</h1>
+      <p>Gestion des patients et consultations</p>
+    </div>
+
+    <button
+      class="refresh-button"
+      (click)="loadAdmissions()">
+      🔄 Actualiser
+    </button>
+  </div>
+
+
+  <!-- MESSAGE ERREUR -->
+
+  <div
+    *ngIf="errorMessage"
+    class="error-message">
+
+    {{ errorMessage }}
+
+  </div>
+
+
+  <!-- MESSAGE SUCCÈS -->
+
+  <div
+    *ngIf="successMessage"
+    class="success-message">
+
+    {{ successMessage }}
+
+  </div>
+
+
+  <!-- LISTE DES ADMISSIONS -->
+
+  <section class="section">
+
+    <div class="section-title">
+
+      <h2>🩺 Patients à consulter</h2>
+
+      <span class="badge">
+        {{ admissions.length }}
+      </span>
+
+    </div>
+
+
+    <div
+      *ngIf="loading"
+      class="loading">
+
+      Chargement des patients...
+
+    </div>
+
+
+    <div
+      *ngIf="!loading && admissions.length === 0"
+      class="empty">
+
+      <div class="empty-icon">
+        🏥
+      </div>
+
+      <h3>Aucun patient</h3>
+
+      <p>
+        Aucun patient n'est actuellement chez le médecin.
+      </p>
+
+    </div>
+
+
+    <!-- ADMISSION -->
+
+    <div
+      *ngFor="let admission of admissions"
+      class="admission-card">
+
+
+      <div class="admission-top">
+
+        <div>
+
+          <h3>
+            Admission #{{ admission.id }}
+          </h3>
+
+          <p class="patient-name">
+
+            👤
+            {{ admission.patient.prenom }}
+            {{ admission.patient.nom }}
+
+          </p>
+
+        </div>
+
+
+        <span class="status">
+
+          {{ admission.statut }}
+
+        </span>
+
+      </div>
+
+
+      <div class="admission-info">
+
+        <div>
+
+          <strong>Téléphone</strong>
+
+          <span>
+            {{ admission.patient.telephone || '-' }}
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong>Date de naissance</strong>
+
+          <span>
+            {{ admission.patient.date_naissance || '-' }}
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong>Diagnostic initial</strong>
+
+          <span>
+            {{ admission.diagnostic || '-' }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="primary-button"
+        (click)="selectAdmission(admission)">
+
+        👁️ Consulter le patient
+
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- DOSSIER DU PATIENT -->
+
+  <section
+    *ngIf="selectedAdmission"
+    class="section">
+
+
+    <div class="section-title">
+
+      <h2>
+        📋 Dossier du patient
+      </h2>
+
+    </div>
+
+
+    <!-- INFORMATIONS PATIENT -->
+
+    <div class="patient-box">
+
+      <h3>
+
+        👤
+        {{ selectedAdmission.patient.prenom }}
+        {{ selectedAdmission.patient.nom }}
+
+      </h3>
+
+      <p>
+        <strong>Admission :</strong>
+        #{{ selectedAdmission.id }}
+      </p>
+
+      <p>
+        <strong>Diagnostic initial :</strong>
+        {{ selectedAdmission.diagnostic || 'Non renseigné' }}
+      </p>
+
+    </div>
+
+
+    <!-- CONSTANTES -->
+
+    <div class="constants-box">
+
+      <h3>🩺 Constantes vitales</h3>
+
+
+      <div
+        *ngIf="selectedConstantes.length === 0"
+        class="empty-small">
+
+        Aucune constante enregistrée.
+
+      </div>
+
+
+      <div
+        *ngFor="let constante of selectedConstantes"
+        class="constant-card">
+
+
+        <div>
+
+          <strong>🌡️ Température</strong>
+
+          <span>
+            {{ constante.temperature }}
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong>🩸 Tension</strong>
+
+          <span>
+            {{ constante.tension }}
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong>💉 Glycémie</strong>
+
+          <span>
+            {{ constante.glycemie ?? '-' }}
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong>🚨 Urgence</strong>
+
+          <span
+            class="urgence"
+            [ngClass]="{
+              'rouge': constante.degre_urgence === 'ROUGE',
+              'jaune': constante.degre_urgence === 'JAUNE',
+              'vert': constante.degre_urgence === 'VERT',
+              'gris': constante.degre_urgence === 'GRIS'
+            }">
+
+            {{ constante.degre_urgence }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <hr>
+
+
+    <!-- CONSULTATION -->
+
+    <div class="consultation-box">
+
+      <h3>
+        📝 Consultation médicale
+      </h3>
+
+
+      <div class="form-group">
+
+        <label>
+          Examen clinique
+        </label>
+
+        <textarea
+          [(ngModel)]="consultation.examen_clinique"
+          rows="5"
+          placeholder="Saisir l'examen clinique du patient...">
+        </textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Diagnostic
+        </label>
+
+        <textarea
+          [(ngModel)]="consultation.diagnostic"
+          rows="4"
+          placeholder="Saisir le diagnostic...">
+        </textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Remarques
+        </label>
+
+        <textarea
+          [(ngModel)]="consultation.remarques"
+          rows="3"
+          placeholder="Remarques supplémentaires...">
+        </textarea>
+
+      </div>
+
+
+      <div class="form-actions">
+
+        <button
+          class="cancel-button"
+          (click)="cancelSelection()">
+
+          Annuler
+
+        </button>
+
+
+        <button
+          class="save-button"
+          (click)="saveConsultation()">
+
+          💾 Enregistrer la consultation
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- ORDONNANCE MEDICALE -->
+    <!-- ========================= -->
+
+   <div
+     *ngIf="consultationId"
+     class="consultation-box">
+
+     <h3>💊 Ordonnance médicale</h3>
+
+
+     <!-- CREER ORDONNANCE -->
+
+     <div *ngIf="!ordonnanceId">
+   
+       <p>
+      La consultation est enregistrée.
+      Vous pouvez maintenant créer une ordonnance.
+       </p>
+
+       <button
+        class="primary-button"
+        (click)="createOrdonnance()">
+
+      💊 Créer l'ordonnance
+
+       </button>
+
+      </div>
+
+
+      <!-- AJOUT MEDICAMENT -->
+
+      <div *ngIf="ordonnanceId">
+
+        <div class="form-group">
+
+          <label>Médicament</label>
+
+          <select
+           [(ngModel)]="selectedMedicamentId">
+
+            <option [ngValue]="null">
+               -- Choisir un médicament --
+            </option>
+
+            <option
+              *ngFor="let medicament of medicaments"
+              [ngValue]="medicament.id">
+
+              {{ medicament.nom }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Dosage</label>
+
+          <input
+            type="text"
+            [(ngModel)]="prescription.dosage"
+            placeholder="">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Fréquence</label>
+
+          <input
+            type="text"
+            [(ngModel)]="prescription.frequence"
+            placeholder="">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Durée</label>
+
+          <input
+            type="text"
+            [(ngModel)]="prescription.duree"
+            placeholder="">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Instructions</label>
+
+          <textarea
+            [(ngModel)]="prescription.instructions"
+            rows="3"
+            placeholder="">
+          </textarea>
+
+        </div>
+
+
+        <button
+          class="save-button"
+          (click)="addPrescription()">
+
+          ➕ Ajouter le médicament
+
+        </button>
+
+        <!-- ========================= -->
+        <!-- MEDICAMENTS PRESCRITS -->
+        <!-- ========================= -->
+
+       <div class="prescriptions-list">
+
+         <h4>💊 Médicaments prescrits</h4>
+
+
+        <p *ngIf="prescriptions.length === 0">
+        Aucun médicament ajouté.
+        </p>
+
+
+       <div
+         *ngFor="let prescription of prescriptions"
+        class="prescription-card">
+
+        <p>
+
+        <strong>Médicament :</strong>
+
+        {{ prescription.medicament_nom }}
+
+       </p>
+
+
+       <p>
+
+       <strong>Dosage :</strong>
+
+       {{ prescription.dosage }}
+
+       </p>
+
+
+       <p>
+
+       <strong>Fréquence :</strong>
+
+       {{ prescription.frequence }}
+
+       </p>
+
+
+       <p>
+
+       <strong>Durée :</strong>
+
+       {{ prescription.duree }}
+
+       </p>
+
+
+       <p *ngIf="prescription.instructions">
+
+       <strong>Instructions :</strong>
+
+       {{ prescription.instructions }}
+
+       </p>
+
+    </div>
+    <button
+      *ngIf="ordonnanceId && prescriptions.length > 0"
+      class="btn btn-success"
+      (click)="terminateAdmission()">
+
+      ✅ Terminer l'admission
+
+    </button>
+
+   </div>
+
+  </div>
+
+ </div>
+
+  </section>
+
+</div>

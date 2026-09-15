@@ -25,7 +25,7 @@ export class PatientListComponent implements OnInit {
     nom: '',
     prenom: '',
     telephone: '',
-    date_naissance: '2000-01-01',
+    date_naissance: '',
     genre: 'M' as 'M' | 'F'
   };
 
@@ -44,6 +44,14 @@ export class PatientListComponent implements OnInit {
       },
       error: (err) => console.error('Erreur chargement patients', err)
     });
+  }
+
+  ouvrirDossier(id: number): void {
+  this.router.navigate([
+    '/patients',
+    id,
+    'medical-record'
+  ]);
   }
 
   // Filtrage pour la recherche (Correction des ||)
@@ -65,20 +73,29 @@ export class PatientListComponent implements OnInit {
       !this.newPatient.prenom ||
       !this.newPatient.telephone
     ) {
+      alert('Veuillez remplir les champs obligatoires (Nom, Prénom, Téléphone, Age)');
       return;
     }
 
-    if (this.isEditing && this.editingPatientId !== null) {
-      this.resetForm();
-    } else {
-      const patientPayload: Patient = {
-        nom: this.newPatient.nom,
-        prenom: this.newPatient.prenom,
-        telephone: this.newPatient.telephone,
-        date_naissance: this.newPatient.date_naissance,
-        genre: this.newPatient.genre
-      };
+    const patientPayload: any = {
+      nom: this.newPatient.nom,
+      prenom: this.newPatient.prenom,
+      telephone: this.newPatient.telephone,
+      date_naissance: this.newPatient.date_naissance || undefined,
+      genre: this.newPatient.genre || 'M'
+    };
 
+    if (this.isEditing && this.editingPatientId !== null) {
+      // إرسال طلب التعديل (PUT) إلى الـ Backend
+      this.clinicService.updatePatient(this.editingPatientId, patientPayload).subscribe({
+        next: () => {
+          this.chargerPatients();
+          this.resetForm();
+        },
+        error: (err) => console.error('Erreur lors de la modification', err)
+      });
+    } else {
+      // إرسال طلب الإضافة (POST) إلى الـ Backend
       this.clinicService.createPatient(patientPayload).subscribe({
         next: () => {
           this.chargerPatients();
@@ -97,7 +114,7 @@ export class PatientListComponent implements OnInit {
       nom: patient.nom,
       prenom: patient.prenom,
       telephone: patient.telephone,
-      date_naissance: patient.date_naissance || '2000-01-01',
+      date_naissance: patient.date_naissance || '',
       genre: patient.genre || 'M'
     };
   }
@@ -120,7 +137,7 @@ export class PatientListComponent implements OnInit {
       nom: '',
       prenom: '',
       telephone: '',
-      date_naissance: '2000-01-01',
+      date_naissance: '',
       genre: 'M'
     };
   }
@@ -129,8 +146,41 @@ export class PatientListComponent implements OnInit {
     this.router.navigate(['/patients', patientId, 'medical-record']);
   }
 
+ onCreateAdmission(patientId: number): void {
+  if (!patientId) {
+    return;
+  }
+
+  const confirmation = confirm(
+    'Voulez-vous créer une nouvelle admission pour ce patient ?'
+  );
+
+  if (!confirmation) {
+    return;
+  }
+
+  this.clinicService.createAdmission(patientId).subscribe({
+    next: (admission) => {
+      console.log('Admission créée :', admission);
+
+      alert(
+        `Admission #${admission.id} créée avec succès pour le patient.`
+      );
+    },
+
+    error: (err) => {
+      console.error('Erreur lors de la création de l admission', err);
+
+      alert(
+        'Erreur lors de la création de l admission.'
+      );
+    }
+  });
+  }
+
   onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
 }

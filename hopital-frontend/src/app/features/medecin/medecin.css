@@ -1,0 +1,299 @@
+.doctor-page {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #2c3e50;
+}
+
+.doctor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.08);
+  margin-bottom: 25px;
+}
+
+.doctor-header h1 {
+  margin: 0 0 8px;
+}
+
+.doctor-header p {
+  margin: 0;
+  color: #777;
+}
+
+.refresh-button,
+.primary-button,
+.save-button,
+.cancel-button {
+  border: none;
+  padding: 11px 18px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.refresh-button {
+  background: #34495e;
+  color: white;
+}
+
+.primary-button {
+  background: #3498db;
+  color: white;
+}
+
+.save-button {
+  background: #27ae60;
+  color: white;
+}
+
+.cancel-button {
+  background: #95a5a6;
+  color: white;
+}
+
+.section {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.08);
+  margin-bottom: 25px;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-title h2 {
+  margin: 0;
+}
+
+.badge {
+  background: #3498db;
+  color: white;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-weight: bold;
+}
+
+.admission-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  background: #fafafa;
+}
+
+.admission-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admission-top h3 {
+  margin: 0 0 8px;
+}
+
+.patient-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.status {
+  background: #f1c40f;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.admission-info {
+  display: flex;
+  gap: 40px;
+  margin: 20px 0;
+}
+
+.admission-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.admission-info strong {
+  color: #888;
+  font-size: 13px;
+}
+
+.patient-box {
+  background: #f4f6f7;
+  padding: 18px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+
+.constants-box,
+.consultation-box {
+  margin-top: 25px;
+}
+
+.constant-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  padding: 18px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.constant-card div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.constant-card strong {
+  color: #777;
+  font-size: 13px;
+}
+
+.urgence {
+  font-weight: bold;
+}
+
+.rouge {
+  color: #e74c3c;
+}
+
+.jaune {
+  color: #f39c12;
+}
+
+.vert {
+  color: #27ae60;
+}
+
+.gris {
+  color: #7f8c8d;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: bold;
+}
+
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.empty,
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #777;
+}
+
+.empty-icon {
+  font-size: 45px;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.empty-small {
+  padding: 20px;
+  color: #777;
+}
+
+@media (max-width: 700px) {
+
+  .doctor-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .admission-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .admission-info {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .constant-card {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .save-button,
+  .cancel-button {
+    width: 100%;
+  }
+}
+
+.prescriptions-list {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.prescription-card {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 12px;
+}
+
+.prescription-card p {
+  margin: 7px 0;
+}

@@ -1,247 +1,1004 @@
-// ===== Variables =====
-$color-primary: #0f6e5f;      // sarcelle profond
-$color-primary-dark: #0a4f45;
-$color-primary-light: #e6f4f1;
-$color-danger: #d64545;
-$color-text: #1f2937;
-$color-text-muted: #6b7280;
-$color-border: #e2e5e9;
-$color-bg: #f6f8f9;
-$color-white: #ffffff;
+/* =========================================
+   VARIABLES
+========================================= */
 
-$radius: 10px;
-$shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-$shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-$font-main: 'Segoe UI', system-ui, sans-serif;
+$primary: #0f6e5f;
+$primary-dark: #0a4f45;
+$primary-light: #e6f4f1;
 
-// ===== Base =====
-body {
+$danger: #d64545;
+$danger-light: #fdecec;
+
+$warning: #d99200;
+$warning-light: #fff4d6;
+
+$text: #1f2937;
+$text-muted: #6b7280;
+
+$border: #e5e7eb;
+
+$background: #f6f8f9;
+$white: #ffffff;
+
+$male: #2563eb;
+$female: #db2777;
+
+$radius: 14px;
+
+$shadow-sm:
+  0 2px 8px
+  rgba(0, 0, 0, 0.05);
+
+$shadow-md:
+  0 8px 24px
+  rgba(0, 0, 0, 0.08);
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $background;
+}
+
+
+.patient-page {
+
+  max-width: 1250px;
+
+  margin: 0 auto;
+
+  padding: 35px 25px 60px;
+
+  color: $text;
+
+  font-family:
+    'Segoe UI',
+    system-ui,
+    sans-serif;
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.page-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+
+  margin-bottom: 30px;
+
+}
+
+
+.page-header h2 {
+
+  margin: 0 0 5px;
+
+  font-size: 30px;
+
+  font-weight: 750;
+
+  color: $primary-dark;
+
+}
+
+
+.page-header p {
+
   margin: 0;
-  background: $color-bg;
-  font-family: $font-main;
-  color: $color-text;
+
+  color: $text-muted;
+
 }
 
-.container {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 24px;
+
+/* =========================================
+   HEADER BUTTONS
+========================================= */
+
+.header-actions {
+
+  display: flex;
+
+  gap: 10px;
+
 }
 
-h2 {
-  font-size: 28px;
-  font-weight: 700;
-  color: $color-primary-dark;
-  margin-bottom: 24px;
-  letter-spacing: -0.02em;
+
+.btn {
+
+  border: none;
+
+  border-radius: 9px;
+
+  padding: 10px 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    0.2s ease;
+
 }
 
-// ===== Barre de recherche =====
-.actions {
-  margin-bottom: 24px;
 
-  input[type="text"] {
-    width: 100%;
-    max-width: 360px;
-    padding: 10px 14px;
-    border: 1px solid $color-border;
-    border-radius: $radius;
-    font-size: 14px;
-    background: $color-white;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+.btn:hover {
 
-    &:focus {
-      outline: none;
-      border-color: $color-primary;
-      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
-    }
+  transform:
+    translateY(-2px);
 
-    &::placeholder {
-      color: $color-text-muted;
-    }
-  }
 }
 
-// ===== Formulaire =====
-.card-form {
-  background: $color-white;
+
+.btn-refresh {
+
+  background: $white;
+
+  color: $primary;
+
+  border:
+    1px solid $primary;
+
+}
+
+
+.btn-refresh:hover {
+
+  background:
+    $primary-light;
+
+}
+
+
+.btn-logout {
+
+  background:
+    $danger;
+
+  color:
+    $white;
+
+}
+
+
+.btn-logout:hover {
+
+  background:
+    #b82f2f;
+
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.search-card {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  background: $white;
+
+  padding: 14px 18px;
+
   border-radius: $radius;
+
   box-shadow: $shadow-sm;
-  padding: 24px;
-  margin-bottom: 32px;
 
-  h3 {
-    margin: 0 0 20px;
-    font-size: 18px;
-    font-weight: 600;
-    color: $color-text;
-  }
+  border:
+    1px solid $border;
 
-  form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
-    align-items: end;
-  }
+  margin-bottom: 25px;
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-
-    label {
-      font-size: 13px;
-      font-weight: 600;
-      color: $color-text-muted;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    input,
-    select {
-      padding: 9px 12px;
-      border: 1px solid $color-border;
-      border-radius: 8px;
-      font-size: 14px;
-      background: $color-white;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-
-      &:focus {
-        outline: none;
-        border-color: $color-primary;
-        box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
-      }
-    }
-  }
-
-  button {
-    padding: 10px 18px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s ease, transform 0.05s ease;
-
-    &:active {
-      transform: scale(0.98);
-    }
-  }
-
-  .btn-success {
-    background: $color-primary;
-    color: $color-white;
-
-    &:hover {
-      background: $color-primary-dark;
-    }
-  }
-
-  button[type="button"] {
-    background: transparent;
-    color: $color-text-muted;
-    border: 1px solid $color-border;
-
-    &:hover {
-      background: $color-bg;
-    }
-  }
 }
 
-// ===== Tableau =====
-.patients-table {
+
+.search-icon {
+
+  font-size: 18px;
+
+}
+
+
+.search-card input {
+
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: $color-white;
-  border-radius: $radius;
-  overflow: hidden;
-  box-shadow: $shadow-sm;
 
-  thead {
-    background: $color-primary;
+  border: none;
 
-    th {
-      color: $color-white;
-      text-align: left;
-      padding: 14px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-  }
+  outline: none;
 
-  tbody {
-    tr {
-      transition: background 0.1s ease;
+  font-size: 15px;
 
-      &:not(:last-child) td {
-        border-bottom: 1px solid $color-border;
-      }
+  color: $text;
 
-      &:hover {
-        background: $color-primary-light;
-      }
-    }
-
-    td {
-      padding: 14px 16px;
-      font-size: 14px;
-      color: $color-text;
-      vertical-align: middle;
-    }
-
-    td[colspan] {
-      text-align: center;
-      color: $color-text-muted;
-      padding: 32px;
-      font-style: italic;
-    }
-  }
-
-  // Actions
-  td button {
-    padding: 6px 12px;
-    margin-right: 6px;
-    border: 1px solid $color-border;
-    border-radius: 6px;
-    background: $color-white;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-
-    &:last-child { margin-right: 0; }
-    &:nth-of-type(1) {
-      // Dossier Médical
-      border-color: $color-primary;
-      color: $color-primary;
-      &:hover { background: $color-primary; color: $color-white; }
-    }
-
-    &:nth-of-type(2) {
-      // Éditer
-      color: $color-text-muted;
-      &:hover { background: $color-bg; }
-    }
-
-    &:nth-of-type(3) {
-      // Supprimer
-      color: $color-danger;
-      border-color: rgba($color-danger, 0.4);
-      &:hover { background: $color-danger; color: $color-white; }
-    }
-  }
 }
 
-// ===== Responsive =====
-@media (max-width: 640px) {
-  .patients-table {
-    display: block;
-    overflow-x: auto;
-  }
+
+.search-card input::placeholder {
+
+  color:
+    #9ca3af;
+
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.card-form {
+
+  background:
+    $white;
+
+  border-radius:
+    $radius;
+
+  padding:
+    25px;
+
+  box-shadow:
+    $shadow-md;
+
+  margin-bottom:
+    30px;
+
+}
+
+
+.form-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  margin-bottom:
+    25px;
+
+}
+
+
+.form-icon {
+
+  width:
+    50px;
+
+  height:
+    50px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  background:
+    $primary-light;
+
+  border-radius:
+    12px;
+
+  font-size:
+    23px;
+
+}
+
+
+.form-title h3 {
+
+  margin:
+    0 0 4px;
+
+  font-size:
+    19px;
+
+}
+
+
+.form-title p {
+
+  margin:
+    0;
+
+  color:
+    $text-muted;
+
+  font-size:
+    14px;
+
+}
+
+
+/* =========================================
+   FORM GRID
+========================================= */
+
+.card-form form {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      5,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    16px;
+
+  align-items:
+    end;
+
+}
+
+
+.form-group {
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    7px;
+
+}
+
+
+.form-group label {
+
+  font-size:
+    13px;
+
+  font-weight:
+    600;
+
+  color:
+    $text-muted;
+
+}
+
+
+.form-group input,
+.form-group select {
+
+  width:
+    100%;
+
+  padding:
+    11px 12px;
+
+  border:
+    1px solid $border;
+
+  border-radius:
+    8px;
+
+  outline:
+    none;
+
+  font-size:
+    14px;
+
+  background:
+    $white;
+
+  transition:
+    0.2s ease;
+
+}
+
+
+.form-group input:focus,
+.form-group select:focus {
+
+  border-color:
+    $primary;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(
+      $primary,
+      0.12
+    );
+
+}
+
+
+/* =========================================
+   FORM BUTTONS
+========================================= */
+
+.form-buttons {
+
+  display:
+    flex;
+
+  gap:
+    8px;
+
+}
+
+
+.btn-save,
+.btn-cancel {
+
+  border:
+    none;
+
+  border-radius:
+    8px;
+
+  padding:
+    11px 15px;
+
+  font-weight:
+    600;
+
+  cursor:
+    pointer;
+
+  white-space:
+    nowrap;
+
+}
+
+
+.btn-save {
+
+  background:
+    $primary;
+
+  color:
+    $white;
+
+}
+
+
+.btn-save:hover {
+
+  background:
+    $primary-dark;
+
+}
+
+
+.btn-cancel {
+
+  background:
+    #e5e7eb;
+
+  color:
+    $text;
+
+}
+
+
+/* =========================================
+   PATIENTS CARD
+========================================= */
+
+.patients-card {
+
+  background:
+    $white;
+
+  border-radius:
+    $radius;
+
+  box-shadow:
+    $shadow-md;
+
+  overflow:
+    hidden;
+
+}
+
+
+/* =========================================
+   PATIENTS HEADER
+========================================= */
+
+.patients-header {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    center;
+
+  padding:
+    22px 25px;
+
+  border-bottom:
+    1px solid $border;
+
+}
+
+
+.patients-header h3 {
+
+  margin:
+    0 0 5px;
+
+  font-size:
+    20px;
+
+}
+
+
+.patients-header p {
+
+  margin:
+    0;
+
+  color:
+    $text-muted;
+
+  font-size:
+    14px;
+
+}
+
+
+.patients-count {
+
+  background:
+    $primary-light;
+
+  color:
+    $primary-dark;
+
+  padding:
+    8px 14px;
+
+  border-radius:
+    20px;
+
+  font-weight:
+    700;
+
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.table-responsive {
+
+  overflow-x:
+    auto;
+
+}
+
+
+.patients-table {
+
+  width:
+    100%;
+
+  border-collapse:
+    collapse;
+
+  min-width:
+    850px;
+
+}
+
+
+.patients-table thead {
+
+  background:
+    $primary-dark;
+
+}
+
+
+.patients-table th {
+
+  padding:
+    15px;
+
+  text-align:
+    left;
+
+  color:
+    $white;
+
+  font-size:
+    12px;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    0.04em;
+
+}
+
+
+.patients-table td {
+
+  padding:
+    15px;
+
+  border-bottom:
+    1px solid $border;
+
+  font-size:
+    14px;
+
+  vertical-align:
+    middle;
+
+}
+
+
+.patients-table tbody tr {
+
+  transition:
+    0.2s ease;
+
+}
+
+
+.patients-table tbody tr:hover {
+
+  background:
+    $primary-light;
+
+}
+
+
+/* =========================================
+   ID
+========================================= */
+
+.patient-id {
+
+  color:
+    $text-muted;
+
+  font-size:
+    13px;
+
+  font-weight:
+    600;
+
+}
+
+
+/* =========================================
+   GENRE
+========================================= */
+
+.genre-badge {
+
+  display:
+    inline-block;
+
+  padding:
+    6px 10px;
+
+  border-radius:
+    20px;
+
+  font-size:
+    12px;
+
+  font-weight:
+    600;
+
+}
+
+
+.genre-m {
+
+  color:
+    $male;
+
+  background:
+    #eff6ff;
+
+}
+
+
+.genre-f {
+
+  color:
+    $female;
+
+  background:
+    #fdf2f8;
+
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.actions-column {
+
+  text-align:
+    center;
+
+}
+
+
+.patient-actions {
+
+  display:
+    flex;
+
+  justify-content:
+    center;
+
+  gap:
+    7px;
+
+}
+
+
+.action-btn {
+
+  width:
+    36px;
+
+  height:
+    36px;
+
+  border:
+    none;
+
+  border-radius:
+    8px;
+
+  cursor:
+    pointer;
+
+  transition:
+    0.2s ease;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+}
+
+
+.action-btn:hover {
+
+  transform:
+    translateY(-2px);
+
+}
+
+
+.dossier-btn {
+
+  background:
+    $primary-light;
+
+}
+
+
+.edit-btn {
+
+  background:
+    $warning-light;
+
+}
+
+
+.delete-btn {
+
+  background:
+    $danger-light;
+
+}
+
+
+.dossier-btn:hover {
+
+  background:
+    $primary;
+
+}
+
+
+.edit-btn:hover {
+
+  background:
+    $warning;
+
+}
+
+
+.delete-btn:hover {
+
+  background:
+    $danger;
+
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state {
+
+  text-align:
+    center;
+
+  padding:
+    50px !important;
+
+}
+
+
+.empty-icon {
+
+  font-size:
+    45px;
+
+  margin-bottom:
+    12px;
+
+}
+
+
+.empty-state strong {
+
+  display:
+    block;
+
+  margin-bottom:
+    6px;
+
+}
+
+
+.empty-state p {
+
+  margin:
+    0;
+
+  color:
+    $text-muted;
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+
 
   .card-form form {
-    grid-template-columns: 1fr;
+
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      );
+
   }
+
+}
+
+
+@media (max-width: 768px) {
+
+
+  .patient-page {
+
+    padding:
+      25px 15px 40px;
+
+  }
+
+
+  .page-header {
+
+    flex-direction:
+      column;
+
+    align-items:
+      flex-start;
+
+  }
+
+
+  .header-actions {
+
+    width:
+      100%;
+
+  }
+
+
+  .header-actions button {
+
+    flex:
+      1;
+
+  }
+
+
+  .card-form form {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .form-buttons {
+
+    width:
+      100%;
+
+  }
+
+
+  .form-buttons button {
+
+    flex:
+      1;
+
+  }
+
+
+  .patients-header {
+
+    padding:
+      18px;
+
+  }
+
+
+  .page-header h2 {
+
+    font-size:
+      24px;
+
+  }
+
 }

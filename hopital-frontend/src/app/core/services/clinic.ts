@@ -15,9 +15,17 @@ export interface Patient {
 
 export interface Admission {
   id?: number;
-  patient: number;
-  motif: string;
-  statut?: string;
+  patient: {
+    id: number;
+    nom: string;
+    prenom: string;
+    telephone?: string;
+    date_naissance?: string;
+    genre?: string;
+  };
+  date_admission?: string;
+  diagnostic: string;
+  statut: string;
 }
 
 export interface Constante {
@@ -34,76 +42,202 @@ export interface Consultation {
   admission: number;
   examen_clinique: string;
   diagnostic: string;
-  medicaments?: string[];
   remarques?: string;
 }
 
+export interface Medicament {
+  id?: number;
+  nom: string;
+  description?: string;
+}
+
+export interface Prescription {
+  id?: number;
+  ordonnance: number;
+  medicament: number;
+  dosage: string;
+  frequence: string;
+  duree: string;
+  instructions?: string;
+}
+
+export interface Ordonnance {
+  id?: number;
+  consultation: number;
+  date_creation?: string;
+  instructions_generales?: string;
+  prescriptions?: Prescription[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClinicService {
+  private http = inject(HttpClient);
+  private apiUrl = 'http://127.0.0.1:8080/api'; // رابط الـ Backend
 
-     private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8000/api'; // Ajustez l'URL de votre backend Django
-
-  getConsultations(): Observable<Consultation[]> {
-  return this.http.get<Consultation[]>(`${this.apiUrl}/consultations/`);
-}
-  // Donnees de test stockees directement en mémoire
-  private mockPatients: Patient[] = [
-    { id: 1, nom: 'El Amrani', prenom: 'Amine', telephone: '0612345678', date_naissance: '1995-04-12', genre: 'M' },
-    { id: 2, nom: 'Benali', prenom: 'Sarah', telephone: '0687654321', date_naissance: '1998-09-25', genre: 'F' }
-  ];
-
-  private mockAdmissions: Admission[] = [
-    { id: 101, patient: 1, motif: 'Fièvre forte', statut: 'EN_ATTENTE' }
-  ];
-
-  private mockConstantes: Constante[] = [];
-  private mockConsultations: Consultation[] = [];
-
-  // Simulateurs d'appels API
+  // --- Patients ---
   getPatients(): Observable<Patient[]> {
-    return of([...this.mockPatients]).pipe(delay(100));
+    const url = `${this.apiUrl}/patients/`;
+    console.log('URL GET PATIENT =', url);
+    return this.http.get<Patient[]>(url);
   }
 
   createPatient(patient: Patient): Observable<Patient> {
-    const newPatient = { ...patient, id: Date.now() };
-    this.mockPatients.push(newPatient);
-    return of(newPatient).pipe(delay(100));
+    return this.http.post<Patient>(`${this.apiUrl}/patients/`, patient);
   }
 
-  deletePatient(id: number): Observable<void> {
-    this.mockPatients = this.mockPatients.filter(p => p.id !== id);
-    return of(undefined).pipe(delay(100));
+  updatePatient(id: number, patient: Patient): Observable<Patient> {
+    return this.http.put<Patient>(`${this.apiUrl}/patients/${id}/`, patient);
   }
 
+  deletePatient(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/patients/${id}/`);
+  }
+
+  // --- Admissions ---
+
+  createAdmission(
+  patientId: number
+  ):
+  Observable<Admission> {
+  
+  const data = {  
+  
+    patient_id: patientId,  
+  
+    diagnostic: '',  
+  
+    statut: 'EN_ATTENTE'  
+  
+  };  
+  
+  return this.http.post<Admission>(  
+    `${this.apiUrl}/admissions/`,  
+    data  
+  );
+  
+  }
+  
   getAdmissions(): Observable<Admission[]> {
-    return of([...this.mockAdmissions]).pipe(delay(100));
+  return this.http.get<Admission[]>(`${this.apiUrl}/admissions/`);
   }
-
-  getConstantes(): Observable<Constante[]> {
-    return of([...this.mockConstantes]).pipe(delay(100));
-  }
-
-  addConstantes(constante: Constante): Observable<Constante> {
-    const newConst = { ...constante, id: Date.now() };
-    this.mockConstantes.push(newConst);
-    return of(newConst).pipe(delay(100));
-  }
-
-  addConsultation(consultation: Consultation): Observable<Consultation> {
-    const newConsult = { ...consultation, id: Date.now() };
-    this.mockConsultations.push(newConsult);
-    return of(newConsult).pipe(delay(100));
-  }
-
+  
   updateStatutAdmission(id: number, statut: string): Observable<Admission> {
-    const admission = this.mockAdmissions.find(a => a.id === id);
-    if (admission) {
-      admission.statut = statut;
-    }
-    return of(admission!).pipe(delay(100));
+    return this.http.patch<Admission>(`${this.apiUrl}/admissions/${id}/`, { statut });
   }
+
+  // --- Medicaments ---
+  getMedicaments(): Observable<Medicament[]> {
+  return this.http.get<Medicament[]>(`${this.apiUrl}/medicaments/`);
+  }
+
+  // --- Ordonnances ---
+
+  getOrdonnances(): Observable<Ordonnance[]> {
+  return this.http.get<Ordonnance[]>(
+    `${this.apiUrl}/ordonnances/`
+  );
+  }
+
+  addOrdonnance(ordonnance: {
+  consultation: number;
+  instructions_generales?: string;
+  }): Observable<Ordonnance> {
+  return this.http.post<Ordonnance>(
+    `${this.apiUrl}/ordonnances/`,
+    ordonnance
+  );
+  }
+
+
+  // --- Prescriptions ---
+
+  getPrescriptions(): Observable<Prescription[]> {
+  return this.http.get<Prescription[]>(
+    `${this.apiUrl}/prescriptions/`
+  );
+  }
+
+  addPrescription(prescription: {
+  ordonnance: number;
+  medicament: number;
+  dosage: string;
+  frequence: string;
+  duree: string;
+  instructions?: string;
+  }): Observable<Prescription> {
+  return this.http.post<Prescription>(
+    `${this.apiUrl}/prescriptions/`,
+    prescription
+  );
+  }
+  // --- Constantes ---
+
+  addConstantes(constante: Constante): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/constantes/`, constante);
+  }
+  getConstantes(): Observable<Constante[]> {
+  return this.http.get<Constante[]>(
+    `${this.apiUrl}/constantes/`
+  );
+  }
+
+  getConsultations(): Observable<Consultation[]> {
+  return this.http.get<Consultation[]>(
+    `${this.apiUrl}/consultations/`
+  );
+  }
+
+
+  addConsultation(
+  admissionId: number,
+  consultation: any
+  ): Observable<Consultation> {
+    const data = {
+    admission: admissionId,
+    examen_clinique: consultation.examen_clinique,
+    diagnostic: consultation.diagnostic,
+    remarques: consultation.remarques || ''
+  };
+
+  return this.http.post<Consultation>(
+    `${this.apiUrl}/consultations/`,
+    data
+  );
+  }
+
+  addVitalSigns(
+  admissionId: number,
+  constante: any
+  ): Observable<any> {
+
+  const data = {
+    admission: admissionId,
+    temperature: constante.temperature,
+    tension: constante.tension,
+    glycemie: constante.glycemie || null,
+    degre_urgence: constante.degre_urgence || 'VERT'
+  };
+
+  return this.http.post<any>(
+    `${this.apiUrl}/constantes/`,
+    data
+  );
+  }
+
+  // =========================
+ // ORDONNANCES
+ // =========================
+
+  createOrdonnance(data: any): Observable<any> {
+
+  return this.http.post<any>(
+    `${this.apiUrl}/ordonnances/`,
+    data
+  );
+
+  }
+
+  
 }

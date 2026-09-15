@@ -2,13 +2,8 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth';
-
-interface Consultation {
-  id?: number;
-  [key: string]: any;
-}
 
 @Component({
   selector: 'app-login',
@@ -20,32 +15,86 @@ interface Consultation {
 export class LoginComponent {
   public authService = inject(AuthService);
   private router = inject(Router);
-  private http = inject(HttpClient);
 
-  apiUrl = 'http://localhost:8000/api';
+  apiUrl = 'http://localhost:8080/api';
   credentials = { username: '', password: '' };
   errorMessage = '';
 
   onSubmit(): void {
-    // Stocke les fausses données de session
-    localStorage.setItem('token', 'fake-jwt-token-123456');
-    localStorage.setItem('role', 'ADMIN');
 
-    // Force la re-navigation vers la page des patients
-    this.router.navigateByUrl('/patients').then((success) => {
-      if (!success) {
-        console.error('La navigation vers /patients a échoué. Vérifiez vos routes.');
-      }
-    });
+  this.authService.login(this.credentials).subscribe({
 
-    // Subscribe to the HTTP call instead of returning it
-    this.http.get<Consultation[]>(`${this.apiUrl}/consultations/`).subscribe({
-      next: (data) => {
-        console.log('Consultations:', data);
-      },
-      error: (err) => {
-        console.error('Erreur lors de la récupération des consultations:', err);
+    next: (res) => {
+
+      console.log('Login success:', res);
+
+      const role = this.authService.getUserRole();
+
+      console.log('ROLE:', role);
+
+
+      // =========================
+      // ADMIN
+      // =========================
+
+      if (role === 'ADMIN') {
+
+        this.router.navigateByUrl('/patients');
+
       }
-    });
+
+
+      // =========================
+      // INFIRMIERE
+      // =========================
+
+      else if (role === 'NURSE') {
+
+        this.router.navigateByUrl('/infirmiere');
+
+      }
+
+
+      // =========================
+      // MEDECIN
+      // =========================
+
+      else if (role === 'DOCTOR') {
+
+        this.router.navigateByUrl('/medecin');
+
+      }
+
+
+      // =========================
+      // ROLE INCONNU
+      // =========================
+
+      else {
+
+        console.warn(
+          'Role inconnu :',
+          role
+        );
+
+        this.errorMessage =
+          'Rôle utilisateur non reconnu.';
+      }
+
+    },
+
+    error: (err) => {
+
+      console.error(
+        'Erreur détaillée:',
+        err
+      );
+
+      this.errorMessage =
+        'Nom d\'utilisateur ou mot de passe incorrect';
+
+    }
+
+  });
   }
 }

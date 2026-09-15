@@ -1,65 +1,247 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, tap } from 'rxjs';
+import {
+  Injectable,
+  inject
+} from '@angular/core';
+
+import {
+  HttpClient
+} from '@angular/common/http';
+
+import {
+  Observable,
+  tap
+} from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private http = inject(HttpClient);
-  private apiUrl = 'http://127.0.0.1:8000';
 
-  login(credentials: { username: string; password: string }): Observable<any> {
-    // Backend Django REST Framework (décommenter en production)
-    /*
-    return this.http.post<any>(`${this.apiUrl}/api-token-auth/`, credentials).pipe(
-      tap((res) => {
-        if (res.token) {
-          localStorage.setItem('token', res.token);
+
+  private http =
+    inject(HttpClient);
+
+
+  private apiUrl =
+    'http://127.0.0.1:8080/api';
+
+
+  // =========================
+  // LOGIN
+  // =========================
+
+  login(
+    credentials: {
+      username: string;
+      password: string;
+    }
+  ):
+    Observable<any> {
+
+
+    return this.http.post<any>(
+
+      `${this.apiUrl}/login/`,
+
+      credentials
+
+    ).pipe(
+
+
+      tap(
+        (res) => {
+
+
+          console.log(
+            'LOGIN RESPONSE =',
+            res
+          );
+
+
+          // =========================
+          // TOKEN
+          // =========================
+
+          if (res.token) {
+
+            localStorage.setItem(
+              'token',
+              res.token
+            );
+
+          }
+
+
+          // =========================
+          // ROLE
+          // =========================
+
+          if (res.role) {
+
+            const role =
+              String(res.role)
+                .trim()
+                .toUpperCase();
+
+
+            localStorage.setItem(
+              'role',
+              role
+            );
+
+          }
+
+
+          // =========================
+          // USERNAME
+          // =========================
+
+          if (res.username) {
+
+            localStorage.setItem(
+              'username',
+              res.username
+            );
+
+          }
+
+
+          console.log(
+            'TOKEN STOCKÉ =',
+            localStorage.getItem(
+              'token'
+            )
+          );
+
+
+          console.log(
+            'ROLE STOCKÉ =',
+            localStorage.getItem(
+              'role'
+            )
+          );
+
+
         }
-        if (res.role) {
-          localStorage.setItem('role', res.role);
-        }
-      })
+
+      )
+
     );
-    */
 
-    // Mode Test Frontend : enregistrement direct du token et du rôle ADMIN
-    localStorage.setItem('token', 'fake-jwt-token-123456');
-    localStorage.setItem('role', 'ADMIN');
-    return of({ token: 'fake-jwt-token-123456', role: 'ADMIN' });
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+
+  // =========================
+  // TOKEN
+  // =========================
+
+  getToken():
+    string | null {
+
+    return localStorage.getItem(
+      'token'
+    );
+
   }
 
-  getUserRole(): string | null {
-    return localStorage.getItem('role');
+
+  // =========================
+  // ROLE
+  // =========================
+
+  getUserRole():
+    string | null {
+
+    const role =
+      localStorage.getItem(
+        'role'
+      );
+
+
+    if (!role) {
+
+      return null;
+
+    }
+
+
+    return role
+      .trim()
+      .toUpperCase();
+
   }
 
-  isLoggedIn(): boolean {
+
+  // =========================
+  // LOGIN STATUS
+  // =========================
+
+  isLoggedIn():
+    boolean {
+
     return !!this.getToken();
+
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
+
+  // =========================
+  // LOGOUT
+  // =========================
+
+  logout():
+    void {
+
+    localStorage.removeItem(
+      'token'
+    );
+
+    localStorage.removeItem(
+      'role'
+    );
+
+    localStorage.removeItem(
+      'username'
+    );
+
   }
 
-  // Vérification des rôles (Opérateurs || corrigés)
-  isNurse(): boolean {
-    const role = this.getUserRole();
-    return role === 'NURSE' || role === 'Infirmiere' || role === 'Infirmière';
+
+  // =========================
+  // ROLE HELPERS
+  // =========================
+
+  isNurse():
+    boolean {
+
+    return (
+      this.getUserRole()
+      === 'NURSE'
+    );
+
   }
 
-  isDoctor(): boolean {
-    const role = this.getUserRole();
-    return role === 'DOCTOR' || role === 'Medecin' ||  role === 'Médecin';
+
+  isDoctor():
+    boolean {
+
+    return (
+      this.getUserRole()
+      === 'DOCTOR'
+    );
+
   }
 
-  isAdmin(): boolean {
-    const role = this.getUserRole();
-    return role === 'ADMIN' || role === 'Administrateur';
+
+  isAdmin():
+    boolean {
+
+    return (
+      this.getUserRole()
+      === 'ADMIN'
+    );
+
   }
+
+
 }
