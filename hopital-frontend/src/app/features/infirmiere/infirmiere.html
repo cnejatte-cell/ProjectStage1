@@ -1,434 +1,335 @@
 <div class="nurse-page">
 
-  <!-- ================================= -->
-  <!-- HEADER -->
-  <!-- ================================= -->
-
+  <!-- =========================================
+       HEADER
+  ========================================= -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <div class="nurse-header">
-
     <div>
-
-      <h1>
-        👩‍⚕️ Espace Infirmière
-      </h1>
-
-      <p>
-        Gestion des patients et enregistrement des constantes médicales
-      </p>
-
+      <h1><i class="bi bi-person-badge"></i> Espace Infirmière</h1>
+      <p>Gestion des patients, admissions et constantes médicales</p>
     </div>
-
 
     <div class="admissions-badge">
-
-      👥 {{ admissions.length }} admission(s)
-
+      <i class="bi bi-people"></i> {{ admissions.length }} admission(s) en attente
     </div>
-
   </div>
 
 
-  <!-- ================================= -->
-  <!-- PATIENTS -->
-  <!-- ================================= -->
+  <!-- =========================================
+       1. PATIENTS
+  ========================================= -->
 
   <div class="section">
 
     <div class="section-title">
-
       <div>
-
-        <h2>
-          ⏳ Patients à prendre en charge
-        </h2>
-
-        <p>
-          Sélectionnez un patient pour enregistrer ses constantes.
-        </p>
-
+        <h2><i class="bi bi-people-fill"></i> Patients</h2>
+        <p>Ajoutez un nouveau patient ou sélectionnez un patient existant.</p>
       </div>
 
-
-      <span class="badge">
-
-        {{ admissions.length }}
-
-      </span>
-
-    </div>
-
-
-    <!-- EMPTY -->
-
-    <div
-      *ngIf="admissions.length === 0"
-      class="empty"
-    >
-
-      <div class="empty-icon">
-
-        👥
-
-      </div>
-
-      <h3>
-        Aucun patient en attente
-      </h3>
-
-      <p>
-        Il n'y a actuellement aucune admission à traiter.
-      </p>
-
-    </div>
-
-
-    <!-- ADMISSIONS -->
-
-    <div
-      *ngFor="let admission of admissions"
-      class="admission-card"
-    >
-
-
-      <div class="admission-top">
-
-
-        <div>
-
-          <span class="admission-id">
-
-            Admission #{{ admission.id }}
-
-          </span>
-
-
-          <h3 class="patient-name">
-
-            👤
-            {{ admission.patient.nom }}
-            {{ admission.patient.prenom }}
-
-          </h3>
-
-        </div>
-
-
-        <span class="status">
-
-          {{ admission.statut }}
-
-        </span>
-
-
-      </div>
-
-
-      <div class="admission-info">
-
-
-        <div>
-
-          <span class="info-label">
-
-            🩺 Diagnostic
-
-          </span>
-
-
-          <strong>
-
-            {{ admission.diagnostic || 'Non renseigné' }}
-
-          </strong>
-
-        </div>
-
-
-        <div>
-
-          <span class="info-label">
-
-            📋 Admission
-
-          </span>
-
-
-          <strong>
-
-            #{{ admission.id }}
-
-          </strong>
-
-        </div>
-
-
-      </div>
-
-
-      <div class="admission-actions">
-
-
-        <button
-          *ngIf="
-            admission.statut !==
-            'AUX_CONSTANTES'
-          "
-          class="primary-button"
-          (click)="selectAdmission(admission)"
-        >
-
-          🩺 Prendre les constantes
-
+      <div class="patient-section-actions">
+        <span class="badge">{{ patients.length }}</span>
+        <button class="primary-button" (click)="openPatientForm()">
+          <i class="bi bi-person-plus-fill"></i> Ajouter Patient
         </button>
-
-
-        <button
-          *ngIf="
-            admission.statut ===
-            'AUX_CONSTANTES'
-          "
-          class="continue-button"
-          (click)="selectAdmission(admission)"
-        >
-
-          ▶️ Continuer les constantes
-
-        </button>
-
-
       </div>
-
-
     </div>
 
+
+    <!-- =========================================
+         FORMULAIRE AJOUT PATIENT
+    ========================================= -->
+
+    <div *ngIf="showPatientForm" class="patient-form">
+      <div class="form-header">
+        <div>
+          <h2><i class="bi bi-person-plus-fill"></i> Ajouter un patient</h2>
+          <p>Enregistrez les informations du nouveau patient.</p>
+        </div>
+        <span class="form-status">Nouveau patient</span>
+      </div>
+
+      <div class="constants-grid">
+        <!-- NOM -->
+        <div class="form-group">
+          <label><i class="bi bi-person"></i> Nom</label>
+          <input type="text" [(ngModel)]="newPatient.nom">
+        </div>
+
+        <!-- PRENOM -->
+        <div class="form-group">
+          <label><i class="bi bi-person"></i> Prénom</label>
+          <input type="text" [(ngModel)]="newPatient.prenom">
+        </div>
+
+        <!-- TELEPHONE -->
+        <div class="form-group">
+          <label><i class="bi bi-telephone"></i> Téléphone</label>
+          <input type="text" [(ngModel)]="newPatient.telephone">
+        </div>
+
+        <!-- DATE NAISSANCE -->
+        <div class="form-group">
+          <label><i class="bi bi-calendar-event"></i> Date de naissance</label>
+          <input type="date" [(ngModel)]="newPatient.date_naissance">
+        </div>
+
+        <!-- GENRE -->
+        <div class="form-group">
+          <label><i class="bi bi-gender-ambiguous"></i> Genre</label>
+          <select [(ngModel)]="newPatient.genre">
+            <option value="M">Masculin</option>
+            <option value="F">Féminin</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="cancel-button" (click)="cancelPatientForm()">Annuler</button>
+        <button class="save-button" (click)="savePatient()">
+          <i class="bi bi-floppy"></i> Enregistrer Patient
+        </button>
+      </div>
+    </div>
+
+
+    <!-- =========================================
+         LISTE DES PATIENTS (TABLEAU)
+    ========================================= -->
+
+    <div *ngIf="patients.length === 0" class="empty">
+      <div class="empty-icon"><i class="bi bi-people"></i></div>
+      <h3>Aucun patient</h3>
+      <p>Aucun patient n'est actuellement enregistré.</p>
+    </div>
+
+    <div *ngIf="patients.length > 0" class="table-responsive" style="margin-top: 1rem; overflow-x: auto;">
+      <table class="patients-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+          <tr style="background-color: #1e3a34; color: white;">
+            <th style="padding: 12px;">ID</th>
+            <th style="padding: 12px;">NOM</th>
+            <th style="padding: 12px;">PRÉNOM</th>
+            <th style="padding: 12px;">TÉLÉPHONE</th>
+            <th style="padding: 12px;">DATE DE NAISSANCE</th>
+            <th style="padding: 12px; text-align: center;">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody><tr *ngFor="let patient of patients" style="border-bottom: 1px solid #e0e0e0;">
+            <td style="padding: 12px; font-weight: bold;">#{{ patient.id }}</td>
+            <td style="padding: 12px;">{{ patient.nom }}</td>
+            <td style="padding: 12px;">{{ patient.prenom }}</td>
+            <td style="padding: 12px;">
+              <i class="bi bi-telephone-fill text-danger me-1"></i>
+              {{ patient.telephone || 'Non renseigné' }}
+            </td>
+            <td style="padding: 12px;">
+              <i class="bi bi-calendar3 me-1"></i>
+              {{ patient.date_naissance || 'Non renseignée' }}
+            </td>
+            <td style="padding: 12px; text-align: center;">
+              <button class="primary-button" (click)="prendreAdmission(patient)">
+                <i class="bi bi-hospital"></i> Prendre Admission
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
   </div>
 
 
-  <!-- ================================= -->
-  <!-- FORM CONSTANTES -->
-  <!-- ================================= -->
+  <!-- =========================================
+       2. FORMULAIRE CREATION ADMISSION
+  ========================================= -->
 
-  <div
-    *ngIf="selectedAdmission"
-    class="constants-section"
-  >
-
-
+  <div *ngIf="selectedPatientForAdmission" class="constants-section">
     <div class="form-header">
-
-
       <div>
-
-        <h2>
-          🩺 Constantes du patient
-        </h2>
-
-        <p>
-          Enregistrez les informations médicales du patient.
-        </p>
-
+        <h2><i class="bi bi-hospital"></i> Créer une admission</h2>
+        <p>Saisissez le diagnostic du patient.</p>
       </div>
-
-
-      <span class="form-status">
-
-        En cours
-
-      </span>
-
-
+      <span class="form-status">Nouvelle admission</span>
     </div>
-
-
-    <!-- PATIENT -->
 
     <div class="patient-box">
-
-
-      <div class="patient-avatar">
-
-        👤
-
-      </div>
-
-
+      <div class="patient-avatar"><i class="bi bi-person-fill"></i></div>
       <div>
-
-        <span>
-          Patient sélectionné
-        </span>
-
-
-        <h3>
-
-          {{ selectedAdmission.patient.nom }}
-          {{ selectedAdmission.patient.prenom }}
-
-        </h3>
-
-
-        <p>
-
-          Admission #{{ selectedAdmission.id }}
-
-        </p>
-
+        <span>Patient sélectionné</span>
+        <h3>{{ selectedPatientForAdmission.nom }} {{ selectedPatientForAdmission.prenom }}</h3>
+        <p>Patient #{{ selectedPatientForAdmission.id }}</p>
       </div>
-
-
     </div>
 
+    <div class="form-group">
+      <label><i class="bi bi-stethoscope"></i> Diagnostic</label>
+      <textarea [(ngModel)]="diagnostic" rows="4" placeholder="Saisissez le diagnostic du patient..."></textarea>
+    </div>
 
-    <!-- FORM -->
+    <div class="form-actions">
+      <button class="cancel-button" (click)="annulerAdmission()">Annuler</button>
+      <button class="save-button" (click)="creerAdmission()">
+        <i class="bi bi-floppy"></i> Créer Admission
+      </button>
+    </div>
+  </div>
+
+
+  <!-- =========================================
+       3. ADMISSIONS EN ATTENTE
+  ========================================= -->
+
+  <div class="section">
+    <div class="section-title">
+      <div>
+        <h2><i class="bi bi-hourglass-split"></i> Patients à prendre en charge</h2>
+        <p>Ces patients attendent l'enregistrement des constantes.</p>
+      </div>
+      <span class="badge">{{ admissions.length }}</span>
+    </div>
+
+    <div *ngIf="admissions.length === 0" class="empty">
+      <div class="empty-icon"><i class="bi bi-hourglass"></i></div>
+      <h3>Aucune admission en attente</h3>
+      <p>Créez une admission pour commencer la prise en charge.</p>
+    </div>
+
+    <div *ngFor="let admission of admissions" class="admission-card">
+      <div class="admission-top">
+        <div>
+          <span class="admission-id">Admission #{{ admission.id }}</span>
+          <h3 class="patient-name">
+            <i class="bi bi-person"></i> {{ admission.patient.nom }} {{ admission.patient.prenom }}
+          </h3>
+        </div>
+        <span class="status">{{ admission.statut }}</span>
+      </div>
+
+      <div class="admission-info">
+        <div>
+          <span class="info-label"><i class="bi bi-stethoscope"></i> Diagnostic</span>
+          <strong>{{ admission.diagnostic || 'Non renseigné' }}</strong>
+        </div>
+        <div>
+          <span class="info-label"><i class="bi bi-clipboard-data"></i> Admission</span>
+          <strong>#{{ admission.id }}</strong>
+        </div>
+      </div>
+
+      <div class="admission-actions">
+        <button class="primary-button" (click)="selectAdmission(admission)">
+          <i class="bi bi-heart-pulse"></i> Prendre les constantes
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =========================================
+       4. CONSTANTES ET URGENCE AUTOMATIQUE========================================= -->
+
+  <div *ngIf="selectedAdmission" class="constants-section">
+    <div class="form-header">
+      <div>
+        <h2><i class="bi bi-heart-pulse-fill"></i> Constantes du patient</h2>
+        <p>Enregistrez les informations médicales pour calculer automatiquement le degré d'urgence.</p>
+      </div>
+      <span class="form-status">En cours</span>
+    </div>
+
+    <div class="patient-box">
+      <div class="patient-avatar"><i class="bi bi-person-fill"></i></div>
+      <div>
+        <span>Patient sélectionné</span>
+        <h3>{{ selectedAdmission.patient.nom }} {{ selectedAdmission.patient.prenom }}</h3>
+        <p>Admission #{{ selectedAdmission.id }}</p>
+      </div>
+    </div>
 
     <div class="constants-grid">
 
+     <!-- CAS D'URGENCE / MOTIF -->
+<div class="form-group">
+  <label><i class="bi bi-exclamation-octagon-fill text-danger"></i> Cas d'urgence / Motif</label>
+  <select [(ngModel)]="casUrgence" (ngModelChange)="calculerDegreUrgence()">
+    <option value="">-- Sélectionnez un cas --</option>
+    <option value="AUCUN">Consultation classique</option>
+    <option value="ACCIDENT">Accident grave / Traumatisme</option>
+    <option value="ARRET_CARDIAQUE">Arrêt cardiaque</option>
+    <option value="BRULURE_GRAVE">Brûlure grave</option>
+    <option value="MALAISE">Malaise / Vertige</option>
+  </select>
+</div>
 
       <!-- TEMPERATURE -->
-
       <div class="form-group">
-
-        <label>
-
-          🌡️ Température
-
-        </label>
-
-
+        <label><i class="bi bi-thermometer-half"></i> Température</label>
         <div class="input-with-unit">
-
-          <input
-            type="number"
-            [(ngModel)]="constante.temperature"
-            placeholder="Ex: 37.2"
-          >
-
-          <span>
-            °C
-          </span>
-
+          <input 
+            type="number" 
+            step="0.1" 
+            [(ngModel)]="constante.temperature" 
+            (ngModelChange)="calculerDegreUrgence()">
+          <span>°C</span>
         </div>
-
       </div>
-
 
       <!-- TENSION -->
-
       <div class="form-group">
-
-        <label>
-
-          ❤️ Tension artérielle
-
-        </label>
-
-
-        <input
-          type="text"
-          [(ngModel)]="constante.tension"
-          placeholder="Ex: 12/8"
-        >
-
+        <label><i class="bi bi-activity"></i> Tension artérielle</label>
+        <input 
+          type="text" 
+          placeholder="12/8" 
+          [(ngModel)]="constante.tension" 
+          (ngModelChange)="calculerDegreUrgence()">
       </div>
-
 
       <!-- GLYCEMIE -->
-
       <div class="form-group">
-
-        <label>
-
-          🩸 Glycémie
-
-        </label>
-
-
+        <label><i class="bi bi-droplet-fill text-danger"></i> Glycémie</label>
         <div class="input-with-unit">
-
-          <input
-            type="number"
-            [(ngModel)]="constante.glycemie"
-            placeholder="Ex: 0.95"
-          >
-
-          <span>
-            g/L
-          </span>
-
+          <input 
+            type="number" 
+            step="0.01" 
+            [(ngModel)]="constante.glycemie" 
+            (ngModelChange)="calculerDegreUrgence()">
+          <span>g/L</span>
         </div>
-
       </div>
 
-
-      <!-- URGENCE -->
-
+      <!-- DEGRE URGENCE (AUTOMATIQUE) -->
       <div class="form-group">
-
-        <label>
-
-          🚨 Degré d'urgence
-
-        </label>
-
-
-        <select
-          [(ngModel)]="constante.degre_urgence"
-        >
-
-          <option value="ROUGE">
-            🔴 Rouge - Urgent
-          </option>
-
-          <option value="JAUNE">
-            🟡 Jaune - Moyen
-          </option>
-
-          <option value="VERT">
-            🟢 Vert - Normal
-          </option>
-
-          <option value="GRIS">
-            ⚪ Gris - En attente
-          </option>
-
-        </select>
-
+        <label><i class="bi bi-shield-exclamation"></i> Degré d'urgence (Automatique)</label>
+        <div class="urgency-badge-box">
+          <span class="badge p-2 w-100 text-start" [ngClass]="{
+            'bg-danger': constante.degre_urgence === 'ROUGE',
+            'bg-warning text-dark': constante.degre_urgence === 'JAUNE',
+            'bg-success': constante.degre_urgence === 'VERT',
+            'bg-secondary': constante.degre_urgence === 'GRIS'
+          }">
+            <i class="bi" [ngClass]="{
+              'bi-exclamation-triangle-fill': constante.degre_urgence === 'ROUGE',
+              'bi-exclamation-circle-fill': constante.degre_urgence === 'JAUNE',
+              'bi-check-circle-fill': constante.degre_urgence === 'VERT',
+              'bi-dash-circle-fill': constante.degre_urgence === 'GRIS'
+            }"></i>
+            {{ constante.degre_urgence === 'ROUGE' ? ' Rouge - Urgent' : '' }}
+            {{ constante.degre_urgence === 'JAUNE' ? ' Jaune - Moyen' : '' }}
+            {{ constante.degre_urgence === 'VERT' ? ' Vert - Normal' : '' }}
+            {{ constante.degre_urgence === 'GRIS' ? ' En attente des données' : '' }}
+          </span>
+        </div>
       </div>
-
 
     </div>
-
-
-    <!-- ACTIONS -->
 
     <div class="form-actions">
-
-
-      <button
-        class="cancel-button"
-        (click)="selectedAdmission = null"
-      >
-
-        Annuler
-
-      </button>
-
-
-      <button
-        class="save-button"
-        (click)="saveConstantes()"
-      >
-
-        💾 Enregistrer les constantes
-
-      </button>
-
-
+      <button class="cancel-button" (click)="selectedAdmission = null">Annuler</button>
+      <button class="save-button" (click)="saveConstantes()">
+        <i class="bi bi-floppy"></i> Enregistrer les constantes</button>
     </div>
-
-
   </div>
-
 
 </div>

@@ -1,668 +1,284 @@
-<div class="container dashboard-container">
-
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<div class="dashboard-layout">
+  
   <!-- ========================= -->
   <!-- HEADER -->
   <!-- ========================= -->
-
   <div class="dashboard-header">
-
     <div>
-
-      <h2>
-        📊 Dashboard de la clinique
-      </h2>
-
-      <p>
-        Vue générale des patients et admissions
-      </p>
-
+      <h1>Tableau de bord</h1>
+      <p class="subtitle">Aperçu en temps réel des activités et du flux des patients</p>
     </div>
 
-
-    <button
-      class="btn btn-primary"
-      (click)="loadDashboard()"
-    >
-
-      🔄 Actualiser
-
+    <button class="btn btn-primary" (click)="loadDashboard()">
+      <i class="bi bi-arrow-clockwise"></i>
+      <span>Actualiser</span>
     </button>
-
-
   </div>
-
 
   <!-- ========================= -->
   <!-- LOADING -->
   <!-- ========================= -->
-
-  <div
-    *ngIf="loading"
-    class="loading-container"
-  >
-
-    ⏳ Chargement du dashboard...
-
+  <div *ngIf="loading" class="loading-state">
+    <i class="bi bi-arrow-repeat spin"></i>
+    <p>Chargement des données du tableau de bord...</p>
   </div>
-
 
   <!-- ========================= -->
   <!-- ERROR -->
   <!-- ========================= -->
-
-  <div
-    *ngIf="!loading && errorMessage"
-    class="alert alert-warning"
-  >
-
-    {{ errorMessage }}
-
+  <div *ngIf="!loading && errorMessage" class="alert-message alert-danger">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <span>{{ errorMessage }}</span>
   </div>
-
 
   <!-- ========================= -->
   <!-- CONTENT -->
   <!-- ========================= -->
+  <div *ngIf="!loading" class="dashboard-content">
 
-  <div *ngIf="!loading">
+    <!-- STATISTIQUES GÉNÉRALES -->
+    <div class="section-title">
+      <h3>Statistiques générales</h3>
+    </div>
 
-
-    <!-- ========================= -->
-    <!-- STATISTIQUES -->
-    <!-- ========================= -->
-
-    <h4 class="section-title">
-
-      📈 Statistiques générales
-
-    </h4>
-
-
-    <div class="row mb-4">
-
+    <div class="stats-grid">
 
       <!-- PATIENTS -->
-
-      <div class="col-md-4 col-lg mb-3">
-
-        <div class="dashboard-card patients-card">
-
-          <div class="stat-icon">
-            👥
-          </div>
-
-          <div>
-
-            <span>
-              Total patients
-            </span>
-
-            <h3>
-              {{ totalPatients }}
-            </h3>
-
-          </div>
-
+      <div class="stat-card">
+        <div class="stat-icon icon-blue">
+          <i class="bi bi-people-fill"></i>
         </div>
-
+        <div class="stat-details">
+          <span class="stat-label">Total Patients</span>
+          <h3 class="stat-value">{{ totalPatients }}</h3>
+        </div>
       </div>
-
 
       <!-- ADMISSIONS -->
-
-      <div class="col-md-4 col-lg mb-3">
-
-        <div class="dashboard-card admissions-card">
-
-          <div class="stat-icon">
-            🏥
-          </div>
-
-          <div>
-
-            <span>
-              Total admissions
-            </span>
-
-            <h3>
-              {{ totalAdmissions }}
-            </h3>
-
-          </div>
-
+      <div class="stat-card">
+        <div class="stat-icon icon-teal">
+          <i class="bi bi-hospital-fill"></i>
         </div>
-
+        <div class="stat-details">
+          <span class="stat-label">Total Admissions</span>
+          <h3 class="stat-value">{{ totalAdmissions }}</h3>
+        </div>
       </div>
-
 
       <!-- INFIRMIERE -->
-
-      <div class="col-md-4 col-lg mb-3">
-
-        <div class="dashboard-card nurse-card">
-
-          <div class="stat-icon">
-            🩺
-          </div>
-
-          <div>
-
-            <span>
-              Chez l'infirmière
-            </span>
-
-            <h3>
-              {{ patientsChezInfirmiere }}
-            </h3>
-
-          </div>
-
+      <div class="stat-card">
+        <div class="stat-icon icon-cyan">
+          <i class="bi bi-heart-pulse-fill"></i>
         </div>
-
+        <div class="stat-details">
+          <span class="stat-label">En Tri (Infirmière)</span>
+          <h3 class="stat-value">{{ patientsChezInfirmiere }}</h3>
+        </div>
       </div>
-
 
       <!-- MEDECIN -->
-
-      <div class="col-md-6 col-lg mb-3">
-
-        <div class="dashboard-card doctor-card">
-
-          <div class="stat-icon">
-            👨‍⚕️
-          </div>
-
-          <div>
-
-            <span>
-              Chez le médecin
-            </span>
-
-            <h3>
-              {{ patientsChezMedecin }}
-            </h3>
-
-          </div>
-
+      <div class="stat-card">
+        <div class="stat-icon icon-indigo">
+          <i class="bi bi-file-earmark-medical-fill"></i>
         </div>
-
+        <div class="stat-details">
+          <span class="stat-label">En Consultation (Médecin)</span>
+          <h3 class="stat-value">{{ patientsChezMedecin }}</h3>
+        </div>
       </div>
-
 
       <!-- TERMINE -->
-
-      <div class="col-md-6 col-lg mb-3">
-
-        <div class="dashboard-card completed-card">
-
-          <div class="stat-icon">
-            ✅
-          </div>
-
-          <div>
-
-            <span>
-              Admissions terminées
-            </span>
-
-            <h3>
-              {{ admissionsTerminees }}
-            </h3>
-
-          </div>
-
+      <div class="stat-card">
+        <div class="stat-icon icon-green">
+          <i class="bi bi-check-circle-fill"></i>
         </div>
-
+        <div class="stat-details">
+          <span class="stat-label">Admissions Terminées</span>
+          <h3 class="stat-value">{{ admissionsTerminees }}</h3>
+        </div>
       </div>
-
 
     </div>
 
+    <!-- RÉPARTITION PAR URGENCE -->
+    <div class="section-title">
+      <h3>Répartition par niveau d'urgence</h3>
+    </div>
 
-    <!-- ========================= -->
-    <!-- URGENCES -->
-    <!-- ========================= -->
-
-    <h4 class="section-title">
-
-      🚨 Répartition par urgence
-
-    </h4>
-
-
-    <div class="row mb-4">
-
+    <div class="urgency-grid">
 
       <!-- ROUGE -->
-
-      <div class="col-md-3 mb-3">
-
-        <div class="urgence-card urgence-rouge">
-
-          <span>
-            🔴 Urgent
-          </span>
-
-          <h2>
-            {{ patientsRouges.length }}
-          </h2>
-
-          <small>
-            Patients critiques
-          </small>
-
+      <div class="urgency-card level-red">
+        <div class="urgency-header">
+          <span class="status-indicator"></span>
+          <h4>Critique</h4>
         </div>
-
+        <h2 class="urgency-count">{{ patientsRouges.length }}</h2>
+        <p class="urgency-desc">Prise en charge immédiate</p>
       </div>
-
 
       <!-- JAUNE -->
-
-      <div class="col-md-3 mb-3">
-
-        <div class="urgence-card urgence-jaune">
-
-          <span>
-            🟡 Modéré
-          </span>
-
-          <h2>
-            {{ patientsJaunes.length }}
-          </h2>
-
-          <small>
-            Attention médicale
-          </small>
-
+      <div class="urgency-card level-yellow">
+        <div class="urgency-header">
+          <span class="status-indicator"></span>
+          <h4>Modéré</h4>
         </div>
-
+        <h2 class="urgency-count">{{ patientsJaunes.length }}</h2>
+        <p class="urgency-desc">Attention médicale requise</p>
       </div>
-
 
       <!-- VERT -->
-
-      <div class="col-md-3 mb-3">
-
-        <div class="urgence-card urgence-vert">
-
-          <span>
-            🟢 Stable
-          </span>
-
-          <h2>
-            {{ patientsVerts.length }}
-          </h2>
-
-          <small>
-            Patients stables
-          </small>
-
+      <div class="urgency-card level-green">
+        <div class="urgency-header">
+          <span class="status-indicator"></span>
+          <h4>Stable</h4>
         </div>
-
+        <h2 class="urgency-count">{{ patientsVerts.length }}</h2>
+        <p class="urgency-desc">État de santé stable</p>
       </div>
-
 
       <!-- GRIS -->
+      <div class="urgency-card level-gray">
+        <div class="urgency-header">
+          <span class="status-indicator"></span>
+          <h4>En attente</h4>
+        </div>
+        <h2 class="urgency-count">{{ patientsGris.length }}</h2>
+        <p class="urgency-desc">En attente d'évaluation</p>
+      </div>
 
-      <div class="col-md-3 mb-3">
+    </div>
 
-        <div class="urgence-card urgence-gris">
+    <!-- SUMMARY BAR -->
+    <div class="summary-banner">
+      <div class="banner-info">
+        <i class="bi bi-person-lines-fill"></i>
+        <span>Patients actuellement pris en charge dans la clinique :</span>
+      </div>
+      <span class="banner-badge">{{ totalUrgences }}</span>
+    </div>
 
-          <span>
-            ⚪ En attente
-          </span>
+    <!-- LISTES DE PATIENTS PAR SECTIONS -->
+    <div class="patient-sections-grid">
 
-          <h2>
-            {{ patientsGris.length }}
-          </h2>
-
-          <small>
-            Sans évaluation
-          </small>
-
+      <!-- PATIENTS CRITIQUES -->
+      <div class="card-box section-red">
+        <div class="card-box-header">
+          <div class="header-title">
+            <i class="bi bi-exclamation-octagon-fill"></i>
+            <h3>Patients critiques</h3>
+          </div>
+          <span class="count-badge red-badge">{{ patientsRouges.length }}</span>
         </div>
 
-      </div>
-
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- TOTAL PATIENTS ACTIFS -->
-    <!-- ========================= -->
-
-    <div class="summary-box">
-
-      <span>
-        👨‍⚕️ Patients actuellement suivis :
-      </span>
-
-      <strong>
-        {{ totalUrgences }}
-      </strong>
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- PATIENTS URGENTS -->
-    <!-- ========================= -->
-
-    <div class="patient-section rouge-section">
-
-
-      <div class="section-header">
-
-        <h4>
-          🔴 Patients urgents
-        </h4>
-
-        <span class="count-badge rouge-badge">
-
-          {{ patientsRouges.length }}
-
-        </span>
-
-      </div>
-
-
-      <div
-        *ngIf="patientsRouges.length === 0"
-        class="empty-list"
-      >
-
-        Aucun patient urgent.
-
-      </div>
-
-
-      <div
-        *ngFor="let item of patientsRouges"
-        class="patient-item"
-      >
-
-
-        <div>
-
-          <strong>
-
-            👤
-            {{ item.patient.nom }}
-            {{ item.patient.prenom }}
-
-          </strong>
-
-
-          <p>
-
-            🏥 Admission
-            #{{ item.admission.id }}
-
-          </p>
-
+        <div *ngIf="patientsRouges.length === 0" class="empty-state">
+          <i class="bi bi-shield-check"></i>
+          <p>Aucun patient en état critique actuellement.</p>
         </div>
 
-
-        <a
-          class="btn btn-danger"
-          [routerLink]="[
-            '/patients',
-            item.patient.id,
-            'medical-record'
-          ]"
-        >
-
-          📁 Voir le dossier
-
-        </a>
-
-
+        <div class="patient-list">
+          <div *ngFor="let item of patientsRouges" class="patient-row">
+            <div class="patient-info">
+              <strong>{{ item.patient.nom }} {{ item.patient.prenom }}</strong>
+              <span class="admission-id">Admission #{{ item.admission.id }}</span>
+            </div>
+            <a class="btn-action btn-red" [routerLink]="['/patients', item.patient.id, 'medical-record']">
+              <i class="bi bi-folder2-open"></i>
+              <span>Consulter</span>
+            </a>
+          </div>
+        </div>
       </div>
 
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- PATIENTS MODERES -->
-    <!-- ========================= -->
-
-    <div class="patient-section jaune-section">
-
-
-      <div class="section-header">
-
-        <h4>
-          🟡 Patients modérés
-        </h4>
-
-        <span class="count-badge jaune-badge">
-
-          {{ patientsJaunes.length }}
-
-        </span>
-
-      </div>
-
-
-      <div
-        *ngIf="patientsJaunes.length === 0"
-        class="empty-list"
-      >
-
-        Aucun patient modéré.
-
-      </div>
-
-
-      <div
-        *ngFor="let item of patientsJaunes"
-        class="patient-item"
-      >
-
-
-        <div>
-
-          <strong>
-
-            👤
-            {{ item.patient.nom }}
-            {{ item.patient.prenom }}
-
-          </strong>
-
-
-          <p>
-
-            🏥 Admission
-            #{{ item.admission.id }}
-
-          </p>
-
+      <!-- PATIENTS MODÉRÉS -->
+      <div class="card-box section-yellow">
+        <div class="card-box-header">
+          <div class="header-title">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <h3>Patients modérés</h3>
+          </div>
+          <span class="count-badge yellow-badge">{{ patientsJaunes.length }}</span>
         </div>
 
-
-        <a
-          class="btn btn-warning"
-          [routerLink]="[
-            '/patients',
-            item.patient.id,
-            'medical-record'
-          ]"
-        >
-
-          📁 Voir le dossier
-
-        </a>
-
-
-      </div>
-
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- PATIENTS STABLES -->
-    <!-- ========================= -->
-
-    <div class="patient-section vert-section">
-
-
-      <div class="section-header">
-
-        <h4>
-          🟢 Patients stables
-        </h4>
-
-        <span class="count-badge vert-badge">
-
-          {{ patientsVerts.length }}
-
-        </span>
-
-      </div>
-
-
-      <div
-        *ngIf="patientsVerts.length === 0"
-        class="empty-list"
-      >
-
-        Aucun patient stable.
-
-      </div>
-
-
-      <div
-        *ngFor="let item of patientsVerts"
-        class="patient-item"
-      >
-
-
-        <div>
-
-          <strong>
-
-            👤
-            {{ item.patient.nom }}
-            {{ item.patient.prenom }}
-
-          </strong>
-
-
-          <p>
-
-            🏥 Admission
-            #{{ item.admission.id }}
-
-          </p>
-
+        <div *ngIf="patientsJaunes.length === 0" class="empty-state">
+          <i class="bi bi-check2-circle"></i>
+          <p>Aucun patient modéré actuellement.</p>
         </div>
 
-
-        <a
-          class="btn btn-success"
-          [routerLink]="[
-            '/patients',
-            item.patient.id,
-            'medical-record'
-          ]"
-        >
-
-          📁 Voir le dossier
-
-        </a>
-
-
+        <div class="patient-list">
+          <div *ngFor="let item of patientsJaunes" class="patient-row">
+            <div class="patient-info">
+              <strong>{{ item.patient.nom }} {{ item.patient.prenom }}</strong>
+              <span class="admission-id">Admission #{{ item.admission.id }}</span>
+            </div>
+            <a class="btn-action btn-yellow" [routerLink]="['/patients', item.patient.id, 'medical-record']">
+              <i class="bi bi-folder2-open"></i>
+              <span>Consulter</span>
+            </a>
+          </div>
+        </div>
       </div>
 
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- PATIENTS EN ATTENTE -->
-    <!-- ========================= -->
-
-    <div class="patient-section gris-section">
-
-
-      <div class="section-header">
-
-        <h4>
-          ⚪ Patients en attente
-        </h4>
-
-        <span class="count-badge gris-badge">
-
-          {{ patientsGris.length }}
-
-        </span>
-
-      </div>
-
-
-      <div
-        *ngIf="patientsGris.length === 0"
-        class="empty-list"
-      >
-
-        Aucun patient en attente.
-
-      </div>
-
-
-      <div
-        *ngFor="let item of patientsGris"
-        class="patient-item"
-      >
-
-
-        <div>
-
-          <strong>
-
-            👤
-            {{ item.patient.nom }}
-            {{ item.patient.prenom }}
-
-          </strong>
-
-
-          <p>
-
-            🏥 Admission
-            #{{ item.admission.id }}
-
-          </p>
-
+      <!-- PATIENTS STABLES -->
+      <div class="card-box section-green">
+        <div class="card-box-header">
+          <div class="header-title">
+            <i class="bi bi-check-circle-fill"></i>
+            <h3>Patients stables</h3>
+          </div>
+          <span class="count-badge green-badge">{{ patientsVerts.length }}</span>
         </div>
 
+        <div *ngIf="patientsVerts.length === 0" class="empty-state">
+          <i class="bi bi-info-circle"></i>
+          <p>Aucun patient stable actuellement.</p>
+        </div>
 
-        <a
-          class="btn btn-secondary"
-          [routerLink]="[
-            '/patients',
-            item.patient.id,
-            'medical-record'
-          ]"
-        >
-
-          📁 Voir le dossier
-
-        </a>
-
-
+        <div class="patient-list">
+          <div *ngFor="let item of patientsVerts" class="patient-row">
+            <div class="patient-info">
+              <strong>{{ item.patient.nom }} {{ item.patient.prenom }}</strong>
+              <span class="admission-id">Admission #{{ item.admission.id }}</span>
+            </div>
+            <a class="btn-action btn-green" [routerLink]="['/patients', item.patient.id, 'medical-record']">
+              <i class="bi bi-folder2-open"></i>
+              <span>Consulter</span>
+            </a>
+          </div>
+        </div>
       </div>
 
+      <!-- PATIENTS EN ATTENTE -->
+      <div class="card-box section-gray">
+        <div class="card-box-header">
+          <div class="header-title">
+            <i class="bi bi-clock-history"></i>
+            <h3>Patients en attente</h3>
+          </div>
+          <span class="count-badge gray-badge">{{ patientsGris.length }}</span>
+        </div>
+
+        <div *ngIf="patientsGris.length === 0" class="empty-state">
+          <i class="bi bi-inbox"></i>
+          <p>Aucun patient en attente d'évaluation.</p>
+        </div>
+
+        <div class="patient-list">
+          <div *ngFor="let item of patientsGris" class="patient-row">
+            <div class="patient-info">
+              <strong>{{ item.patient.nom }} {{ item.patient.prenom }}</strong>
+              <span class="admission-id">Admission #{{ item.admission.id }}</span>
+            </div>
+            <a class="btn-action btn-gray" [routerLink]="['/patients', item.patient.id, 'medical-record']">
+              <i class="bi bi-folder2-open"></i>
+              <span>Consulter</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
     </div>
-
 
   </div>
-
-
 </div>

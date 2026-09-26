@@ -2,14 +2,18 @@
 
   <div class="doctor-header">
     <div>
-      <h1>👨‍⚕️ Espace Médecin</h1>
+      <h1>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+        Espace Médecin
+      </h1>
       <p>Gestion des patients et consultations</p>
     </div>
 
     <button
       class="refresh-button"
       (click)="loadAdmissions()">
-      🔄 Actualiser
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+      Actualiser
     </button>
   </div>
 
@@ -42,7 +46,10 @@
 
     <div class="section-title">
 
-      <h2>🩺 Patients à consulter</h2>
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3V8zm-9 3c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        Patients à consulter
+      </h2>
 
       <span class="badge">
         {{ admissions.length }}
@@ -65,7 +72,7 @@
       class="empty">
 
       <div class="empty-icon">
-        🏥
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/></svg>
       </div>
 
       <h3>Aucun patient</h3>
@@ -94,7 +101,7 @@
 
           <p class="patient-name">
 
-            👤
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             {{ admission.patient.prenom }}
             {{ admission.patient.nom }}
 
@@ -153,7 +160,8 @@
         class="primary-button"
         (click)="selectAdmission(admission)">
 
-        👁️ Consulter le patient
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        Consulter le patient
 
       </button>
 
@@ -172,7 +180,8 @@
     <div class="section-title">
 
       <h2>
-        📋 Dossier du patient
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        Dossier du patient
       </h2>
 
     </div>
@@ -184,7 +193,7 @@
 
       <h3>
 
-        👤
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
         {{ selectedAdmission.patient.prenom }}
         {{ selectedAdmission.patient.nom }}
 
@@ -207,7 +216,10 @@
 
     <div class="constants-box">
 
-      <h3>🩺 Constantes vitales</h3>
+      <h3>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3V8zm-9 3c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        Constantes vitales
+      </h3>
 
 
       <div
@@ -226,7 +238,10 @@
 
         <div>
 
-          <strong>🌡️ Température</strong>
+          <strong>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-3-8c.55 0 1 .45 1 1v3h-2V6c0-.55.45-1 1-1z"/></svg>
+            Température
+          </strong>
 
           <span>
             {{ constante.temperature }}
@@ -237,7 +252,10 @@
 
         <div>
 
-          <strong>🩸 Tension</strong>
+          <strong>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            Tension
+          </strong>
 
           <span>
             {{ constante.tension }}
@@ -248,7 +266,10 @@
 
         <div>
 
-          <strong>💉 Glycémie</strong>
+          <strong>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M6 3h12v2H6zm11 3H7c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-1 9h-3v3h-2v-3H9v-2h3v-3h2v3h3v2z"/></svg>
+            Glycémie
+          </strong>
 
           <span>
             {{ constante.glycemie ?? '-' }}
@@ -259,7 +280,10 @@
 
         <div>
 
-          <strong>🚨 Urgence</strong>
+          <strong>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Urgence
+          </strong>
 
           <span
             class="urgence"
@@ -289,7 +313,8 @@
     <div class="consultation-box">
 
       <h3>
-        📝 Consultation médicale
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        Consultation médicale
       </h3>
 
 
@@ -353,7 +378,8 @@
           class="save-button"
           (click)="saveConsultation()">
 
-          💾 Enregistrer la consultation
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+          Enregistrer la consultation
 
         </button>
 
@@ -369,7 +395,10 @@
      *ngIf="consultationId"
      class="consultation-box">
 
-     <h3>💊 Ordonnance médicale</h3>
+     <h3>
+       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M4.5 10.5C3.67 10.5 3 11.17 3 12s.67 1.5 1.5 1.5h15c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-15zM10.5 4.5C10.5 3.67 11.17 3 12 3s1.5.67 1.5 1.5v15c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5v-15z"/></svg>
+       Ordonnance médicale
+     </h3>
 
 
      <!-- CREER ORDONNANCE -->
@@ -385,7 +414,8 @@
         class="primary-button"
         (click)="createOrdonnance()">
 
-      💊 Créer l'ordonnance
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M4.5 10.5C3.67 10.5 3 11.17 3 12s.67 1.5 1.5 1.5h15c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-15zM10.5 4.5C10.5 3.67 11.17 3 12 3s1.5.67 1.5 1.5v15c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5v-15z"/></svg>
+        Créer l'ordonnance
 
        </button>
 
@@ -473,7 +503,8 @@
           class="save-button"
           (click)="addPrescription()">
 
-          ➕ Ajouter le médicament
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          Ajouter le médicament
 
         </button>
 
@@ -483,7 +514,10 @@
 
        <div class="prescriptions-list">
 
-         <h4>💊 Médicaments prescrits</h4>
+         <h4>
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M4.5 10.5C3.67 10.5 3 11.17 3 12s.67 1.5 1.5 1.5h15c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-15z"/></svg>
+           Médicaments prescrits
+         </h4>
 
 
         <p *ngIf="prescriptions.length === 0">
@@ -545,7 +579,8 @@
       class="btn btn-success"
       (click)="terminateAdmission()">
 
-      ✅ Terminer l'admission
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      Terminer l'admission
 
     </button>
 

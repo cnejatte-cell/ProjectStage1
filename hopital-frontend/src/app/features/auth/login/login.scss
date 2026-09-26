@@ -34,14 +34,16 @@ $shadow-card: 0 24px 60px -20px rgba(31, 111, 120, 0.25);
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
-// --- Page shell -------------------------------------------------------------
-body {
-  min-height: 100vh;
-  margin: 0;
+// --- Hôte du composant (remplace body pour Angular) -------------------------
+:host {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
   padding: 24px;
+  box-sizing: border-box;
   font-family: $font-body;
   color: $text;
   background:
@@ -60,6 +62,7 @@ body {
   box-shadow: $shadow-card;
   border: 1px solid rgba($primary, 0.06);
   animation: rise 0.6s ease-out;
+  box-sizing: border-box;
 
   h2 {
     margin: 0 0 6px;
@@ -115,6 +118,7 @@ form {
     background: #FBFDFC;
     color: $text;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    box-sizing: border-box;
 
     &::placeholder {
       color: #A8B8B6;
@@ -139,9 +143,9 @@ form {
 button[type="submit"] {
   margin-top: 8px;
   padding: 15px 20px;
-  border: none;
-  border-radius: $radius-md;
-  background: linear-gradient(135deg, $primary, $primary-dark);color: #FFFFFF;
+  border: none;border-radius: $radius-md;
+  background: linear-gradient(135deg, $primary, $primary-dark);
+  color: #FFFFFF;
   font-family: $font-body;
   font-size: 1rem;
   font-weight: 600;
@@ -164,7 +168,7 @@ button[type="submit"] {
   }
 }
 
-// --- Animation d'entrée : douce, sans surenchère ---------------------------
+// --- Animation d'entrée ---------------------------
 @keyframes rise {
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }

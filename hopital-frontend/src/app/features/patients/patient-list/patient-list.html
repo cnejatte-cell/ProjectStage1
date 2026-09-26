@@ -1,536 +1,271 @@
-<div class="patient-page">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  <!-- ================================= -->
-  <!-- HEADER -->
-  <!-- ================================= -->
+<div class="dashboard-layout">
 
-  <div class="page-header">
-
-    <div>
-
-      <h2>
-        👥 Gestion des Patients
-      </h2>
-
-      <p>
-        Gestion et suivi des patients de la clinique
-      </p>
-
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="sidebar">
+    <div class="logo-brand">
+      <div class="brand-icon">
+        <i class="bi bi-cross-fill"></i>
+      </div>
+      <h2>Administrateur</h2>
     </div>
+    <nav class="nav-menu">
+      <a class="nav-item" routerLink="/dashboard" routerLinkActive="active">
+        <i class="bi bi-grid-1x2-fill"></i>
+        <span>Tableau de bord</span>
+      </a>
 
+      <!-- Redirige vers la liste des patients -->
+      <a class="nav-item" routerLink="/patients" (click)="scrollToListePatients()">
+        <i class="bi bi-people-fill"></i>
+        <span>Patients</span>
+      </a>
 
-    <div class="header-actions">
-
-      <button
-        class="btn btn-refresh"
-        (click)="chargerPatients()"
-      >
-        🔄 Actualiser
+      <a class="nav-item" routerLink="/admissions" routerLinkActive="active">
+        <i class="bi bi-hospital-fill"></i>
+        <span>Admissions</span>
+      </a>
+    </nav>
+   
+    <div class="sidebar-footer">
+      <button class="btn-logout" (click)="onLogout()">
+        <i class="bi bi-box-arrow-right"></i> Déconnexion
       </button>
-
-
-      <button
-        class="btn btn-logout"
-        (click)="onLogout()"
-      >
-        🚪 Déconnexion
-      </button>
-
     </div>
+  </aside>
 
-  </div>
+  <!-- CONTENU PRINCIPAL -->
+  <main class="main-content">
 
-
-  <!-- ================================= -->
-  <!-- SEARCH -->
-  <!-- ================================= -->
-
-  <div class="search-card">
-
-    <div class="search-icon">
-      🔍
-    </div>
-
-    <input
-      type="text"
-      placeholder="Rechercher par nom ou prénom..."
-      [(ngModel)]="searchTerm"
-    />
-
-  </div>
-
-
-  <!-- ================================= -->
-  <!-- FORM -->
-  <!-- ================================= -->
-
-  <div class="card-form">
-
-
-    <div class="form-title">
-
-      <div class="form-icon">
-
-        {{ isEditing ? '✏️' : '➕' }}
-
-      </div>
-
-
+    <!-- HEADER DE BORD -->
+    <header class="dashboard-header">
       <div>
-
-        <h3>
-
-          {{
-            isEditing
-              ? 'Modifier le patient'
-              : 'Ajouter un nouveau patient'
-          }}
-
-        </h3>
-
-
-        <p>
-
-          {{
-            isEditing
-              ? 'Modifiez les informations du patient.'
-              : 'Remplissez les informations du nouveau patient.'
-          }}
-
-        </p>
-
+        <h1>Gestion des Patients</h1>
+        <p class="subtitle">Aperçu et suivi général de la patientèle</p>
       </div>
 
-    </div>
-
-
-    <form
-      (submit)="onSubmit(); $event.preventDefault()"
-    >
-
-
-      <!-- NOM -->
-
-      <div class="form-group">
-
-        <label for="nom">
-
-          Nom *
-
-        </label>
-
-
-        <input
-          type="text"
-          id="nom"
-          [(ngModel)]="newPatient.nom"
-          name="nom"
-          required
-        />
-
-      </div>
-
-
-      <!-- PRENOM -->
-
-      <div class="form-group">
-
-        <label for="prenom">
-
-          Prénom *
-
-        </label>
-
-
-        <input
-          type="text"
-          id="prenom"
-          [(ngModel)]="newPatient.prenom"
-          name="prenom"
-          required
-        />
-
-      </div>
-
-
-      <!-- TELEPHONE -->
-
-      <div class="form-group">
-
-        <label for="telephone">
-
-          Téléphone *
-
-        </label>
-
-
-        <input
-          type="text"
-          id="telephone"
-          [(ngModel)]="newPatient.telephone"
-          name="telephone"
-          required
-        />
-
-      </div>
-
-
-      <!-- DATE NAISSANCE -->
-
-      <div class="form-group">
-
-        <label for="date_naissance">
-
-          Date de naissance
-
-        </label>
-
-
-        <input
-          type="date"
-          id="date_naissance"
-          [(ngModel)]="newPatient.date_naissance"
-          name="date_naissance"
-        />
-
-      </div>
-
-
-      <!-- GENRE -->
-
-      <div class="form-group">
-
-        <label for="genre">
-
-          Genre
-
-        </label>
-
-
-        <select
-          id="genre"
-          [(ngModel)]="newPatient.genre"
-          name="genre"
-        >
-
-          <option value="M">
-            Masculin
-          </option>
-
-
-          <option value="F">
-            Féminin
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <!-- BUTTONS -->
-
-      <div class="form-buttons">
-
-
-        <button
-          type="submit"
-          class="btn-save"
-        >
-
-          {{
-            isEditing
-              ? '💾 Enregistrer'
-              : '➕ Ajouter le patient'
-          }}
-
+      <div class="header-right">
+        <button class="btn-refresh" (click)="chargerPatients()">
+          <i class="bi bi-arrow-clockwise"></i> Actualiser
         </button>
+        <div class="user-avatar" title="Administrateur">
+          <i class="bi bi-person-circle"></i>
+        </div>
+      </div>
+    </header>
 
-
-        <button
-          *ngIf="isEditing"
-          type="button"
-          class="btn-cancel"
-          (click)="resetForm()"
-        >
-
-          Annuler
-
-        </button>
-
-
+    <!-- DASHBOARD STATISTIQUES (KPI) -->
+    <section class="stats-grid">
+      <div class="stat-card blue">
+        <div class="stat-icon">
+          <i class="bi bi-people-fill"></i>
+        </div>
+        <div class="stat-details">
+          <span class="stat-label">Total Patients</span>
+          <h3 class="stat-value">{{ patients.length }}</h3>
+        </div>
       </div>
 
-
-    </form>
-
-  </div>
-
-
-  <!-- ================================= -->
-  <!-- PATIENTS LIST -->
-  <!-- ================================= -->
-
-  <div class="patients-card">
-
-
-    <!-- HEADER -->
-
-    <div class="patients-header">
-
-
-      <div>
-
-        <h3>
-          📋 Liste des patients
-        </h3>
-
-
-        <p>
-
-          {{ filteredPatients.length }}
-
-          patient(s) trouvé(s)
-
-        </p>
-
+      <div class="stat-card cyan">
+        <div class="stat-icon">
+          <i class="bi bi-gender-male"></i>
+        </div>
+        <div class="stat-details">
+          <span class="stat-label">Hommes</span>
+          <h3 class="stat-value">{{ totalHommes }}</h3>
+        </div>
       </div>
 
+      <div class="stat-card pink">
+        <div class="stat-icon">
+          <i class="bi bi-gender-female"></i>
+        </div>
+        <div class="stat-details">
+          <span class="stat-label">Femmes</span>
+          <h3 class="stat-value">{{ totalFemmes }}</h3>
+        </div>
+      </div>
+    </section>
 
-      <div class="patients-count">
-
-        👥 {{ patients.length }}
-
+    <!-- FORMULAIRE DE SAISIE AVEC ERREURS EN DESSOUS DES CHAMPS -->
+    <section class="card-box">
+      <div class="card-box-header">
+        <div class="header-title">
+          <i class="bi" [ngClass]="isEditMode ? 'bi-pencil-square' : 'bi-person-plus-fill'"></i>
+          <h3>{{ isEditMode ? 'Modifier le patient' : 'Ajouter un nouveau patient' }}</h3>
+        </div>
       </div>
 
-
-    </div>
-
-
-    <!-- TABLE -->
-
-    <div class="table-responsive">
-
-
-      <table class="patients-table">
-
-
-        <thead>
-
-          <tr>
-
-            <th>ID</th>
-
-            <th>Nom</th>
-
-            <th>Prénom</th>
-
-            <th>Téléphone</th>
-
-            <th>Date de naissance</th>
-
-            <th>Genre</th>
-
-            <th class="actions-column">
-
-              Actions
-
-            </th>
-
-          </tr>
-
-        </thead>
-
-
-        <tbody>
-
-
-          <tr
-            *ngFor="
-              let patient
-              of filteredPatients
-            "
-          >
-
-
-            <td>
-
-              <span class="patient-id">
-
-                #{{ patient.id }}
-
-              </span>
-
-            </td>
-
-
-            <td>
-
-              <strong>
-
-                {{ patient.nom }}
-
-              </strong>
-
-            </td>
-
-
-            <td>
-
-              {{ patient.prenom }}
-
-            </td>
-
-
-            <td>
-
-              📞 {{ patient.telephone }}
-
-            </td>
-
-
-            <td>
-
-              {{
-                patient.date_naissance || '-'
-              }}
-
-            </td>
-
-
-            <td>
-
-
-              <span
-                class="genre-badge"
-                [class.genre-m]="
-                  patient.genre === 'M'
-                "
-                [class.genre-f]="
-                  patient.genre === 'F'
-                "
-              >
-
-                {{
-                  patient.genre === 'M'
-                    ? '♂ Masculin'
-                    : '♀ Féminin'
-                }}
-
-              </span>
-
-
-            </td>
-
-
-            <!-- ACTIONS -->
-
-            <td class="patient-actions">
-
-
-              <button
-                class="action-btn dossier-btn"
-                title="Voir le dossier médical"
-                (click)="
-                  onViewMedicalRecord(
-                    patient.id!
-                  )
-                "
-              >
-
-                📁
-
-              </button>
-
-              <button
-                class="action-btn admission-btn"
-                title="Créer une admission"
-              (click)="onCreateAdmission(patient.id!)"
-              >
-              🏥
-              </button>
-
-
-              <button
-                class="action-btn edit-btn"
-                title="Modifier le patient"
-                (click)="onEdit(patient)"
-              >
-
-                ✏️
-
-              </button>
-
-
-              <button
-                class="action-btn delete-btn"
-                title="Supprimer le patient"
-                (click)="onDelete(patient.id)"
-              >
-
-                🗑️
-
-              </button>
-
-
-            </td>
-
-
-          </tr>
-
-
-          <!-- EMPTY -->
-
-          <tr
-            *ngIf="
-              filteredPatients.length === 0
-            "
-          >
-
-            <td
-              colspan="7"
-              class="empty-state"
-            >
-
-              <div>
-
-                <div class="empty-icon">
-
-                  👤
-
+      <form (submit)="savePatient(); $event.preventDefault()" class="modern-form">
+        <div class="form-grid">
+          
+          <!-- Champ Nom -->
+          <div class="form-group">
+            <label for="nom"><i class="bi bi-person"></i> Prénom*</label>
+            <input 
+              type="text" 
+              id="nom" 
+              [(ngModel)]="currentPatient.nom" 
+              name="nom" 
+              (ngModelChange)="validateNom()"
+              [class.input-error]="nomError"
+              required 
+              placeholder="Nom du patient" 
+            />
+            <!-- Message d'erreur affiché sous le champ -->
+            <span *ngIf="nomError" class="error-message-bottom">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ nomError }}
+            </span>
+          </div>
+
+          <!-- Champ Prénom -->
+          <div class="form-group">
+            <label for="prenom"><i class="bi bi-person"></i> Nom *</label>
+            <input 
+              type="text" 
+              id="prenom" 
+              [(ngModel)]="currentPatient.prenom" 
+              name="prenom" 
+              (ngModelChange)="validatePrenom()"
+              [class.input-error]="prenomError"
+              required 
+              placeholder="Prénom du patient" 
+            />
+            <!-- Message d'erreur affiché sous le champ -->
+            <span *ngIf="prenomError" class="error-message-bottom">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ prenomError }}
+            </span>
+          </div>
+
+          <!-- Champ Téléphone (Mauritanien uniquement) -->
+          <div class="form-group">
+            <label for="telephone"><i class="bi bi-telephone"></i> Téléphone *</label>
+            <input 
+              type="text" 
+              id="telephone" 
+              [(ngModel)]="currentPatient.telephone" 
+              name="telephone" 
+              (ngModelChange)="validatePhone()"
+              [class.input-error]="phoneError"
+              required 
+              placeholder="" 
+            />
+            <!-- Message d'erreur affiché sous le champ -->
+            <span *ngIf="phoneError" class="error-message-bottom">
+              <i class="bi bi-exclamation-circle-fill"></i> {{ phoneError }}
+            </span>
+          </div>
+
+          <!-- Champ Date de naissance -->
+          <div class="form-group">
+            <label for="date_naissance"><i class="bi bi-calendar-event"></i> Date de naissance</label>
+            <input type="date" id="date_naissance" [(ngModel)]="currentPatient.date_naissance" name="date_naissance" />
+          </div>
+
+          <!-- Champ Genre -->
+          <div class="form-group">
+            <label for="genre"><i class="bi bi-gender-ambiguous"></i> Genre</label>
+            <select id="genre" [(ngModel)]="currentPatient.genre" name="genre">
+              <option value="M">Masculin</option>
+              <option value="F">Féminin</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Boutons d'action -->
+        <div class="form-actions" style="margin-top: 15px;">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-person-plus"></i> {{ isEditMode ? 'Modifier le patient' : 'Ajouter le patient' }}
+          </button>
+    
+          <button *ngIf="isEditMode" type="button" class="btn-cancel" (click)="closeModal()">
+            <i class="bi bi-x-circle"></i> Annuler
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- TABLEAU DES PATIENTS -->
+    <section id="liste-patients" class="card-box">
+      <div class="card-box-header">
+        <div>
+          <h3><i class="bi bi-clipboard-data-fill"></i> Liste des patients</h3>
+          <p class="subtitle-sm">{{ filteredPatients.length }} patient(s) trouvé(s)</p>
+        </div>
+
+        <div class="search-box">
+          <i class="bi bi-search search-icon"></i>
+          <input
+            type="text"
+            placeholder="Rechercher par nom, prénom ou n° tél..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearchChange()"
+          />
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Patient</th>
+              <th>Téléphone</th>
+              <th>Date de naissance</th>
+              <th>Genre</th>
+              <th style="text-align: right;">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let patient of filteredPatients">
+              <td><span class="id-tag">#{{ patient.id }}</span></td>
+
+              <td class="patient-name-cell">
+                <div class="avatar-circle">
+                  {{ patient.prenom ? patient.prenom[0] : '' }}{{ patient.nom ? patient.nom[0] : '' }}
                 </div>
+                <div>
+                  <strong>{{ patient.prenom }}</strong> {{ patient.nom}}
+                </div>
+              </td>
 
+              <td><i class="bi bi-telephone text-muted"></i> {{ patient.telephone }}</td>
 
-                <strong>
+              <td>{{ patient.date_naissance || '-' }}</td>
 
-                  Aucun patient trouvé
+              <td>
+                <span class="genre-badge" [class.genre-m]="patient.genre === 'M'" [class.genre-f]="patient.genre === 'F'">
+                  <i class="bi" [ngClass]="patient.genre === 'M' ? 'bi-gender-male' : 'bi-gender-female'"></i>
+                  {{ patient.genre === 'M' ? ' Masculin' : ' Féminin' }}
+                </span>
+              </td>
 
-                </strong>
+              <td class="actions-cell">
+                <button class="action-btn edit-btn" title="Modifier" (click)="openEditModal(patient)">
+                  <i class="bi bi-pencil-fill"></i>
+                </button>
 
+                <button class="action-btn delete-btn" title="Supprimer" (click)="onDelete(patient.id)">
+                  <i class="bi bi-trash-fill"></i>
+                </button>
+              </td>
+            </tr>
 
-                <p>
+            <tr *ngIf="filteredPatients.length === 0">
+              <td colspan="6" class="empty-state">
+                <div class="empty-box">
+                  <i class="bi bi-person-x empty-icon"></i>
+                  <strong>Aucun patient trouvé</strong>
+                  <p>Aucun résultat ne correspond à votre recherche.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-                  Aucun résultat ne correspond
-                  à votre recherche.
-
-                </p>
-
-              </div>
-
-            </td>
-
-          </tr>
-
-
-        </tbody>
-
-
-      </table>
-
-
-    </div>
-
-
-  </div>
-
-
+  </main>
 </div>

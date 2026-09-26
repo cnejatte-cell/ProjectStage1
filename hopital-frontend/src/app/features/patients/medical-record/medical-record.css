@@ -1,101 +1,78 @@
 /* =====================================
-   DOSSIER MEDICAL
+   DOSSIER MEDICAL - BASE
 ===================================== */
 
 .medical-record-container {
   max-width: 1100px;
   margin: 30px auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #2c3e50;
 }
 
-
 /* =====================================
-   TITLE
+   HEADER & TITLE
 ===================================== */
 
-.medical-record-container h2 {
+.medical-record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 25px;
+}
+
+.medical-record-header h2 {
+  margin: 0;
   font-size: 30px;
   color: #2c3e50;
 }
-
 
 /* =====================================
    MAIN CARDS
 ===================================== */
 
 .card {
-  background: white;
-  border: none;
+  background: #ffffff;
+  border: 1px solid #eef2f5;
   border-radius: 14px;
   padding: 25px;
   margin-bottom: 25px;
-
-  box-shadow:
-    0 4px 15px rgba(0, 0, 0, 0.08);
-
-  transition: 0.2s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 
 .card:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 6px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
-
-
-/* =====================================
-   PATIENT CARD
-===================================== */
 
 .card h3 {
   margin-top: 0;
   margin-bottom: 20px;
+  font-size: 22px;
   color: #2c3e50;
 }
-
 
 .card h4 {
   margin-top: 20px;
   color: #34495e;
 }
 
-
 .card h5 {
   color: #2c3e50;
 }
-
-
-/* =====================================
-   ADMISSION HEADER
-===================================== */
-
-.card > h3 {
-  font-size: 22px;
-}
-
-
-/* =====================================
-   INFORMATION
-===================================== */
 
 .card p {
   margin: 10px 0;
   line-height: 1.6;
 }
 
-
 .card strong {
   color: #34495e;
 }
 
-
 /* =====================================
-   CONSTANTES
+   SECTIONS SPECIFIQUES
 ===================================== */
 
 .constant-card {
@@ -105,6 +82,33 @@
   margin-top: 15px;
 }
 
+.consultation-box {
+  background: #eef7ff;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 5px solid #3498db;
+  margin-top: 15px;
+}
+
+.instructions-box {
+  background: #fff8e1;
+  padding: 18px;
+  border-radius: 10px;
+  border-left: 5px solid #f1c40f;
+  margin-bottom: 20px;
+}
+
+.instructions-box p {
+  margin-bottom: 0;
+}
+
+.medicament-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 15px;
+  border-left: 5px solid #27ae60;
+}
 
 /* =====================================
    URGENCE BADGES
@@ -112,359 +116,209 @@
 
 .urgence-badge {
   display: inline-block;
-
   padding: 6px 14px;
-
   margin-left: 8px;
-
   border-radius: 20px;
-
   font-size: 13px;
-
   font-weight: bold;
 }
 
-
 .urgence-rouge {
   background: #e74c3c;
-  color: white;
+  color: #ffffff;
 }
-
 
 .urgence-jaune {
   background: #f1c40f;
   color: #2c3e50;
 }
 
-
 .urgence-vert {
   background: #27ae60;
-  color: white;
+  color: #ffffff;
 }
-
 
 .urgence-gris {
   background: #95a5a6;
-  color: white;
+  color: #ffffff;
 }
-
 
 /* =====================================
-   CONSULTATION
-===================================== */
-
-.consultation-box {
-  background: #eef7ff;
-
-  padding: 20px;
-
-  border-radius: 10px;
-
-  border-left:
-    5px solid #3498db;
-
-  margin-top: 15px;
-}
-
-
-/* =====================================
-   ORDONNANCE
-===================================== */
-
-.instructions-box {
-  background: #fff8e1;
-
-  padding: 18px;
-
-  border-radius: 10px;
-
-  border-left:
-    5px solid #f1c40f;
-
-  margin-bottom: 20px;
-}
-
-
-.instructions-box p {
-  margin-bottom: 0;
-}
-
-
-/* =====================================
-   MEDICAMENTS
-===================================== */
-
-.medicament-card {
-  background: #f8f9fa;
-
-  border-radius: 10px;
-
-  padding: 18px;
-
-  margin-bottom: 15px;
-
-  border-left:
-    5px solid #27ae60;
-}
-
-
-/* =====================================
-   FORMS
+   FORMULAIRES
 ===================================== */
 
 label {
   display: block;
-
   margin-bottom: 8px;
-
   font-weight: bold;
-
   color: #34495e;
 }
-
 
 input,
 textarea,
 select {
   width: 100%;
-
   padding: 12px;
-
-  border:
-    1px solid #dcdcdc;
-
+  border: 1px solid #dcdcdc;
   border-radius: 8px;
-
   box-sizing: border-box;
-
   font-size: 15px;
-
-  transition: 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 
 input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-
   border-color: #3498db;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(52, 152, 219, 0.15);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
 }
 
-
 /* =====================================
-   BUTTONS
+   BOUTONS & ALERTES
 ===================================== */
 
 button {
   border: none;
-
   border-radius: 8px;
-
   padding: 10px 18px;
-
   font-weight: bold;
-
   cursor: pointer;
-
-  transition: 0.2s;
+  transition: background-color 0.2s, transform 0.2s;
 }
-
 
 button:hover {
   transform: translateY(-1px);
 }
 
-
-/* =====================================
-   ALERTS
-===================================== */
-
-.alert {
-  border-radius: 10px;
-
-  padding: 18px;
-
-  margin-bottom: 20px;
-}
-
-
-/* =====================================
-   HORIZONTAL LINE
-===================================== */
-
-hr {
-  border: none;
-
-  border-top:
-    1px solid #e5e5e5;
-
-  margin: 25px 0;
-}
-
-
-/* =====================================
-   RESPONSIVE
-===================================== */
-
-@media (max-width: 700px) {
-
-  .medical-record-container {
-    margin: 15px auto;
-    padding: 12px;
-  }
-
-
-  .medical-record-container h2 {
-    font-size: 24px;
-  }
-
-
-  .card {
-    padding: 18px;
-  }
-
-
-  button {
-    width: 100%;
-
-    margin-bottom: 10px;
-  }
-
-}
-
-/* =====================================
-   HEADER
-===================================== */
-
-.medical-record-header {
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  margin-bottom: 25px;
-}
-
-
-.medical-record-header h2 {
-  margin: 0;
-}
-
-
-/* =====================================
-   PRINT BUTTON
-===================================== */
-
 .btn-print {
   background: #3498db;
-
-  color: white;
-
-  border: none;
-
+  color: #ffffff;
   padding: 11px 20px;
-
-  border-radius: 8px;
-
   font-size: 15px;
-
-  font-weight: bold;
-
-  cursor: pointer;
-
-  transition: 0.2s;
 }
-
 
 .btn-print:hover {
   background: #2980b9;
 }
 
+.alert {
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e5e5e5;
+  margin: 25px 0;
+}
+
 /* =====================================
-   PRINT MODE
+   RESPONSIVE (MOBILE)
+===================================== */
+
+@media (max-width: 700px) {
+  .medical-record-container {
+    margin: 15px auto;
+    padding: 12px;
+  }
+
+  .medical-record-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .medical-record-header h2 {
+    font-size: 24px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* =====================================
+   PRINT MODE (IMPRESSION)
 ===================================== */
 
 @media print {
-
-
-  /* إخفاء الأزرار */
-
-  button {
-    display: none !important;
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
   }
 
-
-  /* إخفاء النماذج */
-
+  /* Masquer les commandes non nécessaires */
+  button,
+  .btn-print,
   input,
   textarea,
-  select {
+  select,
+  form {
     display: none !important;
   }
-
-
-  /* الصفحة */
 
   .medical-record-container {
     max-width: 100%;
-
     margin: 0;
-
     padding: 0;
   }
 
-
-  /* إزالة الظلال */
-
-  .card,
-  .medicament-card {
-    box-shadow: none !important;
-
-    border: 1px solid #ccc;
-
-    break-inside: avoid;
-  }
-
-
-  /* منع تقسيم Admission بين صفحتين */
-
-  .card {
-    break-inside: avoid;
-  }
-
-
-  /* إخفاء تأثير hover */
-
-  .card:hover {
-    transform: none;
-
-    box-shadow: none;
-  }
-
-
-  /* الألوان تظهر في الطباعة */
-
-  * {
-    -webkit-print-color-adjust: exact;
-
-    print-color-adjust: exact;
-  }
-
-
-  /* عنوان الصفحة */
-
   .medical-record-header {
     border-bottom: 2px solid #333;
-
     padding-bottom: 15px;
-
     margin-bottom: 25px;
   }
 
+  /* Préservation du style des blocs lors de l'impression */
+  .card,
+  .medicament-card,
+  .consultation-box,
+  .instructions-box {
+    box-shadow: none !important;
+    border: 1px solid #cccccc !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .form-group {
+  display: flex;
+  flex-direction: column;
+
+  /* Message d'erreur rouge placé sous l'input */
+  .error-message-bottom {
+    color: #dc2626;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Champ avec bordure rouge */
+  input.input-error {
+    border-color: #ef4444 !important;
+    background-color: #fef2f2 !important;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+    }
+  }
+}
 }
