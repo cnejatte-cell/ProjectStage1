@@ -37,6 +37,7 @@ export class InfirmiereComponent implements OnInit {
 
   patients: Patient[] = [];
   showPatientForm = false;
+  submittedPatientForm = false; // Indique si l'utilisateur a cliqué sur "Enregistrer"
 
   newPatient: Patient = {
     nom: '',
@@ -107,6 +108,7 @@ export class InfirmiereComponent implements OnInit {
 
   openPatientForm(): void {
     this.showPatientForm = true;
+    this.submittedPatientForm = false;
     this.newPatient = {
       nom: '',
       prenom: '',
@@ -118,6 +120,7 @@ export class InfirmiereComponent implements OnInit {
 
   cancelPatientForm(): void {
     this.showPatientForm = false;
+    this.submittedPatientForm = false;
     this.newPatient = {
       nom: '',
       prenom: '',
@@ -128,18 +131,20 @@ export class InfirmiereComponent implements OnInit {
   }
 
   savePatient(): void {
-    if (!this.newPatient.nom.trim()) {
-      this.showAlert('Champ requis', 'Veuillez saisir le nom du patient.', 'warning');
-      return;
-    }
+    this.submittedPatientForm = true;
 
-    if (!this.newPatient.prenom.trim()) {
-      this.showAlert('Champ requis', 'Veuillez saisir le prénom du patient.', 'warning');
-      return;
-    }
+    // Expression régulière : 8 chiffres commençant obligatoirement par 2, 3 ou 4
+    const phoneRegex = /^(2|3|4)\d{7}$/;
 
-    if (!this.newPatient.telephone.trim()) {
-      this.showAlert('Champ requis', 'Veuillez saisir le téléphone du patient.', 'warning');
+    // Vérification de la validité de l'ensemble des champs
+    if (
+      !this.newPatient.nom?.trim() ||
+      !this.newPatient.prenom?.trim() ||
+      !this.newPatient.date_naissance ||
+      !this.newPatient.telephone?.trim() ||
+      !phoneRegex.test(this.newPatient.telephone.trim())
+    ) {
+      // Bloque la soumission si un des champs est invalide (le HTML affichera les erreurs en rouge)
       return;
     }
 
@@ -149,14 +154,7 @@ export class InfirmiereComponent implements OnInit {
         next: (patient) => {
           console.log('PATIENT CREE :', patient);
           this.showToast('success', 'Patient ajouté avec succès.');
-          this.showPatientForm = false;
-          this.newPatient = {
-            nom: '',
-            prenom: '',
-            telephone: '',
-            date_naissance: '',
-            genre: 'M'
-          };
+          this.cancelPatientForm();
           this.loadPatients();
         },
         error: (error) => {

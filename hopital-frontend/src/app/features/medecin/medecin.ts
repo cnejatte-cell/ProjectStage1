@@ -45,6 +45,7 @@ export class MedecinComponent implements OnInit {
     diagnostic: '',
     remarques: ''
   };
+  isConsultationSaved:boolean = false
 
   // =========================
   // ORDONNANCE
@@ -132,13 +133,19 @@ export class MedecinComponent implements OnInit {
     this.clinicService.getPrescriptions().subscribe({
       next: (data) => {
         this.prescriptions = data.filter(
-          prescription => prescription.ordonnance === this.ordonnanceId
+          p => p.ordonnance === this.ordonnanceId
         );
       },
       error: (error) => {
         console.error('Erreur prescriptions :', error);
       }
     });
+  }
+
+  // Helper pour afficher le nom du médicament dans l'IHM
+  getMedicamentName(id: number): string {
+    const med = this.medicaments.find(m => m.id === id);
+    return med ? med.nom : 'Médicament inconnu';
   }
 
   // =========================
@@ -150,16 +157,14 @@ export class MedecinComponent implements OnInit {
     this.errorMessage = '';
 
     this.selectedConstantes = this.constantes.filter(
-      constante => constante.admission === admission.id
+      c => c.admission === admission.id
     );
 
     this.consultation = {
       examen_clinique: '',
       diagnostic: '',
       remarques: ''
-    };
-
-    this.consultationId = null;
+    };this.consultationId = null;
     this.ordonnanceId = null;
     this.prescriptions = [];
     this.selectedMedicamentId = null;
@@ -241,7 +246,7 @@ export class MedecinComponent implements OnInit {
     };
 
     this.clinicService.addPrescription(data).subscribe({
-      next: (response) => {
+      next: () => {
         this.showToast('success', 'Médicament ajouté à l ordonnance avec succès.');
         this.loadPrescriptions();
 
@@ -258,6 +263,10 @@ export class MedecinComponent implements OnInit {
         this.showAlert('Erreur', 'Erreur lors de l ajout du médicament.', 'error');
       }
     });
+  }
+
+  printOrdonnance(): void {
+    window.print();
   }
 
   cancelSelection(): void {
@@ -283,43 +292,44 @@ export class MedecinComponent implements OnInit {
   // =========================
   // ENREGISTRER CONSULTATION
   // =========================
-  saveConsultation(): void {
-    if (!this.selectedAdmission) {
-      this.showAlert('Attention', 'Veuillez sélectionner une admission.', 'warning');
-      return;
-    }
-
-    if (!this.consultation.examen_clinique.trim()) {
-      this.showAlert('Champ obligatoire', 'Veuillez saisir l examen clinique.', 'warning');
-      return;
-    }
-
-    if (!this.consultation.diagnostic.trim()) {
-      this.showAlert('Champ obligatoire', 'Veuillez saisir le diagnostic.', 'warning');
-      return;
-    }
-
-    const admissionId = this.selectedAdmission.id!;
-
-    this.clinicService.addConsultation(
-      admissionId,
-      this.consultation
-    ).subscribe({
-      next: (response: Consultation) => {
-        this.consultationId = response.id!;
-        this.showAlert(
-          'Succès !',
-          'Consultation enregistrée avec succès. Vous pouvez maintenant créer une ordonnance.',
-          'success'
-        );
-      },
-      error: (error) => {
-        console.error('Erreur consultation :', error);
-        this.showAlert('Erreur', 'Erreur lors de l enregistrement de la consultation.', 'error');
-      }
-    });
+ saveConsultation(): void {
+  if (!this.selectedAdmission?.id) {
+    this.showAlert('Attention', 'Veuillez sélectionner une admission.', 'warning');
+    return;
   }
 
+  if (!this.consultation.examen_clinique.trim()) {
+    this.showAlert('Champ obligatoire', 'Veuillez saisir l examen clinique.', 'warning');
+    return;
+  }
+
+  if (!this.consultation.diagnostic.trim()) {
+    this.showAlert('Champ obligatoire', 'Veuillez saisir le diagnostic.', 'warning');
+    return;
+  }
+
+  const admissionId = this.selectedAdmission.id;
+
+  // On passe les 2 arguments attendus par le service : (admissionId, consultation)
+ this.clinicService.addConsultation(admissionId, this.consultation).subscribe({
+  next: (response: any) => {
+    // Vérifiez le nom exact du champ renvoyé par Django (souvent response.id)
+    this.consultationId = response.id; 
+    this.ordonnanceId = response.id || response.ordonnace_id
+    // Si vous utilisez un booléen pour afficher la suite :
+    this.isConsultationSaved = true; 
+
+    this.showAlert(
+      'Succès !',
+      'Consultation enregistrée avec succès. Vous pouvez maintenant créer une ordonnance ou générer le PDF.',
+      'success'
+    );
+  },
+  error: (error) => {
+    console.error('Erreur consultation :', error);
+  }
+});
+ }
   // =========================
   // HELPER SWEETALERT2
   // =========================

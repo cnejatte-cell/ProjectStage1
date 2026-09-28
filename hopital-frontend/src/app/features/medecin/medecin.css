@@ -1,95 +1,195 @@
-.doctor-page {
-  max-width: 1100px;
-  margin: 30px auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  color: #2c3e50;
+/* ==========================================================================
+   STYLE MODERNE - ESPACE MÉDECIN & IMPRESSION ORDONNANCE
+   ========================================================================== */
+
+:host {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --secondary: #64748b;
+  --success: #10b981;
+  --success-hover: #059669;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --bg-main: #f8fafc;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Page Container */
+.doctor-page {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-main);
+}
+
+/* En-tête Principal */
 .doctor-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
-  margin-bottom: 25px;
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  padding: 28px 32px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 28px;
 }
 
 .doctor-header h1 {
-  margin: 0 0 8px;
+  margin: 0 0 6px 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-main);
 }
 
 .doctor-header p {
   margin: 0;
-  color: #777;
+  color: var(--text-muted);
+  font-size: 14px;
 }
+.doctor-header {
+  /* Positionnement fixe au défilement */
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Assure que l'en-tête reste au-dessus des autres éléments */
 
+  /* Effet visuel moderne avec flou de recul (Glassmorphism) */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+
+  /* Style & alignement */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 28px;
+  border-radius: var(--radius-lg, 12px);
+  border: 1px solid var(--border, #e2e8f0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 25px;
+}
+/* Boutons Modernes */
 .refresh-button,
 .primary-button,
 .save-button,
 .cancel-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   border: none;
-  padding: 11px 18px;
-  border-radius: 7px;
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 14px;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
 .refresh-button {
-  background: #34495e;
-  color: white;
+  background: #1e293b;
+  color: #ffffff;
+}
+
+.refresh-button:hover {
+  background: #0f172a;
+  transform: translateY(-1px);
 }
 
 .primary-button {
-  background: #3498db;
-  color: white;
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.primary-button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .save-button {
-  background: #27ae60;
-  color: white;
+  background: var(--success);
+  color: #ffffff;
+}
+
+.save-button:hover {
+  background: var(--success-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .cancel-button {
-  background: #95a5a6;
-  color: white;
+  background: #f1f5f9;
+  color: var(--secondary);
+  border: 1px solid var(--border);
 }
 
+.cancel-button:hover {
+  background: #e2e8f0;
+  color: var(--text-main);
+}
+
+/* Sections & Cartes */
 .section {
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
-  margin-bottom: 25px;
+  background: var(--card-bg);
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 28px;
+  transition: var(--transition);
 }
 
 .section-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
 }
 
 .section-title h2 {
   margin: 0;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .badge {
-  background: #3498db;
-  color: white;
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-weight: bold;
+  background: #eff6ff;
+  color: var(--primary);
+  border: 1px solid #bfdbfe;
+  border-radius: 9999px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 13px;
 }
 
+/* Carte Admission */
 .admission-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   padding: 20px;
-  margin-bottom: 15px;
-  background: #fafafa;
+  margin-bottom: 16px;
+  background: #ffffff;
+  transition: var(--transition);
+}
+
+.admission-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
 }
 
 .admission-top {
@@ -98,167 +198,158 @@
   align-items: center;
 }
 
-.admission-top h3 {
-  margin: 0 0 8px;
-}
-
 .patient-name {
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 700;
+  color: var(--text-main);
 }
 
 .status {
-  background: #f1c40f;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: bold;
+  background: #fef3c7;
+  color: #d97706;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .admission-info {
   display: flex;
-  gap: 40px;
-  margin: 20px 0;
+  gap: 32px;
+  margin: 18px 0;
 }
 
 .admission-info div {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .admission-info strong {
-  color: #888;
-  font-size: 13px;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.patient-box {
-  background: #f4f6f7;
-  padding: 18px;
-  border-radius: 8px;
-  margin-bottom: 25px;
-}
-
-.constants-box,
-.consultation-box {
-  margin-top: 25px;
-}
-
+/* Constantes Vitale Grid */
 .constant-card {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  padding: 18px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  margin-top: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  margin-top: 16px;
 }
 
 .constant-card div {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
 }
 
 .constant-card strong {
-  color: #777;
-  font-size: 13px;
+  color: var(--text-muted);
+  font-size: 12px;
 }
 
-.urgence {
-  font-weight: bold;
-}
-
-.rouge {
-  color: #e74c3c;
-}
-
-.jaune {
-  color: #f39c12;
-}
-
-.vert {
-  color: #27ae60;
-}
-
-.gris {
-  color: #7f8c8d;
-}
-
+/* Formulaires */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 7px;
-  font-weight: bold;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-main);
 }
 
-.form-group textarea {
+.form-group textarea,
+.form-group input,
+.form-group select {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 7px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: inherit;
   font-size: 15px;
-  resize: vertical;
+  color: var(--text-main);
+  background-color: #ffffff;
+  transition: var(--transition);
+}
+
+.form-group textarea:focus,
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 25px;
+  margin-top: 28px;
 }
 
-.empty,
-.loading {
-  text-align: center;
-  padding: 40px;
-  color: #777;
+/* Prescriptions */
+.prescriptions-list {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
 }
 
-.empty-icon {
-  font-size: 45px;
-  margin-bottom: 10px;
+.prescription-card {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-top: 12px;
+  transition: var(--transition);
 }
 
+.prescription-card:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+/* Messages & Alerts */
 .error-message {
-  background: #f8d7da;
-  color: #721c24;
-  padding: 15px;
-  border-radius: 8px;
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  padding: 16px;
+  border-radius: var(--radius-md);
   margin-bottom: 20px;
 }
 
 .success-message {
-  background: #d4edda;
-  color: #155724;
-  padding: 15px;
-  border-radius: 8px;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 16px;
+  border-radius: var(--radius-md);
   margin-bottom: 20px;
 }
 
-.empty-small {
-  padding: 20px;
-  color: #777;
-}
-
-@media (max-width: 700px) {
-
-  .doctor-header {
+/* Responsive */
+@media (max-width: 768px) {
+  .doctor-header,
+  .admission-top,
+  .form-actions {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .admission-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: stretch;
+    gap: 16px;
   }
 
   .admission-info {
@@ -269,31 +360,117 @@
   .constant-card {
     grid-template-columns: 1fr;
   }
+}
 
-  .form-actions {
-    flex-direction: column;
+/* ==========================================================================
+   STYLE DE TÉLÉCHARGEMENT & IMPRESSION (SEULEMENT L'ORDONNANCE)
+   ========================================================================== */
+/* ==========================================================================
+   IMPRESSION EXCLUSIVE DE L'ORDONNANCE
+   ========================================================================== */
+@media print {
+  /* 1. Masquer visuellement tout le document */
+  body * {
+    visibility: hidden !important;
   }
 
-  .save-button,
-  .cancel-button {
+  /* 2. Afficher UNIQUEMENT le bloc ordonnance et tout son contenu */
+  #printable-ordonnance,
+  #printable-ordonnance * {
+    visibility: visible !important;
+  }
+
+  /* 3. Sortir l'ordonnance du flux global pour supprimer le vide au-dessus */
+  #printable-ordonnance {
+    display: block !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* 4. Masquer les boutons dans l'ordonnance imprimée */
+  #printable-ordonnance .no-print,
+  #printable-ordonnance button,
+  #printable-ordonnance .actions-group {
+    display: none !important;
+  }
+  .doctor-header {
+    position: static !important;
+    box-shadow: none !important;
+  }
+}
+/* Conteneur des boutons */
+.actions-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Style de base des boutons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn svg {
+  flex-shrink: 0;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* 1. Bouton "Ajouter le médicament" (Bleu moderne) */
+.btn-add {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.btn-add:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+  transform: translateY(-1px);
+}
+
+/* 2. Bouton "Télécharger PDF / Imprimer" (Rouge/Rose médical élégant) */
+.btn-pdf {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.btn-pdf:hover {
+  background-color: #b91c1c;
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Adaptation écran mobile */
+@media (max-width: 600px) {
+  .actions-group {
+    flex-direction: column;
     width: 100%;
   }
-}
 
-.prescriptions-list {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #ddd;
-}
-
-.prescription-card {
-  background: #f8f9fa;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 15px;
-  margin-top: 12px;
-}
-
-.prescription-card p {
-  margin: 7px 0;
+  .btn {
+    width: 100%;
+  }
 }

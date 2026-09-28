@@ -3,7 +3,7 @@
   <!-- =========================================
        HEADER
   ========================================= -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <div class="nurse-header">
     <div>
       <h1><i class="bi bi-person-badge"></i> Espace Infirmière</h1>
@@ -50,47 +50,95 @@
         <span class="form-status">Nouveau patient</span>
       </div>
 
-      <div class="constants-grid">
-        <!-- NOM -->
-        <div class="form-group">
-          <label><i class="bi bi-person"></i> Nom</label>
-          <input type="text" [(ngModel)]="newPatient.nom">
+      <form #patientForm="ngForm" (ngSubmit)="savePatient()">
+        <div class="constants-grid">
+          
+          <!-- NOM -->
+          <div class="form-group">
+            <label><i class="bi bi-person"></i> Nom</label>
+            <input 
+              type="text" 
+              name="nom" 
+              [(ngModel)]="newPatient.nom" 
+              #nomInput="ngModel" 
+              required>
+            <small style="color: #dc2626; font-size: 0.8rem; margin-top: 4px; display: block;" 
+                   *ngIf="(nomInput.touched || submittedPatientForm) && nomInput.errors?.['required']">
+              Le nom est obligatoire.
+            </small>
+          </div>
+
+          <!-- PRENOM -->
+          <div class="form-group">
+            <label><i class="bi bi-person"></i> Prénom</label>
+            <input 
+              type="text" 
+              name="prenom" 
+              [(ngModel)]="newPatient.prenom" 
+              #prenomInput="ngModel" 
+              required>
+            <small style="color: #dc2626; font-size: 0.8rem; margin-top: 4px; display: block;" 
+                   *ngIf="(prenomInput.touched || submittedPatientForm) && prenomInput.errors?.['required']">
+              Le prénom est obligatoire.
+            </small>
+          </div>
+
+          <!-- TELEPHONE (MAURITANIEN: 8 Chiffres commençant par 2, 3 ou 4) -->
+          <div class="form-group">
+            <label><i class="bi bi-telephone"></i> Téléphone</label>
+            <input 
+              type="text" 
+              name="telephone" 
+              [(ngModel)]="newPatient.telephone" 
+              #telInput="ngModel" 
+              required 
+              pattern="^(2|3|4)\d{7}$"
+              placeholder="">
+            
+            <small style="color: #dc2626; font-size: 0.8rem; margin-top: 4px; display: block;" 
+                   *ngIf="(telInput.touched || submittedPatientForm) && telInput.errors?.['required']">
+              Le numéro de téléphone est obligatoire.
+            </small>
+
+            <small style="color: #dc2626; font-size: 0.8rem; margin-top: 4px; display: block;" 
+                   *ngIf="(telInput.touched || submittedPatientForm) && telInput.errors?.['pattern']">
+              Le numéro doit comporter 8 chiffres et commencer par 2, 3 ou 4.
+            </small>
+          </div>
+
+          <!-- DATE NAISSANCE -->
+          <div class="form-group">
+            <label><i class="bi bi-calendar-event"></i> Date de naissance</label>
+            <input 
+              type="date" 
+              name="date_naissance" 
+              [(ngModel)]="newPatient.date_naissance" 
+              #dateInput="ngModel" 
+              required>
+            <small style="color: #dc2626; font-size: 0.8rem; margin-top: 4px; display: block;" 
+                   *ngIf="(dateInput.touched || submittedPatientForm) && dateInput.errors?.['required']">
+              La date de naissance est obligatoire.
+            </small>
+          </div>
+
+          <!-- GENRE -->
+          <div class="form-group">
+            <label><i class="bi bi-gender-ambiguous"></i> Genre</label>
+            <select name="genre" [(ngModel)]="newPatient.genre">
+              <option value="M">Masculin</option>
+              <option value="F">Féminin</option>
+            </select>
+          </div>
+
         </div>
 
-        <!-- PRENOM -->
-        <div class="form-group">
-          <label><i class="bi bi-person"></i> Prénom</label>
-          <input type="text" [(ngModel)]="newPatient.prenom">
+        <div class="form-actions" style="margin-top: 1rem;">
+          <button type="button" class="cancel-button" (click)="cancelPatientForm()">Annuler</button>
+          <button type="submit" class="save-button">
+            <i class="bi bi-floppy"></i> Enregistrer Patient
+          </button>
         </div>
-
-        <!-- TELEPHONE -->
-        <div class="form-group">
-          <label><i class="bi bi-telephone"></i> Téléphone</label>
-          <input type="text" [(ngModel)]="newPatient.telephone">
-        </div>
-
-        <!-- DATE NAISSANCE -->
-        <div class="form-group">
-          <label><i class="bi bi-calendar-event"></i> Date de naissance</label>
-          <input type="date" [(ngModel)]="newPatient.date_naissance">
-        </div>
-
-        <!-- GENRE -->
-        <div class="form-group">
-          <label><i class="bi bi-gender-ambiguous"></i> Genre</label>
-          <select [(ngModel)]="newPatient.genre">
-            <option value="M">Masculin</option>
-            <option value="F">Féminin</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button class="cancel-button" (click)="cancelPatientForm()">Annuler</button>
-        <button class="save-button" (click)="savePatient()">
-          <i class="bi bi-floppy"></i> Enregistrer Patient
-        </button>
-      </div>
+      </form>
     </div>
 
 
@@ -116,7 +164,8 @@
             <th style="padding: 12px; text-align: center;">ACTIONS</th>
           </tr>
         </thead>
-        <tbody><tr *ngFor="let patient of patients" style="border-bottom: 1px solid #e0e0e0;">
+        <tbody>
+          <tr *ngFor="let patient of patients" style="border-bottom: 1px solid #e0e0e0;">
             <td style="padding: 12px; font-weight: bold;">#{{ patient.id }}</td>
             <td style="padding: 12px;">{{ patient.nom }}</td>
             <td style="padding: 12px;">{{ patient.prenom }}</td>
@@ -228,7 +277,8 @@
 
 
   <!-- =========================================
-       4. CONSTANTES ET URGENCE AUTOMATIQUE========================================= -->
+       4. CONSTANTES ET URGENCE AUTOMATIQUE
+  ========================================= -->
 
   <div *ngIf="selectedAdmission" class="constants-section">
     <div class="form-header">
@@ -250,18 +300,18 @@
 
     <div class="constants-grid">
 
-     <!-- CAS D'URGENCE / MOTIF -->
-<div class="form-group">
-  <label><i class="bi bi-exclamation-octagon-fill text-danger"></i> Cas d'urgence / Motif</label>
-  <select [(ngModel)]="casUrgence" (ngModelChange)="calculerDegreUrgence()">
-    <option value="">-- Sélectionnez un cas --</option>
-    <option value="AUCUN">Consultation classique</option>
-    <option value="ACCIDENT">Accident grave / Traumatisme</option>
-    <option value="ARRET_CARDIAQUE">Arrêt cardiaque</option>
-    <option value="BRULURE_GRAVE">Brûlure grave</option>
-    <option value="MALAISE">Malaise / Vertige</option>
-  </select>
-</div>
+      <!-- CAS D'URGENCE / MOTIF -->
+      <div class="form-group">
+        <label><i class="bi bi-exclamation-octagon-fill text-danger"></i> Cas d'urgence / Motif</label>
+        <select [(ngModel)]="casUrgence" (ngModelChange)="calculerDegreUrgence()">
+          <option value="">-- Sélectionnez un cas --</option>
+          <option value="AUCUN">Consultation classique</option>
+          <option value="ACCIDENT">Accident grave / Traumatisme</option>
+          <option value="ARRET_CARDIAQUE">Arrêt cardiaque</option>
+          <option value="BRULURE_GRAVE">Brûlure grave</option>
+          <option value="MALAISE">Malaise / Vertige</option>
+        </select>
+      </div>
 
       <!-- TEMPERATURE -->
       <div class="form-group">
@@ -328,7 +378,8 @@
     <div class="form-actions">
       <button class="cancel-button" (click)="selectedAdmission = null">Annuler</button>
       <button class="save-button" (click)="saveConstantes()">
-        <i class="bi bi-floppy"></i> Enregistrer les constantes</button>
+        <i class="bi bi-floppy"></i> Enregistrer les constantes
+      </button>
     </div>
   </div>
 

@@ -762,3 +762,16 @@
   }
 
 }
+/* Style pour le texte d'erreur en rouge */
+.error-message {
+  color: #dc2626;
+  font-size: 0.825rem;
+  margin-top: 4px;
+  display: block;
+  font-weight: 500;
+}
+
+/* Optionnel : Bordure rouge autour de l'input si en erreur */
+input.ng-invalid.ng-touched {
+  border-color: #dc2626 !important;
+}
