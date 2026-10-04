@@ -1,0 +1,626 @@
+/* ==========================================================================
+   GESTION DU PERSONNEL — fichier autonome (layout + sidebar + page)
+   ========================================================================== */
+
+$primary:      #2563eb;
+$primary-dark: #1d4ed8;
+$text-dark:    #0f172a;
+$text:         #1e293b;
+$text-soft:    #334155;
+$text-muted:   #64748b;
+$text-faint:   #94a3b8;
+$border:       #e2e8f0;
+$border-light: #f1f5f9;
+$surface:      #ffffff;
+$surface-alt:  #f8fafc;
+
+/* ---------- 1. LAYOUT ---------- */
+
+
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f1f5f9;
+  font-family: 'Segoe UI', system-ui, sans-serif, -apple-system;
+  
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding: 2rem;
+}
+
+/* ---------- 2. SIDEBAR ---------- */
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  padding: 1.5rem 1rem;
+  background: $surface;
+  border-right: 1px solid $border;
+}
+
+.logo-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem 1.5rem;
+  border-bottom: 1px solid $border;
+
+  h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $text-dark;
+  }
+}
+
+.brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: $primary;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+
+  i { font-size: 1.15rem; }
+
+  &:hover {
+    background: $border-light;
+    color: $text;
+  }
+
+  &.active {
+    background: #eff6ff;
+    color: $primary;
+    font-weight: 600;
+  }
+}
+
+.sidebar-footer {
+  padding-top: 1rem;
+  border-top: 1px solid $border;
+}
+
+.btn-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background: #fee2e2; }
+}
+
+/* ---------- 3. EN-TÊTE DE PAGE ---------- */
+.dashboard-header {
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $text-dark;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    margin: 6px 0 0;
+    font-size: 0.95rem;
+    color: $text-muted;
+  }
+}
+
+/* ---------- 4. CARTE ---------- */
+.card-box {
+  padding: 1.5rem;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.card-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 1.25rem;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $text;
+
+    i { color: $primary; }
+  }
+
+  .subtitle-sm {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    color: $text-muted;
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ---------- 5. RECHERCHE + BOUTONS ---------- */
+.search-box {
+  position: relative;
+
+  i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-faint;
+  }
+
+  input {
+    width: 260px;
+    padding: 0.6rem 1rem 0.6rem 2.2rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: $surface;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.2s;
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.15);
+    }
+  }
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 10px;
+  background: $primary;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba($primary, 0.25);
+  transition: all 0.2s;
+
+  &:hover {
+    background: $primary-dark;
+    transform: translateY(-1px);
+  }
+}
+
+.btn-cancel {
+  padding: 0.6rem 1.1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: $surface;
+  color: $text-soft;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { background: $border-light; }
+}
+
+/* ---------- 6. TABLEAU ---------- */
+.table-responsive {
+  overflow-x: auto;
+  border: 1px solid $border;
+  border-radius: 12px;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid $border-light;
+    vertical-align: middle;
+  }
+
+  th {
+    background: $surface-alt;
+    color: $text-muted;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  td {
+    color: $text-soft;
+    font-size: 0.92rem;
+  }
+
+  tbody tr {
+    transition: background 0.15s;
+
+    &:hover { background: $surface-alt; }
+    &:last-child td { border-bottom: none; }
+  }
+
+  .text-right { text-align: right; }
+}
+
+.text-muted { color: $text-faint; }
+
+.muted-text {
+  color: $text-faint;
+  font-style: italic;
+}
+
+.id-tag {
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: $border-light;
+  color: #475569;
+  font-family: monospace;
+  font-weight: 600;
+}
+
+.username-tag {
+  font-family: monospace;
+  color: #475569;
+}
+
+/* Utilisateur : avatar + nom + email */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-text {
+  display: flex;
+  flex-direction: column;
+
+  strong { color: $text-dark; }
+  small  { color: $text-faint; font-size: 0.78rem; }
+}
+
+.avatar-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  &.av-admin  { background: #fee2e2; color: #b91c1c; }
+  &.av-doctor { background: #e0e7ff; color: #4338ca; }
+  &.av-nurse  { background: #dcfce7; color: #15803d; }
+}
+
+/* Badges de rôle */
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &.role-admin  { background: #fee2e2; color: #991b1b; }
+  &.role-doctor { background: #e0e7ff; color: #3730a3; }
+  &.role-nurse  { background: #dcfce7; color: #166534; }
+}
+
+/* Badge de statut */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &.on  { background: #dcfce7; color: #15803d; }
+  &.off { background: #fee2e2; color: #b91c1c; }
+}
+
+/* Boutons d'action (icônes) */
+.actions-cell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-bottom: none;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &.edit-btn {
+    background: #eff6ff;
+    color: $primary;
+
+    &:hover { background: $primary; color: #fff; }
+  }
+
+  &.delete-btn {
+    background: #fee2e2;
+    color: #ef4444;
+
+    &:hover { background: #ef4444; color: #fff; }
+  }
+}
+
+/* ---------- 7. PAGINATION ---------- */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.pagination-info {
+  font-size: 0.875rem;
+  color: $text-muted;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-page {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: $surface;
+  color: $text-soft;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: $primary;
+    border-color: $primary;
+    color: #fff;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+/* ---------- 8. ÉTAT VIDE ---------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 3rem 1rem;
+  color: #475569;
+
+  .empty-icon {
+    font-size: 2.5rem;
+    color: $text-faint;
+  }
+}
+
+/* ---------- 9. MODAL ---------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.modal-card {
+  width: 520px;
+  max-width: 92%;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: $surface;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid $border;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 1.1rem;
+    color: $text-dark;
+
+    i { color: $primary; }
+  }
+}
+
+.btn-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: $border-light;
+  color: $text-muted;
+  cursor: pointer;
+
+  &:hover { background: $border; }
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  &.full { grid-column: 1 / -1; }
+
+  label {
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $text-soft;
+  }
+
+  input,
+  select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: $surface;
+    font-size: 0.92rem;
+    outline: none;
+    transition: all 0.2s;
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.15);
+    }
+  }
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid $border;
+  background: $surface-alt;
+  border-radius: 0 0 16px 16px;
+}
+
+/* ---------- 10. RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid $border;
+  }
+
+  .nav-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .search-box {
+    flex: 1;
+
+    input { width: 100%; box-sizing: border-box; }
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

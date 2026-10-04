@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -30,14 +31,20 @@ export class InfirmiereComponent implements OnInit {
 
   private clinicService = inject(ClinicService);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   // =========================================
-  // PATIENTS
+  // PATIENTS & PAGINATION
   // =========================================
-
+  // Onglet actif : 'patients' par défaut, ou 'prise-en-charge'
+  currentTab: 'patients' | 'prise-en-charge' = 'patients';
   patients: Patient[] = [];
   showPatientForm = false;
   submittedPatientForm = false; // Indique si l'utilisateur a cliqué sur "Enregistrer"
+
+  // Variables de pagination
+  currentPage: number = 1;
+  itemsPerPage: number = 5; // Nombre de patients par page
 
   newPatient: Patient = {
     nom: '',
@@ -60,7 +67,7 @@ export class InfirmiereComponent implements OnInit {
   // CONSTANTES & URGENCE
   // =========================================
 
-  casUrgence = ''; // Motifs d'urgence (ex: ACCIDENT, ARRET_CARDIAQUE, BRULURE_GRAVE, MALAISE)
+  casUrgence = ''; // Motifs d'urgence
 
   constante: Constante = {
     admission: 0,
@@ -80,6 +87,19 @@ export class InfirmiereComponent implements OnInit {
     this.loadAdmissions();
   }
 
+  // Méthode pour changer d'onglet
+  setActiveTab(tab: 'patients' | 'prise-en-charge'): void {
+    this.currentTab = tab;
+  }
+
+  logout(): void {
+    // Supprimer le token et réinitialiser le stockage local
+    localStorage.clear();
+
+    // Rediriger l'utilisateur vers la page de connexion
+    this.router.navigate(['/login']);
+  }
+
   // =========================================
   // CHARGER PATIENTS
   // =========================================
@@ -90,9 +110,18 @@ export class InfirmiereComponent implements OnInit {
     this.clinicService
       .getPatients()
       .subscribe({
-        next: (data) => {
+        next: (data: any) => {
           console.log('PATIENTS RECUS :', data);
-          this.patients = data;
+          if (Array.isArray(data)) {
+            this.patients = data;
+          } else if (data && Array.isArray(data.results)) {
+            this.patients = data.results;
+          } else if (data && Array.isArray(data.content)) {
+            this.patients = data.content;
+          } else {
+            this.patients = [];
+          }
+          this.currentPage = 1; // Réinitialise la page lors du rechargement des données
           this.cdr.detectChanges();
         },
         error: (error) => {
@@ -100,6 +129,37 @@ export class InfirmiereComponent implements OnInit {
           this.showToast('error', 'Impossible de charger la liste des patients.');
         }
       });
+  }
+
+  // =========================================
+  // LOGIQUE DE PAGINATION
+  // =========================================
+
+  get paginatedPatients(): Patient[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.patients.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.patients.length / this.itemsPerPage) || 1;
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
   }
 
   // =========================================
@@ -133,10 +193,9 @@ export class InfirmiereComponent implements OnInit {
   savePatient(): void {
     this.submittedPatientForm = true;
 
-    // Expression régulière : 8 chiffres commençant obligatoirement par 2, 3 ou 4
+    // Validation du téléphone mauritanien (8 chiffres commençant par 2, 3 ou 4)
     const phoneRegex = /^(2|3|4)\d{7}$/;
 
-    // Vérification de la validité de l'ensemble des champs
     if (
       !this.newPatient.nom?.trim() ||
       !this.newPatient.prenom?.trim() ||
@@ -144,7 +203,6 @@ export class InfirmiereComponent implements OnInit {
       !this.newPatient.telephone?.trim() ||
       !phoneRegex.test(this.newPatient.telephone.trim())
     ) {
-      // Bloque la soumission si un des champs est invalide (le HTML affichera les erreurs en rouge)
       return;
     }
 
@@ -174,8 +232,17 @@ export class InfirmiereComponent implements OnInit {
     this.clinicService
       .getAdmissions()
       .subscribe({
-        next: (data) => {
-          this.admissions = data.filter(admission => {
+        next: (data: any) => {
+          let list: Admission[] = [];
+          if (Array.isArray(data)) {
+            list = data;
+          } else if (data && Array.isArray(data.results)) {
+            list = data.results;
+          } else if (data && Array.isArray(data.content)) {
+            list = data.content;
+          }
+
+          this.admissions = list.filter(admission => {
             const statut = admission.statut?.trim().toUpperCase();
             return statut === 'EN_ATTENTE';
           });
@@ -197,23 +264,32 @@ export class InfirmiereComponent implements OnInit {
     this.diagnostic = '';
   }
 
+  annulerAdmission(): void {
+    this.selectedPatientForAdmission = null;
+    this.diagnostic = '';
+  }
+
   creerAdmission(): void {
     if (!this.selectedPatientForAdmission) {
       this.showAlert('Attention', 'Veuillez sélectionner un patient.', 'warning');
       return;
     }
 
-    const patientId = this.selectedPatientForAdmission.id!;
+    const admissionData = {
+      patient_id: this.selectedPatientForAdmission.id!,
+      diagnostic: this.diagnostic ? this.diagnostic.trim() : ''
+    };
 
     this.clinicService
-      .createAdmission(patientId)
+      .createAdmission(admissionData)
       .subscribe({
         next: (admission) => {
           this.showToast('success', 'Admission créée avec succès.');
+          
           this.selectedPatientForAdmission = null;
           this.diagnostic = '';
+          
           this.selectedAdmission = admission;
-
           this.casUrgence = '';
           this.constante = {
             admission: admission.id!,
@@ -227,14 +303,12 @@ export class InfirmiereComponent implements OnInit {
         },
         error: (error) => {
           console.error('ERREUR CREATION ADMISSION :', error);
+          if (error.error) {
+            console.error('Détails validation Django :', error.error);
+          }
           this.showAlert('Erreur', 'Erreur lors de la création de l\'admission.', 'error');
         }
       });
-  }
-
-  annulerAdmission(): void {
-    this.selectedPatientForAdmission = null;
-    this.diagnostic = '';
   }
 
   selectAdmission(admission: Admission): void {
@@ -259,11 +333,10 @@ export class InfirmiereComponent implements OnInit {
     const cas = this.casUrgence;
 
     let sys = 0;
-    if (this.constante.tension) {
+    if (this.constante.tension && typeof this.constante.tension === 'string') {
       const parts = this.constante.tension.split('/');
       sys = parseFloat(parts[0]) || 0;
 
-      // Convertit les cmHg en mmHg (ex: 12 devient 120)
       if (sys > 0 && sys < 30) {
         sys = sys * 10;
       }
@@ -319,7 +392,7 @@ export class InfirmiereComponent implements OnInit {
       return;
     }
 
-    if (!this.constante.tension.trim()) {
+    if (!this.constante.tension || !this.constante.tension.trim()) {
       this.showAlert('Champ requis', 'Veuillez saisir la tension.', 'warning');
       return;
     }
@@ -373,7 +446,7 @@ export class InfirmiereComponent implements OnInit {
   }
 
   // =========================================
-  // HELPERS SWEETALERT2
+  // HELPERS SWEETALERT2 & DIVERS
   // =========================================
 
   private showAlert(title: string, text: string, icon: 'success' | 'error' | 'warning' | 'info'): void {
@@ -396,6 +469,13 @@ export class InfirmiereComponent implements OnInit {
       timer: 3000,
       timerProgressBar: true
     });
+  }
+
+  getPatientFullName(patient: any): string {
+    if (patient && typeof patient === 'object') {
+      return `${patient.prenom || ''} ${patient.nom || ''}`.trim();
+    }
+    return patient ? `Patient #${patient}` : '-';
   }
 
 }

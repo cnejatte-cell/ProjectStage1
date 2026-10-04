@@ -7,7 +7,7 @@ import {
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink,  RouterLinkActive } from '@angular/router';
 import Swal from 'sweetalert2';
 
 // Import du service et des modèles
@@ -15,7 +15,8 @@ import {
   ClinicService,
   Admission,
   Constante,
-  Patient
+  Patient,
+  PaginatedResponse
 } from '../../../core/services/clinic';
 
 @Component({
@@ -31,10 +32,15 @@ export class PatientListComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
 
+  // Exposer Math pour l'utiliser dans le template si besoin
+  Math = Math;
+   Array = Array; // Exposer Array pour le template
+
   // =========================================
   // PROPRIÉTÉS DU MODAL & DU FORMULAIRE
   // =========================================
   showModal = false;
+  showAdmissionModal = false;
   isEditMode = false;
   searchTerm = '';
 
@@ -43,6 +49,7 @@ export class PatientListComponent implements OnInit {
   prenomError = '';
   phoneError = '';
 
+  // Objet Patient courant
   currentPatient: Patient = {
     nom: '',
     prenom: '',
@@ -51,7 +58,54 @@ export class PatientListComponent implements OnInit {
     genre: 'M'
   };
 
+  // Données d'admission
+  admissionData = {
+    motif: '',
+    service: ''
+  };
+
   patients: Patient[] = [];
+
+  // =========================================
+  // PAGINATION
+  // =========================================
+  currentPage: number = 1;
+  pageSize: number = 5; // Nombre de patients affichés par page
+
+  // Dans patient-list.ts
+get pages(): number[] {
+  return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+}
+
+  // Patients découpés pour la page courante
+  get paginatedPatients(): Patient[] {
+    const filtered = this.filteredPatients;
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return filtered.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  // Nombre total de pages selon les résultats filtrés
+  get totalPages(): number {
+    return Math.ceil(this.filteredPatients.length / this.pageSize) || 1;
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
 
   // =========================================
   // DÉFILEMENT AUTOMATIQUE VERS LA LISTE
@@ -83,8 +137,17 @@ export class PatientListComponent implements OnInit {
 
   chargerPatients(): void {
     this.clinicService.getPatients().subscribe({
-      next: (data) => {
-        this.patients = data;
+      next: (data: any) => {
+        if (Array.isArray(data)) {
+          this.patients = data;
+        } else if (data?.content && Array.isArray(data.content)) {
+          this.patients = data.content;
+        } else if (data?.results && Array.isArray(data.results)) {
+          this.patients = data.results;
+        } else {
+          this.patients = [];
+        }
+        this.currentPage = 1; // Réinitialise la page courante à 1 après le chargement
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -123,12 +186,11 @@ export class PatientListComponent implements OnInit {
       return false;
     }
 
-    // RegEx : 8 chiffres commençant par 2, 3 ou 4 (Chinguitel, Mauritel, Mattel)
-    // Accepte également le format international (+222 ou 00222)
+    // Mauritanie : 8 chiffres commençant par 2, 3 ou 4 (+222 / 00222 optionnel)
     const mauritaniaRegex = /^(?:\+222|00222)?[234]\d{7}$/;
 
     if (!mauritaniaRegex.test(phone)) {
-      this.phoneError = 'Numéro invalide (Mauritel, Mattel ou Chinguitel : 8 chiffres commençant par 2, 3 ou 4).';
+      this.phoneError = 'Veuillez saisir un numéro mauritanien valide (8 chiffres commençant par 2, 3 ou 4).';
       return false;
     }
 
@@ -143,12 +205,13 @@ export class PatientListComponent implements OnInit {
   }
 
   // =========================================
-  // RECHERCHE (FILTRAGE MAURITANIEN)
+  // RECHERCHE (FILTRAGE MAURITANIEN LOCAL)
   // =========================================
   onSearchChange(): void {
     if (/^\d+$/.test(this.searchTerm) && this.searchTerm.length > 8) {
       this.searchTerm = this.searchTerm.slice(0, 8);
     }
+    this.currentPage = 1; // Revenir à la page 1 lors d'une nouvelle recherche
   }
 
   get filteredPatients(): Patient[] {
@@ -182,7 +245,7 @@ export class PatientListComponent implements OnInit {
   }
 
   // =========================================
-  // GESTION DU MODAL & SAUVEGARDE
+  // GESTION DU MODAL PATIENT (AJOUT / MODIF)
   // =========================================
   openAddModal(): void {
     this.isEditMode = false;
@@ -214,7 +277,6 @@ export class PatientListComponent implements OnInit {
     const isPrenomValid = this.validatePrenom();
     const isPhoneValid = this.validatePhone();
 
-    // Bloque la sauvegarde si l'un des champs est invalide
     if (!isNomValid || !isPrenomValid || !isPhoneValid) {
       return;
     }
@@ -232,6 +294,44 @@ export class PatientListComponent implements OnInit {
       error: (err) => {
         console.error('Erreur sauvegarde patient:', err);
         this.showAlert('Erreur', 'Erreur lors de l\'enregistrement.', 'error');
+      }
+    });
+  }
+
+  // =========================================
+  // GESTION DU MODAL ADMISSION
+  // =========================================
+  openAdmissionModal(patient: Patient): void {
+    this.currentPatient = { ...patient };
+    this.admissionData = { motif: '', service: '' };
+    this.showAdmissionModal = true;
+  }
+
+  closeAdmissionModal(): void {
+    this.showAdmissionModal = false;
+    this.admissionData = { motif: '', service: '' };
+  }
+
+  saveAdmission(): void {
+    if (!this.admissionData.motif.trim()) {
+      this.showToast('error', 'Le motif d\'admission est requis.');
+      return;
+    }
+
+    const payload = {
+      patient_id: this.currentPatient.id,
+      diagnostic: this.admissionData.motif,
+      service: this.admissionData.service
+    };
+
+    this.clinicService.createAdmission(payload).subscribe({
+      next: () => {
+        this.showToast('success', `Admission créée pour ${this.currentPatient.prenom} ${this.currentPatient.nom}`);
+        this.closeAdmissionModal();
+      },
+      error: (err) => {
+        console.error('Erreur création admission:', err);
+        this.showAlert('Erreur', 'Impossible de créer l\'admission.', 'error');
       }
     });
   }
@@ -271,7 +371,7 @@ export class PatientListComponent implements OnInit {
   }
 
   // =========================================
-  // MÉTHODE DE DÉCONNEXION (AVEC REDIRECTION)
+  // MÉTHODE DE DÉCONNEXION
   // =========================================
   onLogout(): void {
     Swal.fire({
@@ -288,8 +388,7 @@ export class PatientListComponent implements OnInit {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        localStorage.clear();
         sessionStorage.clear();
 
         this.showToast('info', 'Déconnexion réussie.');

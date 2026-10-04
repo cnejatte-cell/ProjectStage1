@@ -11,37 +11,48 @@ export const authGuard: CanActivateFn = (route, state) => {
   console.log('--- AuthGuard Check ---');
   console.log('Token présent :', !!token);
 
-  // 1. المستخدم غير مسجل الدخول
+  // 1. Si aucun token n'est présent -> Direction Login
   if (!token) {
     console.warn('Accès refusé : Aucun token trouvé.');
     router.navigate(['/login']);
     return false;
   }
 
-  // 2. الحصول على الدور المطلوب للصفحة
-  const allowedRoles = route.data['roles'] as string[] | undefined;
+  // 2. Récupération des rôles autorisés pour la route
+  const rawAllowedRoles = route.data['roles'] as string[] | undefined;
 
-  // إذا لم تحدد الصفحة أدواراً، السماح للمستخدم
-  if (!allowedRoles || allowedRoles.length === 0) {
+  // Si aucun rôle n'est spécifié sur la route -> Accès autorisé
+  if (!rawAllowedRoles || rawAllowedRoles.length === 0) {
     return true;
   }
 
-  // 3. الحصول على دور المستخدم
-  const userRole = authService.getUserRole();
+  // Normalisation des rôles de la route en majuscules
+  const allowedRoles = rawAllowedRoles.map(role => role.toUpperCase());
 
-  console.log('Role utilisateur :', userRole);
-  console.log('Roles autorisés :', allowedRoles);
+  // 3. Récupération et normalisation du rôle utilisateur
+  const rawUserRole = authService.getUserRole();
+  const userRole = rawUserRole ? rawUserRole.toUpperCase().trim() : null;
 
-  // 4. التحقق من الدور
+  console.log('Rôle utilisateur (normalisé) :', userRole);
+  console.log('Rôles autorisés (normalisés) :', allowedRoles);
+
+  // 4. Vérification de l'autorisation
   if (userRole && allowedRoles.includes(userRole)) {
     return true;
   }
 
-  // 5. الدور غير مسموح
-  console.warn('Accès refusé : rôle non autorisé.');
+  // 5. Redirection en cas de rôle non autorisé
+  console.warn('Accès refusé : rôle non autorisé pour cette page.');
 
-  // نرجعه إلى patients أو login حسب اختيارنا
-  router.navigate(['/patients']);
+  if (userRole === 'ADMIN') {
+    router.navigate(['/admin/patients']); // 👈 FIX : Chemin exact de la route Admin
+  } else if (userRole === 'NURSE' || userRole === 'INFIRMIER' || userRole === 'INFIRMIERE') {
+    router.navigate(['/infirmiere']);
+  } else if (userRole === 'DOCTOR' || userRole === 'MEDECIN') {
+    router.navigate(['/medecin']);
+  } else {
+    router.navigate(['/login']);
+  }
 
   return false;
 };

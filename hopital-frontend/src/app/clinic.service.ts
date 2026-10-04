@@ -112,14 +112,14 @@ export class ClinicService {
     return this.http.get<Admission[]>(`${this.apiUrl}/admissions/`);
   }
 
-  createAdmission(patientId: number): Observable<Admission> {
-    const data = {  
-      patient: patientId,  
-      diagnostic: '',  
-      statut: 'EN_ATTENTE'  
-    };  
-    return this.http.post<Admission>(`${this.apiUrl}/admissions/`, data);
-  }
+ createAdmission(patientId: number, diagnostic: string = ''): Observable<Admission> {
+  const data = {
+    patient_id: patientId,
+    diagnostic: diagnostic,
+    statut: 'EN_ATTENTE'
+  };
+  return this.http.post<Admission>(`${this.apiUrl}/admissions/`, data);
+}
 
   updateStatutAdmission(id: number, statut: string): Observable<Admission> {
     return this.http.patch<Admission>(`${this.apiUrl}/admissions/${id}/`, { statut });
@@ -206,4 +206,15 @@ export class ClinicService {
   addPrescription(prescription: Prescription): Observable<Prescription> {
     return this.http.post<Prescription>(`${this.apiUrl}/prescriptions/`, prescription);
   }
+  // Dans src/app/core/services/clinic.ts
+
+createPrescription(payload: any): Observable<any> {
+  return this.http.post<any>(`${this.apiUrl}/prescriptions/`, payload);
+}
+
+// Récupérer les prescriptions filtrées par ordonnance
+getPrescriptionsByOrdonnance(ordonnanceId: number): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/prescriptions/?ordonnance=${ordonnanceId}`);
+}
+
 }

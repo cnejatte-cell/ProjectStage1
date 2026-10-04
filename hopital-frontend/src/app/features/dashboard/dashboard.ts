@@ -5,7 +5,8 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 
-import { Router, RouterLink } from '@angular/router';
+
+import { Router, RouterLink,  RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -34,7 +35,7 @@ interface PatientUrgence {
     RouterLink
   ],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  styleUrl: './dashboard.scss'
 })
 export class DashboardComponent implements OnInit {
 
@@ -87,7 +88,7 @@ export class DashboardComponent implements OnInit {
     console.log('ROLE DASHBOARD =', this.userRole);
     this.loadDashboard();
   }
-
+ 
   // =========================
   // ACTUALISER DASHBOARD
   // =========================
