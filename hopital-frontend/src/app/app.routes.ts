@@ -1,193 +1,97 @@
 import { Routes } from '@angular/router';
 
-// ===============================
-// IMPORT DES COMPONENTS
-// ===============================
-
 import { LoginComponent } from './features/auth/login/login';
+import { PatientListComponent } from './features/patients/patient-list/patient-list';
+import { MedicalRecordComponent } from './features/patients/medical-record/medical-record';
+import { InfirmiereComponent } from './features/infirmiere/infirmiere';
+import { MedecinComponent } from './features/medecin/medecin';
+import { HistoriqueComponent } from './features/historique/historique';
+import { DashboardComponent } from './features/dashboard/dashboard';
+import { authGuard } from './core/guards/auth-guard';
 
-import { PatientListComponent } 
-  from './features/patients/patient-list/patient-list';
-
-import { MedicalRecordComponent } 
-  from './features/patients/medical-record/medical-record';
-
-import { InfirmiereComponent } 
-  from './features/infirmiere/infirmiere';
-
-import { MedecinComponent }
-  from './features/medecin/medecin';
-
-import { HistoriqueComponent }
-  from './features/historique/historique';
-
-import { DashboardComponent }
-  from './features/dashboard/dashboard';
-
-import { authGuard } 
-  from './core/guards/auth-guard';
-
-
-// ===============================
-// ROUTES
-// ===============================
+import { AdmissionsComponent } from './features/admissions/admissions';
+import { RendezVousComponent } from './features/rendez-vous/rendez-vous';
+import { UserManagementComponent } from './features/user-management/user-management';
 
 export const routes: Routes = [
-
-  // ==========================================
   // 1. PAGE D'ACCUEIL
-  // ==========================================
-
   {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
   },
 
-
-  // ==========================================
-  // 2. LOGIN
-  // Accessible sans authentification
-  // ==========================================
-
+  // 2. AUTHENTIFICATION
   {
     path: 'login',
     component: LoginComponent
   },
 
-
-  // ==========================================
-  // 3. LISTE DES PATIENTS
-  //
-  // ADMIN
-  // NURSE
-  // DOCTOR
-  // ==========================================
-
-  {
-    path: 'patients',
-
-    component: PatientListComponent,
-
-    canActivate: [authGuard],
-
-    data: {
-      roles: [
-        'ADMIN',
-        'NURSE',
-        'DOCTOR'
-      ]
-    }
-  },
-
-
-  // ==========================================
-  // 4. ESPACE INFIRMIÈRE
-  //
-  // Accessible uniquement à :
-  // NURSE
-  // ==========================================
-
+  // 3. ESPACES DÉDIÉS STRICTS PAR RÔLE
   {
     path: 'infirmiere',
-
     component: InfirmiereComponent,
-
     canActivate: [authGuard],
-
-    data: {
-      roles: [
-        'NURSE'
-      ]
-    }
+    data: { roles: ['NURSE', 'INFIRMIER'] }
   },
-
   {
-  path: 'medecin',
-
-  component: MedecinComponent,
-
-  canActivate: [authGuard],
-
-  data: {
-    roles: [
-      'DOCTOR'
-    ]
-  }
-  },
-
-
-
-  // ==========================================
-  // 5. DOSSIER MÉDICAL DU PATIENT
-  //
-  // Exemple :
-  // /patients/2/medical-record
-  //
-  // Accessible à :
-  // ADMIN
-  // NURSE
-  // DOCTOR
-  // ==========================================
-
-  {
-    path: 'patients/:id/medical-record',
-
-    component: MedicalRecordComponent,
-
+    path: 'medecin',
+    component: MedecinComponent,
     canActivate: [authGuard],
-
-    data: {
-      roles: [
-        'ADMIN',
-        'NURSE',
-        'DOCTOR'
-      ]
-    }
+    data: { roles: ['DOCTOR', 'MEDECIN'] }
   },
 
+  // 4. ESPACES D'ADMINISTRATION (RÉSERVÉS STRICTEMENT À L'ADMIN)
   {
-  path: 'historique',
-
-  component: HistoriqueComponent,
-
-  canActivate: [authGuard],
-
-  data: {
-    roles: [
-      'ADMIN',
-      'DOCTOR'
-    ]
-  }
+    path: 'admin/users',
+    component: UserManagementComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ADMIN'] }
   },
-
+  {
+    path: 'patients',
+    component: PatientListComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ADMIN'] } // Restreint à l'ADMIN pour ne plus être accessible par NURSE/DOCTOR
+  },
   {
     path: 'dashboard',
-
     component: DashboardComponent,
-
     canActivate: [authGuard],
-
-    data: {
-      roles: [
-        'ADMIN',
-        'NURSE',
-        'DOCTOR'
-      ]
-    }
+    data: { roles: ['ADMIN'] }
   },
 
+  // 5. FONCTIONNALITÉS PARTAGÉES SPÉCIFIQUES
+  {
+    path: 'rendez-vous',
+    component: RendezVousComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ADMIN', 'DOCTOR'] }
+  },
+  {
+    path: 'admissions',
+    component: AdmissionsComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ADMIN', 'NURSE'] }
+  },
 
-  // ==========================================
-  // 6. ROUTE INCONNUE
-  //
-  // Si l'utilisateur écrit une URL
-  // qui n'existe pas
-  // ==========================================
+  // 6. DOSSIER MÉDICAL & HISTORIQUE
+  {
+    path: 'patients/:id/medical-record',
+    component: MedicalRecordComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ADMIN', 'DOCTOR', 'NURSE'] }
+  },
+  {
+    path: 'historique',
+    component: HistoriqueComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ADMIN', 'DOCTOR'] }
+  },
 
+  // 7. ROUTE INCONNUE
   {
     path: '**',
     redirectTo: 'login'
   }
-
 ];

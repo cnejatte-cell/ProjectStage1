@@ -1,15 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User  
 
-# 1. نموذج المستخدمين (مع الصلاحيات)
 class User(AbstractUser):
-    ROLE_CHOICES = (
-        ('admin', 'Administrateur'),
-        ('infirmiere', 'Infirmiere'),
-        ('medecin', 'Medecin'),
-    )
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    class Role(models.TextChoices):
+        ADMIN = 'ADMIN', 'Administrateur'
+        MEDECIN = 'MEDECIN', 'Médecin'
+        INFIRMIER = 'INFIRMIER', 'Infirmière / Infirmier'
 
+    role = models.CharField(
+        max_length=20, 
+        choices=Role.choices, 
+        default=Role.INFIRMIER
+    )
+    telephone = models.CharField(max_length=20, blank=True, null=True)
+
+    def is_admin(self):
+        return self.role == self.Role.ADMIN or self.is_superuser
 # 2. نموذج المريض
 class Patient(models.Model):
     SEX_CHOICES = (

@@ -1,0 +1,663 @@
+@use 'sass:map';
+@use 'sass:list';
+
+/* ==========================================================================
+   DASHBOARD — fichier autonome (layout + sidebar + page)
+   ========================================================================== */
+
+/* ---------- 1. VARIABLES ---------- */
+$primary:      #2563eb;
+$primary-dark: #1d4ed8;
+$text-dark:    #0f172a;
+$text:         #1e293b;
+$text-soft:    #334155;
+$text-muted:   #64748b;
+$text-faint:   #94a3b8;
+$border:       #e2e8f0;
+$border-light: #f1f5f9;
+$surface:      #ffffff;
+$surface-alt:  #f8fafc;
+$radius:       16px;
+$radius-sm:    10px;
+$shadow:       0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 12px rgba(15, 23, 42, 0.04);
+$shadow-hover: 0 10px 24px rgba(15, 23, 42, 0.10);
+
+/* Niveaux d'urgence */
+$levels: (
+  "red": (
+    bg: #fef2f2, border: #fecaca, text: #991b1b,
+    dot: #ef4444, accent: #dc2626, hover: #fee2e2
+  ),
+  "yellow": (
+    bg: #fffbeb, border: #fde68a, text: #92400e,
+    dot: #f59e0b, accent: #d97706, hover: #fef3c7
+  ),
+  "green": (
+    bg: #f0fdf4, border: #bbf7d0, text: #166534,
+    dot: #22c55e, accent: #16a34a, hover: #dcfce7
+  ),
+  "gray": (
+    bg: #f8fafc, border: #e2e8f0, text: #475569,
+    dot: #94a3b8, accent: #64748b, hover: #e2e8f0
+  )
+);
+
+/* Icônes des statistiques : (couleur début, couleur fin) du dégradé */
+$stat-icons: (
+  "blue":   (#60a5fa, #2563eb),
+  "teal":   (#34d399, #059669),
+  "cyan":   (#22d3ee, #0891b2),
+  "indigo": (#818cf8, #4f46e5),
+  "green":  (#4ade80, #16a34a)
+);
+
+/* ---------- 2. MIXINS ---------- */
+@mixin card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius;
+  box-shadow: $shadow;
+}
+
+@mixin lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadow-hover;
+  }
+}
+
+/* ---------- 3. LAYOUT ---------- */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f1f5f9;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: $text;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding: 2rem;
+}
+
+/* ---------- 4. SIDEBAR ---------- */
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  padding: 1.5rem 1rem;
+  background: $surface;
+  border-right: 1px solid $border;
+}
+
+.logo-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem 1.5rem;
+  border-bottom: 1px solid $border;
+
+  h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $text-dark;
+  }
+}
+
+.brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: $primary;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+
+  i { font-size: 1.15rem; }
+
+  &:hover {
+    background: $border-light;
+    color: $text;
+  }
+
+  &.active {
+    background: #eff6ff;
+    color: $primary;
+    font-weight: 600;
+  }
+}
+
+.sidebar-footer {
+  padding-top: 1rem;
+  border-top: 1px solid $border;
+}
+
+.btn-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background: #fee2e2; }
+}
+
+/* ---------- 5. EN-TÊTE DE PAGE ---------- */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $border;
+
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $text-dark;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    margin: 6px 0 0;
+    font-size: 0.95rem;
+    color: $text-muted;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: $radius-sm;
+    background: $primary;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba($primary, 0.25);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $primary-dark;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+/* ---------- 6. ÉTATS : CHARGEMENT / ERREUR / VIDE ---------- */
+.loading-state {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: $primary;
+
+  .spin {
+    margin-bottom: 12px;
+    font-size: 32px;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.alert-message {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+
+  &.alert-danger {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 12px;
+  color: $text-faint;
+  text-align: center;
+
+  i { margin-bottom: 6px; font-size: 24px; }
+  p { margin: 0; font-size: 13px; }
+}
+
+/* ---------- 7. TITRES DE SECTION ---------- */
+.section-title {
+  margin: 32px 0 16px;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $text-soft;
+
+    /* petite barre d'accent à gauche */
+    &::before {
+      content: '';
+      width: 4px;
+      height: 18px;
+      border-radius: 4px;
+      background: $primary;
+    }
+  }
+}
+
+/* ---------- 8. STATISTIQUES (5 cartes alignées) ---------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  @include card;
+  @include lift;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px;
+
+  /* cercle décoratif en arrière-plan */
+  &::after {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: $border-light;
+    opacity: 0.8;
+  }
+}
+
+.stat-icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 20px;
+}
+
+@each $name, $c in $stat-icons {
+  .icon-#{$name} {
+    background: linear-gradient(135deg, list.nth($c, 1), list.nth($c, 2));
+    box-shadow: 0 6px 14px rgba(list.nth($c, 2), 0.3);
+  }
+}
+
+.stat-details {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  min-height: 2.4em;           /* aligne les chiffres même si le libellé passe sur 2 lignes */
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: $text-muted;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: $text-dark;
+}
+
+/* ---------- 9. NIVEAUX D'URGENCE (4 cartes alignées) ---------- */
+.urgency-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.urgency-card {
+  padding: 18px 20px;
+  border: 1px solid transparent;
+  border-left-width: 5px;
+  border-radius: $radius;
+  box-shadow: $shadow;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadow-hover;
+  }
+}
+
+.urgency-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.urgency-count {
+  margin: 10px 0 4px;
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.urgency-desc {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+/* ---------- 10. BANNIÈRE DE RÉSUMÉ ---------- */
+.summary-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 28px 0;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #eff6ff, #f8fafc);
+  border: 1px solid #dbeafe;
+  border-radius: $radius;
+}
+
+.banner-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: $text-soft;
+
+  i { font-size: 20px; color: $primary; }
+}
+
+.banner-badge {
+  padding: 4px 16px;
+  border-radius: 20px;
+  background: $primary;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* ---------- 11. LISTES DE PATIENTS (2 x 2) ---------- */
+.patient-sections-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.card-box {
+  @include card;
+  padding: 20px;
+}
+
+.card-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid $border-light;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  i  { font-size: 18px; }
+  h3 { margin: 0; font-size: 1rem; font-weight: 700; color: $text-dark; }
+}
+
+.count-badge {
+  padding: 2px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.patient-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.patient-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: $surface-alt;
+  border: 1px solid $border-light;
+  border-radius: $radius-sm;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $surface;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.patient-info {
+  display: flex;
+  flex-direction: column;
+
+  strong { font-size: 14px; color: $text; }
+}
+
+.admission-id {
+  margin-top: 2px;
+  font-size: 12px;
+  color: $text-muted;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+/* ---------- 12. VARIANTES DE COULEUR (générées) ---------- */
+@each $name, $c in $levels {
+  .level-#{$name} {
+    background: map.get($c, bg);
+    border-color: map.get($c, border);
+    border-left-color: map.get($c, dot);
+    color: map.get($c, text);
+
+    .status-indicator { background: map.get($c, dot); }
+  }
+
+  .section-#{$name} .header-title i {
+    color: map.get($c, accent);
+  }
+
+  .#{$name}-badge {
+    background: map.get($c, bg);
+    color: map.get($c, accent);
+    border: 1px solid map.get($c, border);
+  }
+
+  .btn-#{$name} {
+    background: map.get($c, bg);
+    color: map.get($c, accent);
+
+    &:hover { background: map.get($c, hover); }
+  }
+}
+
+.btn-gray {
+  background: $border-light;
+  color: #475569;
+
+  &:hover { background: $border; }
+}
+
+/* ---------- 13. RESPONSIVE ---------- */
+@media (max-width: 1280px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .urgency-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .patient-sections-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid $border;
+  }
+
+  .nav-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+
+    .btn-primary {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .summary-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .patient-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .btn-action {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid,
+  .urgency-grid {
+    grid-template-columns: 1fr;
+  }
+}

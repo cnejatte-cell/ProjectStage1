@@ -1,560 +1,366 @@
-<div class="doctor-page">
-
-  <div class="doctor-header">
-    <div>
-      <h1>👨‍⚕️ Espace Médecin</h1>
-      <p>Gestion des patients et consultations</p>
-    </div>
-
-    <button
-      class="refresh-button"
-      (click)="loadAdmissions()">
-      🔄 Actualiser
-    </button>
-  </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 
-  <!-- MESSAGE ERREUR -->
+<div class="layout-container">
 
-  <div
-    *ngIf="errorMessage"
-    class="error-message">
-
-    {{ errorMessage }}
-
-  </div>
-
-
-  <!-- MESSAGE SUCCÈS -->
-
-  <div
-    *ngIf="successMessage"
-    class="success-message">
-
-    {{ successMessage }}
-
-  </div>
-
-
-  <!-- LISTE DES ADMISSIONS -->
-
-  <section class="section">
-
-    <div class="section-title">
-
-      <h2>🩺 Patients à consulter</h2>
-
-      <span class="badge">
-        {{ admissions.length }}
-      </span>
-
-    </div>
-
-
-    <div
-      *ngIf="loading"
-      class="loading">
-
-      Chargement des patients...
-
-    </div>
-
-
-    <div
-      *ngIf="!loading && admissions.length === 0"
-      class="empty">
-
-      <div class="empty-icon">
-        🏥
+  <!-- BARRE LATÉRALE MÉDECIN -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      
+      <!-- En-tête Rôle -->
+      <div class="logo-brand">
+        <div class="brand-icon">
+          <i class="bi bi-stethoscope"></i>
+        </div>
+        <h2>Médecin</h2>
       </div>
 
-      <h3>Aucun patient</h3>
+      <!-- Menu de Navigation -->
+      <nav class="nav-menu">
 
-      <p>
-        Aucun patient n'est actuellement chez le médecin.
-      </p>
+       
+        <a routerLink="/medecin/patients" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-people-fill"></i> Patients
+        </a>
+
+      </nav>
 
     </div>
 
-
-    <!-- ADMISSION -->
-
-    <div
-      *ngFor="let admission of admissions"
-      class="admission-card">
-
-
-      <div class="admission-top">
-
-        <div>
-
-          <h3>
-            Admission #{{ admission.id }}
-          </h3>
-
-          <p class="patient-name">
-
-            👤
-            {{ admission.patient.prenom }}
-            {{ admission.patient.nom }}
-
-          </p>
-
-        </div>
-
-
-        <span class="status">
-
-          {{ admission.statut }}
-
-        </span>
-
-      </div>
-
-
-      <div class="admission-info">
-
-        <div>
-
-          <strong>Téléphone</strong>
-
-          <span>
-            {{ admission.patient.telephone || '-' }}
-          </span>
-
-        </div>
-
-
-        <div>
-
-          <strong>Date de naissance</strong>
-
-          <span>
-            {{ admission.patient.date_naissance || '-' }}
-          </span>
-
-        </div>
-
-
-        <div>
-
-          <strong>Diagnostic initial</strong>
-
-          <span>
-            {{ admission.diagnostic || '-' }}
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <button
-        class="primary-button"
-        (click)="selectAdmission(admission)">
-
-        👁️ Consulter le patient
-
+    <!-- Bouton Déconnexion en bas -->
+    <div class="sidebar-footer">
+      <button type="button" class="btn-logout" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i> Déconnexion
       </button>
-
     </div>
+  </aside>
 
-  </section>
+  <!-- CONTENU PRINCIPAL -->
+  <main class="main-content">
+    <div class="doctor-page">
 
-
-  <!-- DOSSIER DU PATIENT -->
-
-  <section
-    *ngIf="selectedAdmission"
-    class="section">
-
-
-    <div class="section-title">
-
-      <h2>
-        📋 Dossier du patient
-      </h2>
-
-    </div>
-
-
-    <!-- INFORMATIONS PATIENT -->
-
-    <div class="patient-box">
-
-      <h3>
-
-        👤
-        {{ selectedAdmission.patient.prenom }}
-        {{ selectedAdmission.patient.nom }}
-
-      </h3>
-
-      <p>
-        <strong>Admission :</strong>
-        #{{ selectedAdmission.id }}
-      </p>
-
-      <p>
-        <strong>Diagnostic initial :</strong>
-        {{ selectedAdmission.diagnostic || 'Non renseigné' }}
-      </p>
-
-    </div>
-
-
-    <!-- CONSTANTES -->
-
-    <div class="constants-box">
-
-      <h3>🩺 Constantes vitales</h3>
-
-
-      <div
-        *ngIf="selectedConstantes.length === 0"
-        class="empty-small">
-
-        Aucune constante enregistrée.
-
-      </div>
-
-
-      <div
-        *ngFor="let constante of selectedConstantes"
-        class="constant-card">
-
-
+      <!-- EN-TÊTE PAGE (Masqué à l'impression) -->
+      <div class="doctor-header no-print">
         <div>
+          <h1>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+            Espace Médecin
+          </h1>
+          <p>Gestion des patients et consultations</p> 
+        </div> 
 
-          <strong>🌡️ Température</strong>
-
-          <span>
-            {{ constante.temperature }}
-          </span>
-
-        </div>
-
-
-        <div>
-
-          <strong>🩸 Tension</strong>
-
-          <span>
-            {{ constante.tension }}
-          </span>
-
-        </div>
-
-
-        <div>
-
-          <strong>💉 Glycémie</strong>
-
-          <span>
-            {{ constante.glycemie ?? '-' }}
-          </span>
-
-        </div>
-
-
-        <div>
-
-          <strong>🚨 Urgence</strong>
-
-          <span
-            class="urgence"
-            [ngClass]="{
-              'rouge': constante.degre_urgence === 'ROUGE',
-              'jaune': constante.degre_urgence === 'JAUNE',
-              'vert': constante.degre_urgence === 'VERT',
-              'gris': constante.degre_urgence === 'GRIS'
-            }">
-
-            {{ constante.degre_urgence }}
-
-          </span>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <hr>
-
-
-    <!-- CONSULTATION -->
-
-    <div class="consultation-box">
-
-      <h3>
-        📝 Consultation médicale
-      </h3>
-
-
-      <div class="form-group">
-
-        <label>
-          Examen clinique
-        </label>
-
-        <textarea
-          [(ngModel)]="consultation.examen_clinique"
-          rows="5"
-          placeholder="Saisir l'examen clinique du patient...">
-        </textarea>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Diagnostic
-        </label>
-
-        <textarea
-          [(ngModel)]="consultation.diagnostic"
-          rows="4"
-          placeholder="Saisir le diagnostic...">
-        </textarea>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Remarques
-        </label>
-
-        <textarea
-          [(ngModel)]="consultation.remarques"
-          rows="3"
-          placeholder="Remarques supplémentaires...">
-        </textarea>
-
-      </div>
-
-
-      <div class="form-actions">
-
-        <button
-          class="cancel-button"
-          (click)="cancelSelection()">
-
-          Annuler
-
+        <button class="refresh-button" (click)="loadAdmissions()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          Actualiser
         </button>
+      </div>
 
+      <!-- MESSAGES D'ALERTE -->
+      <div *ngIf="errorMessage" class="error-message no-print">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="success-message no-print">{{ successMessage }}</div>
 
-        <button
-          class="save-button"
-          (click)="saveConsultation()">
+      <!-- LISTE DES ADMISSIONS EN TABLEAU STRUCTURÉ (Masquée à l'impression) -->
+      <section class="section no-print">
+        <div class="section-title">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3V8zm-9 3c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            Patients en attente de consultation
+          </h2>
+          <span class="badge">{{ admissions.length }}</span>
+        </div>
 
-          💾 Enregistrer la consultation
+        <!-- STATE 1: CHARGEMENT -->
+        <div *ngIf="loading" class="loading">
+          Chargement des patients...
+        </div>
 
-        </button>
+        <!-- STATE 2: AUCUN PATIENT -->
+        <div *ngIf="!loading && admissions.length === 0" class="empty">
+          <div class="empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/></svg>
+          </div>
+          <h3>Aucun patient</h3>
+          <p>Aucun patient n'est actuellement en attente chez le médecin.</p>
+        </div>
 
+        <!-- STATE 3: TABLEAU DES PATIENTS -->
+        <div *ngIf="!loading && admissions.length > 0" class="table-container">
+          <table class="patients-table">
+            <thead>
+              <tr>
+                <th>N° Admission</th>
+                <th>Patient</th>
+                <th>Téléphone</th>
+                <th>Date de Naissance</th>
+                <th>Diagnostic Initial</th>
+                <th>Statut</th>
+                <th style="text-align: center;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let admission of admissions" [class.selected-row]="selectedAdmission?.id === admission.id">
+                <td><strong>#{{ admission.id }}</strong></td>
+                <td class="patient-name-cell">
+                  <ng-container *ngIf="admission.patient && typeof admission.patient === 'object'; else defaultName">
+                    {{ admission.patient.prenom }} {{ admission.patient.nom }}
+                  </ng-container>
+                  <ng-template #defaultName>
+                    Patient #{{ admission.patient }}
+                  </ng-template>
+                </td>
+                <td>
+                  {{ (admission.patient && typeof admission.patient === 'object') ? (admission.patient.telephone || '-') : '-' }}
+                </td>
+                <td>
+                  {{ (admission.patient && typeof admission.patient === 'object') ? (admission.patient.date_naissance || '-') : '-' }}
+                </td>
+                <td>{{ admission.diagnostic || 'Non spécifié' }}</td>
+                <td>
+                  <span class="status-badge">{{ admission.statut }}</span>
+                </td>
+                <td style="text-align: center;">
+                  <button class="primary-button btn-sm" (click)="selectAdmission(admission)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    Consulter
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FENÊTRE MODALE DE CONSULTATION -->
+      <div *ngIf="selectedAdmission" class="modal-overlay no-print">
+        <div class="modal-card">
+          
+          <!-- En-tête de la modale -->
+          <div class="modal-header">
+            <h2>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              Dossier du patient : 
+              <ng-container *ngIf="selectedAdmission.patient && typeof selectedAdmission.patient === 'object'; else modalPatientId">
+                {{ selectedAdmission.patient.prenom }} {{ selectedAdmission.patient.nom }}
+              </ng-container>
+              <ng-template #modalPatientId>#{{ selectedAdmission.patient }}</ng-template>
+            </h2>
+            <button class="modal-close-btn" type="button" (click)="cancelSelection()">&times;</button>
+          </div>
+
+          <!-- Corps de la modale -->
+          <div class="modal-body">
+
+            <!-- INFORMATIONS PATIENT ET CONSTANTES -->
+            <div class="patient-box">
+              <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <ng-container *ngIf="selectedAdmission.patient && typeof selectedAdmission.patient === 'object'; else modalBoxId">
+                  {{ selectedAdmission.patient.prenom }} {{ selectedAdmission.patient.nom }}
+                </ng-container>
+                <ng-template #modalBoxId>Patient #{{ selectedAdmission.patient }}</ng-template>
+              </h3>
+              <p><strong>Admission :</strong> #{{ selectedAdmission.id }}</p>
+              <p><strong>Diagnostic initial :</strong> {{ selectedAdmission.diagnostic || 'Non renseigné' }}</p>
+            </div>
+
+            <div class="constants-box">
+              <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3V8zm-9 3c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                Constantes vitales
+              </h3>
+
+              <div *ngIf="selectedConstantes.length === 0" class="empty-small">
+                Aucune constante enregistrée.
+              </div>
+
+              <div *ngFor="let constante of selectedConstantes" class="constant-card">
+                <div>
+                  <strong>Température</strong>
+                  <span>{{ constante.temperature }}</span>
+                </div>
+                <div>
+                  <strong>Tension</strong>
+                  <span>{{ constante.tension }}</span>
+                </div>
+                <div>
+                  <strong>Glycémie</strong>
+                  <span>{{ constante.glycemie ?? '-' }}</span>
+                </div>
+                <div>
+                  <strong>Urgence</strong>
+                  <span class="urgence" [ngClass]="{
+                    'rouge': constante.degre_urgence === 'ROUGE',
+                    'jaune': constante.degre_urgence === 'JAUNE',
+                    'vert': constante.degre_urgence === 'VERT',
+                    'gris': constante.degre_urgence === 'GRIS'
+                  }">
+                    {{ constante.degre_urgence }}
+                  </span>
+                </div>
+              </div>
+            </div>  
+
+            <hr style="margin: 20px 0;">
+
+            <!-- SAISIE CONSULTATION -->
+            <div class="consultation-box">
+              <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                Consultation médicale
+              </h3>
+
+              <div class="form-group">
+                <label>Examen clinique</label>
+                <textarea [(ngModel)]="consultation.examen_clinique" rows="4" placeholder="Saisir l'examen clinique..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Diagnostic</label>
+                <textarea [(ngModel)]="consultation.diagnostic" rows="3" placeholder="Saisir le diagnostic..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Remarques</label>
+                <textarea [(ngModel)]="consultation.remarques" rows="2" placeholder="Remarques supplémentaires..."></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="cancel-button" (click)="cancelSelection()">Annuler</button>
+                <button type="button" class="save-button" (click)="saveConsultation()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+                  Enregistrer la consultation
+                </button>
+              </div>
+            </div>
+
+            <!-- ORDONNANCE MÉDICALE -->
+            <div *ngIf="consultationId" class="consultation-box" style="margin-top: 20px;">
+              <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M4.5 10.5C3.67 10.5 3 11.17 3 12s.67 1.5 1.5 1.5h15c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-15zM10.5 4.5C10.5 3.67 11.17 3 12 3s1.5.67 1.5 1.5v15c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5v-15z"/></svg>
+                Ordonnance médicale
+              </h3>
+
+              <div *ngIf="!ordonnanceId">
+                <p>La consultation est enregistrée. Vous pouvez maintenant créer une ordonnance.</p>
+                <button type="button" class="primary-button" (click)="createOrdonnance()">
+                  Créer l'ordonnance
+                </button>
+              </div>
+
+              <div *ngIf="ordonnanceId">
+                <div class="form-group">
+                  <label>Médicament (Recherche Auto-complétée)</label>
+                  <input 
+                    type="text" 
+                    list="medicaments-list" 
+                    [(ngModel)]="medicamentSearchTerm" 
+                    (change)="onMedicamentSelect()"
+                    placeholder="Tapez le nom du médicament..."
+                    class="form-control"
+                  />
+                  <datalist id="medicaments-list">
+                    <option *ngFor="let med of filteredMedicaments" [value]="med.nom"></option>
+                  </datalist>
+                </div>
+
+                <div class="form-group">
+                  <label>Dosage</label>
+                  <input type="text" [(ngModel)]="prescription.dosage" placeholder="ex: 1g / 500mg">
+                </div>
+
+                <div class="form-group">
+                  <label>Fréquence</label>
+                  <input type="text" [(ngModel)]="prescription.frequence" placeholder="ex: 3 fois par jour">
+                </div>
+
+                <div class="form-group">
+                  <label>Durée</label>
+                  <input type="text" [(ngModel)]="prescription.duree" placeholder="ex: 7 jours">
+                </div>
+
+                <div class="form-group">
+                  <label>Instructions</label>
+                  <textarea [(ngModel)]="prescription.instructions" rows="2" placeholder="Avant le repas..."></textarea>
+                </div>
+
+                <div class="actions-group" style="margin-bottom: 20px;">
+                  <button type="button" class="btn btn-add" (click)="addPrescription()">
+                    <span>+ Ajouter le médicament</span>
+                  </button>
+
+                  <button type="button" class="btn btn-pdf" (click)="printOrdonnance()">
+                    <span>🖨 Imprimer / PDF</span>
+                  </button>
+                </div>
+
+                <div style="margin-top: 20px;" *ngIf="prescriptions.length > 0">
+                  <button type="button" class="save-button" style="background-color: #16a34a;" (click)="terminateAdmission()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    Terminer l'admission
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ZONE D'IMPRESSION HORS MODALE (Pour impression papier / PDF via Ctrl+P) -->
+      <div id="ordonnance-print-zone" style="display: none;">
+        <div class="ordonnance-header">
+          <div>
+            <h2>CABINET MÉDICAL</h2>
+            <p>Consultations & Soins Médicaux</p>
+          </div>
+          <div>
+            <h1>ORDONNANCE MÉDICALE</h1>
+          </div>
+          <div>
+            <p><strong>N° Consultation :</strong> #{{ consultationId }}</p>
+          </div>
+        </div>
+
+        <div class="patient-details">
+          <p>
+            <strong>Patient(e) :</strong> 
+            {{ (selectedAdmission?.patient && typeof selectedAdmission?.patient === 'object') ? (selectedAdmission?.patient?.prenom + ' ' + selectedAdmission?.patient?.nom) : (selectedAdmission?.patient_nom || selectedAdmission?.patient || '-') }}
+          </p>
+          <p><strong>Date :</strong> {{ selectedAdmission?.date || 'Aujourd\'hui' }}</p>
+        </div>
+
+        <table class="prescription-table">
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>MÉDICAMENT</th>
+              <th>DOSAGE</th>
+              <th>FRÉQUENCE</th>
+              <th>DURÉE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of prescriptions; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ getMedicamentName(p.medicament) }}</td>
+              <td>{{ p.dosage }}</td>
+              <td>{{ p.frequence }}</td>
+              <td>{{ p.duree }}</td>
+            </tr>
+            <tr *ngIf="prescriptions.length === 0">
+              <td colspan="5" style="text-align: center;">Aucun médicament ajouté à cette ordonnance.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="ordonnance-footer" style="margin-top: 50px;">
+          <div class="signature-box">
+            <p>Signature & Cachet du Médecin</p>
+          </div>
+        </div>
       </div>
 
     </div>
-
-    <!-- ========================= -->
-    <!-- ORDONNANCE MEDICALE -->
-    <!-- ========================= -->
-
-   <div
-     *ngIf="consultationId"
-     class="consultation-box">
-
-     <h3>💊 Ordonnance médicale</h3>
-
-
-     <!-- CREER ORDONNANCE -->
-
-     <div *ngIf="!ordonnanceId">
-   
-       <p>
-      La consultation est enregistrée.
-      Vous pouvez maintenant créer une ordonnance.
-       </p>
-
-       <button
-        class="primary-button"
-        (click)="createOrdonnance()">
-
-      💊 Créer l'ordonnance
-
-       </button>
-
-      </div>
-
-
-      <!-- AJOUT MEDICAMENT -->
-
-      <div *ngIf="ordonnanceId">
-
-        <div class="form-group">
-
-          <label>Médicament</label>
-
-          <select
-           [(ngModel)]="selectedMedicamentId">
-
-            <option [ngValue]="null">
-               -- Choisir un médicament --
-            </option>
-
-            <option
-              *ngFor="let medicament of medicaments"
-              [ngValue]="medicament.id">
-
-              {{ medicament.nom }}
-
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>Dosage</label>
-
-          <input
-            type="text"
-            [(ngModel)]="prescription.dosage"
-            placeholder="">
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>Fréquence</label>
-
-          <input
-            type="text"
-            [(ngModel)]="prescription.frequence"
-            placeholder="">
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>Durée</label>
-
-          <input
-            type="text"
-            [(ngModel)]="prescription.duree"
-            placeholder="">
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>Instructions</label>
-
-          <textarea
-            [(ngModel)]="prescription.instructions"
-            rows="3"
-            placeholder="">
-          </textarea>
-
-        </div>
-
-
-        <button
-          class="save-button"
-          (click)="addPrescription()">
-
-          ➕ Ajouter le médicament
-
-        </button>
-
-        <!-- ========================= -->
-        <!-- MEDICAMENTS PRESCRITS -->
-        <!-- ========================= -->
-
-       <div class="prescriptions-list">
-
-         <h4>💊 Médicaments prescrits</h4>
-
-
-        <p *ngIf="prescriptions.length === 0">
-        Aucun médicament ajouté.
-        </p>
-
-
-       <div
-         *ngFor="let prescription of prescriptions"
-        class="prescription-card">
-
-        <p>
-
-        <strong>Médicament :</strong>
-
-        {{ prescription.medicament_nom }}
-
-       </p>
-
-
-       <p>
-
-       <strong>Dosage :</strong>
-
-       {{ prescription.dosage }}
-
-       </p>
-
-
-       <p>
-
-       <strong>Fréquence :</strong>
-
-       {{ prescription.frequence }}
-
-       </p>
-
-
-       <p>
-
-       <strong>Durée :</strong>
-
-       {{ prescription.duree }}
-
-       </p>
-
-
-       <p *ngIf="prescription.instructions">
-
-       <strong>Instructions :</strong>
-
-       {{ prescription.instructions }}
-
-       </p>
-
-    </div>
-    <button
-      *ngIf="ordonnanceId && prescriptions.length > 0"
-      class="btn btn-success"
-      (click)="terminateAdmission()">
-
-      ✅ Terminer l'admission
-
-    </button>
-
-   </div>
-
-  </div>
-
- </div>
-
-  </section>
+  </main>
 
 </div>

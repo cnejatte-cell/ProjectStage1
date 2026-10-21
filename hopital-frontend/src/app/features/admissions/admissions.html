@@ -1,28 +1,117 @@
-<div class="page-header">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<div class="dashboard-layout">
 
-  <div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="logo-brand">
+        <div class="brand-icon"><i class="bi bi-shield-lock-fill"></i></div>
+        <h2>Administrateur</h2>
+      </div>
 
-    <h1>Admissions</h1>
+      <nav class="nav-menu">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-grid-1x2-fill"></i> Tableau de bord
+        </a>
+        <a routerLink="/patients" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-people-fill"></i> Patients
+        </a>
+        <a routerLink="/admissions" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-hospital-fill"></i> Admissions
+        </a>
+        <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-person-badge-fill"></i> Gestion du Personnel
+        </a>
+      </nav>
+    </div>
 
-    <p>
-      Suivi des admissions des patients
-    </p>
+    <div class="sidebar-footer">
+      <button type="button" class="btn-logout" (click)="onLogout()">
+        <i class="bi bi-box-arrow-right"></i> Déconnexion
+      </button>
+    </div>
+  </aside>
 
-  </div>
+  <!-- CONTENU PRINCIPAL -->
+  <main class="main-content">
 
-</div>
+    <!-- HEADER -->
+    <header class="dashboard-header">
+      <div>
+        <h1>Gestion des Admissions</h1>
+        <p class="subtitle">Suivi des admissions et des motifs de consultation</p>
+      </div>
 
+      <div class="header-right">
+        <button class="btn-refresh" (click)="chargerAdmissions()">
+          <i class="bi bi-arrow-clockwise"></i> Actualiser
+        </button>
+      </div>
+    </header>
 
-<div class="content-card">
+    <!-- TABLEAU DES ADMISSIONS -->
+    <section class="card-box" style="margin-top: 25px;">
+      <div class="card-box-header">
+        <div>
+          <h3><i class="bi bi-clipboard-data-fill"></i> Liste des admissions</h3>
+          <p class="subtitle-sm">{{ admissions.length }} enregistrement(s)</p>
+        </div>
+      </div>
 
-  <div class="empty-icon">
-    ▣
-  </div>
+      <div class="table-responsive">
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>N° Admission</th>
+              <th>Patient</th>
+              <th>Motif / Diagnostic</th>
+              <th>Date & Heure</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
 
-  <h3>Liste des admissions</h3>
+          <tbody>
+            <tr *ngFor="let adm of admissions">
+              <td><span class="id-tag">#ADM-{{ adm.id }}</span></td>
 
-  <p>
-    Les admissions seront chargées depuis Django.
-  </p>
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar-circle">{{ getInitials(getPatientName(adm.patient)) }}</div>
+                  <strong>{{ getPatientName(adm.patient) }}</strong>
+                </div>
+              </td>
 
+              <td>
+                <span *ngIf="adm.diagnostic; else noDiag">{{ adm.diagnostic }}</span>
+                <ng-template #noDiag><span class="muted-text">Non renseigné</span></ng-template>
+              </td>
+
+              <td>
+                <div class="date-cell">
+                  <span class="date-main">{{ adm.date_admission | date:'dd/MM/yyyy' }}</span>
+                  <span class="date-time"><i class="bi bi-clock"></i> {{ adm.date_admission | date:'HH:mm' }}</span>
+                </div>
+              </td>
+
+              <td>
+                <span class="status-badge" [ngClass]="getStatutClass(adm.statut)">
+                  <span class="dot"></span>{{ getStatutLabel(adm.statut) }}
+                </span>
+              </td>
+            </tr>
+
+            <tr *ngIf="admissions.length === 0">
+              <td colspan="5" class="empty-state">
+                <div class="empty-box">
+                  <i class="bi bi-hospital empty-icon"></i>
+                  <strong>Aucune admission enregistrée</strong>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
 </div>
