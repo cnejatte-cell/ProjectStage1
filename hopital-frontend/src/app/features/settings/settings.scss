@@ -1,0 +1,90 @@
+.page-header {
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0;
+
+  color: #172033;
+}
+
+.page-header p {
+  color: #98a2b3;
+
+  font-size: 13px;
+}
+
+.settings-card {
+  background: white;
+
+  border: 1px solid #e8ebf0;
+
+  border-radius: 14px;
+
+  padding: 25px;
+}
+
+.settings-card h3 {
+  margin-top: 0;
+
+  color: #172033;
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 18px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #475467;
+
+  font-size: 12px;
+}
+
+.form-group input {
+  width: 100%;
+
+  padding: 12px;
+
+  border: 1px solid #dfe3ea;
+
+  border-radius: 8px;
+
+  outline: none;
+}
+
+.actions {
+  margin-top: 25px;
+
+  text-align: right;
+}
+
+.primary-button {
+  background: #2563eb;
+
+  color: white;
+
+  border: none;
+
+  padding: 12px 18px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

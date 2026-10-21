@@ -1,0 +1,96 @@
+.page-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0;
+
+  color: #172033;
+}
+
+.page-header p {
+  color: #98a2b3;
+
+  font-size: 13px;
+}
+
+.primary-button {
+  background: #2563eb;
+
+  color: white;
+
+  border: none;
+
+  padding: 11px 17px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.role-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 20px;
+}
+
+.role-card {
+  background: white;
+
+  border: 1px solid #e8ebf0;
+
+  border-radius: 14px;
+
+  padding: 25px;
+
+  text-align: center;
+}
+
+.role-icon {
+  width: 55px;
+  height: 55px;
+
+  margin: auto;
+
+  border-radius: 50%;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+
+  font-weight: bold;
+}
+
+.role-card h3 {
+  color: #172033;
+}
+
+.role-card p {
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+@media (max-width: 800px) {
+
+  .role-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

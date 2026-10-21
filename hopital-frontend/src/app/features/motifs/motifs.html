@@ -1,0 +1,142 @@
+<div class="page-header">
+
+  <div>
+
+    <h1>Motifs</h1>
+
+    <p>
+      Gestion des motifs de consultation
+    </p>
+
+  </div>
+
+
+  <button
+    class="primary-button"
+    (click)="showForm = !showForm">
+
+    + Nouveau motif
+
+  </button>
+
+</div>
+
+
+<div class="toolbar">
+
+  <input
+    [(ngModel)]="search"
+    placeholder="Rechercher un motif..."
+  >
+
+</div>
+
+
+@if (showForm) {
+
+  <div class="form-card">
+
+    <h3>Nouveau motif</h3>
+
+    <input
+      [(ngModel)]="newMotif.name"
+      placeholder="Nom du motif"
+    >
+
+    <textarea
+      [(ngModel)]="newMotif.description"
+      placeholder="Description">
+    </textarea>
+
+    <div class="actions">
+
+      <button
+        class="primary-button"
+        (click)="addMotif()">
+
+        Enregistrer
+
+      </button>
+
+    </div>
+
+  </div>
+
+}
+
+
+<div class="table-card">
+
+  <table>
+
+    <thead>
+
+      <tr>
+
+        <th>ID</th>
+        <th>Motif</th>
+        <th>Description</th>
+        <th>Statut</th>
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      @for (motif of filteredMotifs; track motif.id) {
+
+        <tr>
+
+          <td>#{{ motif.id }}</td>
+
+          <td>
+            <strong>{{ motif.name }}</strong>
+          </td>
+
+          <td>{{ motif.description }}</td>
+
+          <td>
+            <span class="status">
+              {{ motif.status }}
+            </span>
+          </td>
+
+          <td>
+
+            <button
+              class="delete"
+              (click)="deleteMotif(motif.id)">
+
+              Supprimer
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      }
+
+      @empty {
+
+        <tr>
+
+          <td
+            colspan="5"
+            class="empty">
+
+            Aucun motif enregistré
+
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

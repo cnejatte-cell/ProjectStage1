@@ -1,0 +1,29 @@
+<div class="app-layout">
+  <!-- القائمة الجانبية (Sidebar) -->
+  <aside class="app-sidebar">
+    <div class="sidebar-header">
+      <h3>🏥 MedClinic</h3>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a routerLink="/patients" routerLinkActive="active">📁 Patients</a></li>
+      <li><a routerLink="/admissions" routerLinkActive="active">🏥 Admissions</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <button class="btn-logout" (click)="logout()">🚪 Déconnexion</button>
+    </div>
+  </aside>
+
+  <!-- المحتوى الرئيسي -->
+  <div class="main-content-wrapper">
+    <header class="app-navbar">
+      <span class="welcome-text">Espace de gestion médicale</span>
+      <div class="user-profile">
+        <span>👤 Utilisateur</span>
+      </div>
+    </header>
+
+    <main class="app-body">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

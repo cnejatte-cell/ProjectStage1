@@ -1,0 +1,246 @@
+<div class="admin-container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- LOGO -->
+    <div class="logo">
+
+      <div class="logo-icon">
+        +
+      </div>
+
+      <div class="logo-text">
+        <h2>Clinica</h2>
+        <span>Medical Management</span>
+      </div>
+
+    </div>
+
+
+    <!-- MENU -->
+    <nav class="sidebar-menu">
+
+      <div class="menu-section">
+        PRINCIPAL
+      </div>
+
+      <a
+        routerLink="/admin"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="menu-item">
+
+        <span class="menu-icon">⌂</span>
+        <span>Dashboard</span>
+
+      </a>
+
+
+      <a
+        routerLink="/admin/patients"
+        routerLinkActive="active"
+        class="menu-item">
+
+        <span class="menu-icon">♙</span>
+        <span>Patients</span>
+
+      </a>
+
+
+      <div class="menu-section">
+        RÉFÉRENTIELS
+      </div>
+
+
+      <a
+        routerLink="/admin/referentiels/medicaments"
+        routerLinkActive="active"
+        class="menu-item">
+
+        <span class="menu-icon">✚</span>
+        <span>Médicaments</span>
+
+      </a>
+
+
+      <a
+        routerLink="/admin/referentiels/motifs"
+        routerLinkActive="active"
+        class="menu-item">
+
+        <span class="menu-icon">☷</span>
+        <span>Motifs</span>
+
+      </a>
+
+
+      <div class="menu-section">
+        PERSONNEL
+      </div>
+
+
+      <a
+        routerLink="/admin/doctors"
+        routerLinkActive="active"
+        class="menu-item">
+
+        <span class="menu-icon">⚕</span>
+        <span>Médecins</span>
+
+      </a>
+
+
+      <a
+        routerLink="/admin/nurses"
+        routerLinkActive="active"
+        class="menu-item">
+
+        <span class="menu-icon">♧</span>
+        <span>Infirmières</span>
+
+      </a>
+
+
+      <div class="menu-section">
+        ACTIVITÉ MÉDICALE
+      </div>
+
+
+      <a
+        routerLink="/admin/admissions"
+        routerLinkActive="active"
+        class="menu-item">
+
+        <span class="menu-icon">▣</span>
+        <span>Admissions</span>
+
+      </a>
+
+
+      <a
+        routerLink="/admin/consultations"
+        routerLinkActive="active"
+        class="menu-item">
+
+        <span class="menu-icon">◉</span>
+        <span>Consultations</span>
+
+      </a>
+
+
+      <div class="menu-section">
+        SYSTÈME
+      </div>
+
+
+      <a
+        routerLink="/admin/users"
+        routerLinkActive="active"
+        class="menu-item">
+
+        <span class="menu-icon">♟</span>
+        <span>Utilisateurs</span>
+
+      </a>
+
+
+      <a
+        routerLink="/admin/settings"
+        routerLinkActive="active"
+        class="menu-item">
+
+        <span class="menu-icon">⚙</span>
+        <span>Paramètres</span>
+
+      </a>
+
+    </nav>
+
+
+    <!-- LOGOUT -->
+    <div class="logout-area">
+
+      <button class="logout-button">
+
+        <span>↪</span>
+
+        Déconnexion
+
+      </button>
+
+    </div>
+
+  </aside>
+
+
+
+  <!-- MAIN -->
+  <div class="main-area">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+      <button
+        class="mobile-menu"
+        (click)="toggleMenu()">
+
+        ☰
+
+      </button>
+
+
+      <div class="search">
+
+        <span>⌕</span>
+
+        <input
+          type="text"
+          placeholder="Rechercher..."
+        >
+
+      </div>
+
+
+      <div class="topbar-right">
+
+        <button class="notification">
+          ♢
+        </button>
+
+
+        <div class="admin-profile">
+
+          <div class="admin-avatar">
+            A
+          </div>
+
+          <div>
+
+            <strong>
+              Administrateur
+            </strong>
+
+            <small>
+              Admin
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- PAGE CONTENT -->
+    <main class="content">
+
+      <router-outlet></router-outlet>
+
+    </main>
+
+  </div>
+
+</div>

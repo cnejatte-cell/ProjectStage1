@@ -1,0 +1,175 @@
+<div class="page-header">
+
+  <div>
+
+    <h1>Médicaments</h1>
+
+    <p>
+      Gestion du référentiel des médicaments
+    </p>
+
+  </div>
+
+
+  <button
+    class="primary-button"
+    (click)="openForm()">
+
+    + Nouveau médicament
+
+  </button>
+
+</div>
+
+
+<div class="toolbar">
+
+  <div class="search-box">
+
+    🔍
+
+    <input
+      [(ngModel)]="search"
+      placeholder="Rechercher un médicament..."
+    >
+
+  </div>
+
+</div>
+
+
+@if (showForm) {
+
+  <div class="form-card">
+
+    <h3>Ajouter un médicament</h3>
+
+    <div class="form-grid">
+
+      <input
+        [(ngModel)]="newMedicament.name"
+        placeholder="Nom du médicament"
+      >
+
+      <input
+        [(ngModel)]="newMedicament.dosage"
+        placeholder="Dosage"
+      >
+
+      <input
+        [(ngModel)]="newMedicament.form"
+        placeholder="Forme : comprimé, sirop..."
+      >
+
+    </div>
+
+
+    <div class="form-actions">
+
+      <button
+        class="cancel"
+        (click)="closeForm()">
+
+        Annuler
+
+      </button>
+
+      <button
+        class="primary-button"
+        (click)="addMedicament()">
+
+        Enregistrer
+
+      </button>
+
+    </div>
+
+  </div>
+
+}
+
+
+<div class="table-card">
+
+  <table>
+
+    <thead>
+
+      <tr>
+
+        <th>ID</th>
+
+        <th>Médicament</th>
+
+        <th>Dosage</th>
+
+        <th>Forme</th>
+
+        <th>Statut</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+
+    <tbody>
+
+      @for (medicament of filteredMedicaments; track medicament.id) {
+
+        <tr>
+
+          <td>#{{ medicament.id }}</td>
+
+          <td>
+            <strong>{{ medicament.name }}</strong>
+          </td>
+
+          <td>{{ medicament.dosage }}</td>
+
+          <td>{{ medicament.form }}</td>
+
+          <td>
+            <span class="status">
+              {{ medicament.status }}
+            </span>
+          </td>
+
+          <td>
+
+            <button
+              class="delete"
+              (click)="deleteMedicament(medicament.id)">
+
+              Supprimer
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      }
+
+      @empty {
+
+        <tr>
+
+          <td
+            colspan="6"
+            class="empty">
+
+            Aucun médicament enregistré
+
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

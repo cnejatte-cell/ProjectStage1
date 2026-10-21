@@ -1,0 +1,195 @@
+.page-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0;
+
+  font-size: 25px;
+
+  color: #172033;
+}
+
+.page-header p {
+  color: #98a2b3;
+
+  font-size: 13px;
+}
+
+.primary-button {
+  border: none;
+
+  background: #2563eb;
+
+  color: white;
+
+  padding: 12px 18px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  background: #1d4ed8;
+}
+
+.toolbar {
+  background: white;
+
+  border: 1px solid #e8ebf0;
+
+  border-radius: 12px;
+
+  padding: 15px;
+
+  margin-bottom: 18px;
+}
+
+.search-box {
+  width: 350px;
+
+  background: #f6f7f9;
+
+  padding: 11px;
+
+  border-radius: 8px;
+}
+
+.search-box input {
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  margin-left: 8px;
+}
+
+.form-card {
+  background: white;
+
+  border: 1px solid #e8ebf0;
+
+  border-radius: 12px;
+
+  padding: 20px;
+
+  margin-bottom: 20px;
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 12px;
+}
+
+.form-grid input {
+  padding: 12px;
+
+  border: 1px solid #dfe3ea;
+
+  border-radius: 7px;
+
+  outline: none;
+}
+
+.form-actions {
+  margin-top: 15px;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+}
+
+.cancel {
+  border: none;
+
+  padding: 11px 18px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+}
+
+.table-card {
+  background: white;
+
+  border: 1px solid #e8ebf0;
+
+  border-radius: 12px;
+
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 16px;
+
+  text-align: left;
+
+  border-bottom: 1px solid #eef0f4;
+
+  font-size: 13px;
+}
+
+th {
+  color: #667085;
+
+  background: #fafbfc;
+}
+
+td {
+  color: #475467;
+}
+
+.status {
+  background: #ecfdf3;
+
+  color: #027a48;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+}
+
+.delete {
+  border: none;
+
+  background: #fff1f2;
+
+  color: #dc2626;
+
+  padding: 7px 10px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+.empty {
+  text-align: center;
+
+  padding: 40px;
+
+  color: #98a2b3;
+}

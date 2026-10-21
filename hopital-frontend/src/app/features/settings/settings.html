@@ -1,0 +1,90 @@
+<div class="page-header">
+
+  <div>
+
+    <h1>Paramètres</h1>
+
+    <p>
+      Configuration de la clinique
+    </p>
+
+  </div>
+
+</div>
+
+
+<div class="settings-card">
+
+  <h3>Informations de la clinique</h3>
+
+
+  <div class="form-grid">
+
+    <div class="form-group">
+
+      <label>
+        Nom de la clinique
+      </label>
+
+      <input
+        [(ngModel)]="clinicName"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Email
+      </label>
+
+      <input
+        [(ngModel)]="email"
+        type="email"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Téléphone
+      </label>
+
+      <input
+        [(ngModel)]="phone"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Adresse
+      </label>
+
+      <input
+        [(ngModel)]="address"
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="actions">
+
+    <button
+      class="primary-button"
+      (click)="save()">
+
+      Enregistrer les paramètres
+
+    </button>
+
+  </div>
+
+</div>
